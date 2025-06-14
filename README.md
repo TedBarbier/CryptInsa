@@ -69,13 +69,10 @@ executez run_dev.sh voilà les serveurs web sont lancés.
 
 Le script :
 
--    Crée un environnement virtuel
-
--    Installe les dépendances depuis requirements.txt
-
--    Lance le serveur Flask sur http://127.0.0.1:5000 (uniquement présent pour faire le liens avec le serveur web)
-
--    lance le serveur web sur [http://localhost:8000](http://localhost:8000)
+*    Crée un environnement virtuel
+*    Installe les dépendances depuis requirements.txt
+*    Lance le serveur Flask sur http://127.0.0.1:5000 (uniquement présent pour faire le liens avec le serveur web)
+*    lance le serveur web sur [http://localhost:8000](http://localhost:8000)
 
 ## Roadmap
 - [x] Implémentation de l’API Flask
@@ -102,4 +99,22 @@ Le script :
 [NGUYEN Dinh-Huy] - [Email](mailto:[dinh_huy.nguyen@insa-cvl.fr])
 
 [NGUYEN Nhat-Lam] - [LinkedIn](https://www.linkedin.com/in/nhat-lam-nguyen/) - [Email](nhat_lam.nguyen@insa-cvl.fr])
+
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
+Ce projet a été réalisé dans un cadre pédagogique avec le soutien de notre encadrant⋅e. Nous remercions également les plateformes et ressources open-source suivantes qui ont facilité notre développement :
+
+* [Python](https://www.python.org/)
+* [Flask](https://flask.palletsprojects.com/)
+//* [Cryptohack](https://cryptohack.org/) – pour l'inspiration pédagogique
+* [Wikipedia](https://fr.wikipedia.org/wiki/Analyse_de_fr%C3%A9quence) – pour les bases théoriques de la cryptanalyse
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[python.com]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
+[flask.com]: https://img.shields.io/badge/flask-black?style=for-the-badge&logo=flask&logoColor=white
+
+
 
