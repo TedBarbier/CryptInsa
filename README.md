@@ -106,7 +106,6 @@ Ce projet a été réalisé dans un cadre pédagogique avec le soutien de notre 
 * [GitHub Pages](https://pages.github.com/)
 * [Python](https://www.python.org/)
 * [Flask](https://flask.palletsprojects.com/)
-//* [Cryptohack](https://cryptohack.org/) – pour l'inspiration pédagogique
 * [Wikipedia](https://fr.wikipedia.org/wiki/Analyse_de_fr%C3%A9quence) – pour les bases théoriques de la cryptanalyse
 
 
