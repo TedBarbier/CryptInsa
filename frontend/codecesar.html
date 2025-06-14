@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chiffrement César interactif</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      max-width: 700px;
+      margin: auto;
+      background: #f0f0f5;
+    }
+    textarea {
+      width: 100%;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    input[type=number] {
+      width: 60px;
+      font-size: 1.1rem;
+    }
+    button {
+      padding: 0.6rem 1.2rem;
+      margin: 0.5rem 0.8rem 0.5rem 0;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    ul {
+      background: white;
+      padding: 1rem;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      list-style-type: decimal;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Chiffrement César</h1>
+
+  <p>Entrez un message à chiffrer ou cliquez sur Exemple :</p>
+
+  <textarea id="userInput" rows="4" placeholder="Ex : BONJOUR LE MONDE"></textarea><br>
+  Décalage (shift) : <input type="number" id="shiftValue" value="3" min="1" max="25" />
+  <button onclick="useExample()">Exemple</button>
+  <button onclick="encrypt()">Chiffrer</button>
+
+  <h2>Résultat :</h2>
+  <p id="result" style="font-weight:bold; font-size:1.2rem; background:#ddd; padding:0.5rem; border-radius:4px;"></p>
+
+  <h2>Étapes détaillées :</h2>
+  <ul id="steps"></ul>
+
+  <script>
+    function useExample() {
+      document.getElementById('userInput').value = "BONJOUR LE MONDE";
+      document.getElementById('result').innerText = "";
+      document.getElementById('steps').innerHTML = "";
+    }
+
+    async function encrypt() {
+      const text = document.getElementById('userInput').value;
+      const shift = parseInt(document.getElementById('shiftValue').value);
+
+      if(!text) {
+        alert("Merci d'entrer un message à chiffrer !");
+        return;
+      }
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/cesar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text, shift: shift })
+        });
+        if (!response.ok) {
+          throw new Error("Erreur réseau, statut: " + response.status);
+        }
+        const data = await response.json();
+
+        if (data.status !== "success") {
+          alert("Erreur dans la réponse du serveur");
+          return;
+        }
+
+        // Afficher le résultat chiffré
+        document.getElementById('result').innerText = data.result.encrypted;
+
+        // Afficher les étapes (juste original -> code)
+        const stepsList = document.getElementById('steps');
+        stepsList.innerHTML = '';
+        data.result.steps.forEach(step => {
+          const li = document.createElement('li');
+          li.textContent = `${step.original} → ${step.code}`;
+          stepsList.appendChild(li);
+        });
+
+      } catch (err) {
+        alert("Erreur lors de l'appel au serveur : " + err.message);
+      }
+    }
+  </script>
+
+</body>
+</html>

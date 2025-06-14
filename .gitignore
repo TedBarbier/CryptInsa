@@ -1,0 +1,47 @@
+# Environnements virtuels Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Fichiers compilés Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Fichiers logs et temporaires
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Fichiers de base de données SQLite (si utilisé)
+*.sqlite3
+*.db
+
+# Dossier de configuration IDEs courants
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dossier node_modules (si tu utilises npm pour frontend)
+node_modules/
+
+# fichiers build JS (si tu utilises webpack ou autre)
+dist/
+build/
+
+# Fichiers système (Mac, Windows)
+.DS_Store
+Thumbs.db
+
+# Fichiers Flask debug (cache, sessions, etc)
+instance/
+*.pyc
+
+# fichiers secrets (à ne pas commiter)
+.env
+.env.local
