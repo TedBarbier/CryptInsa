@@ -7,7 +7,7 @@
   <p align="center">
     Application pédagogique expliquant le chiffrement par substitution et son attaque par analyse de fréquences.
     <br />
-    <a href="https://github.com/TedBarbier/ProjetApplicationMediationScientifiqueCryptographie/ton-projet"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/TedBarbier/ProjetApplicationMediationScientifiqueCryptographie/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/TedBarbier/ProjetApplicationMediationScientifiqueCryptographie/issues">Report Bug</a>
