@@ -102,8 +102,8 @@ Le script :
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-Ce projet a été réalisé dans un cadre pédagogique avec le soutien de notre encadrant⋅e. Nous remercions également les plateformes et ressources open-source suivantes qui ont facilité notre développement :
-
+Ce projet a été réalisé dans un cadre pédagogique avec le soutien de notre encadrant Xavier Bultel. Nous remercions également les plateformes et ressources open-source suivantes qui ont facilité notre développement :
+* [GitHub Pages](https://pages.github.com/
 * [Python](https://www.python.org/)
 * [Flask](https://flask.palletsprojects.com/)
 //* [Cryptohack](https://cryptohack.org/) – pour l'inspiration pédagogique
