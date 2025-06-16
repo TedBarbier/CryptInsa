@@ -7,7 +7,7 @@ import string
 from Crypto.cesar import cesar_cipher
 
 app = Flask(__name__)
-CORS(app, origins=["https://tbarbier.github.io"])
+CORS(app, origins=["https://tedbarbier.github.io"])
 
 
 def analyze_frequencies(text):
