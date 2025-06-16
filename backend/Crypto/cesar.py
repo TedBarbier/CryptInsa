@@ -31,7 +31,7 @@ def cesar_cipher(data):
 
 
 
-alphabet=string.ascii_lowercase+' '
+alphabet=string.ascii_lowercase+' '+','+'.'
 
 def cesar_encrypt(message,decalage):
     lettres=message.split()

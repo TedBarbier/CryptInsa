@@ -1,6 +1,7 @@
 from collections import Counter
+import frequences_lettres as freq
 import string
-
+import cesar
 
 # Fréquence des lettres en français (environ)
 freq_francais = {
@@ -18,8 +19,39 @@ def frequences_lettres(texte):
     total = sum(compteur.values())
     return {lettre: (count / total) * 100 for lettre, count in compteur.items()} if total > 0 else {}
 
-def decrypt_message(message_chiffre, chemin_dictionnaire):
-    pass
+def decrypt_lettre(frequence, chemin_dictionnaire):
+    
+    min_diff=1000
+    
+    for l,f in chemin_dictionnaire.items():
+        if abs(frequence-f)<min_diff:
+            min_diff=abs(frequence-f)
+            decode=l
+    return decode
+
+def decrypt_message(message,pdf_path):
+    message=cesar.cesar_encrypt(message.lower(),3)
+    frequences,_=freq.get_letter_frequencies(message)
+    text = freq.extract_text_from_pdf(pdf_path)
+    chemin_dictionnaire,size= freq.get_letter_frequencies(text)
+    code=["-1"]*len(message)
+    for i in range(0,len(message)):
+        l=message[i]
+        if l in frequences.keys():
+            c=decrypt_lettre(frequences[l],chemin_dictionnaire)
+            code[i]=c
+    # for l,f in frequences.items():
+    #     c=decrypt_lettre(f,chemin_dictionnaire)
+    #     code[message.index(l)]=c
+    separateur=""
+    return separateur.join(code)
+
+def comparaison(m1,m2):
+    cpt=0
+    for i in range(0,min(len(m1),len(m2))):
+        if m1[i]==m2[i]:
+            cpt+=1
+    return cpt/len(m1)*100,cpt,len(m2)
 
 def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
     """le mot_chiffre est le mot ayant le plus grand nombre de caractère dans le message"""
@@ -41,3 +73,11 @@ def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
 
 def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
     pass
+
+
+pdf_path = "miserables.pdf"
+text = freq.extract_text_from_pdf(pdf_path)
+letter_freq,size= freq.get_letter_frequencies(text)
+m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
+code=decrypt_message(m,"miserables.pdf")
+print(comparaison(code,m))
