@@ -27,3 +27,33 @@ def cesar_cipher(data):
         'encrypted': ''.join(encrypted),
         'steps': steps
     }
+
+
+
+
+alphabet=string.ascii_lowercase+' '
+
+def cesar_encrypt(message,decalage):
+    lettres=message.split()
+    code=[]
+    for l in message:
+        i=alphabet.index(l)
+        i+=decalage
+        code.append(alphabet[i%len(alphabet)])
+    separateur=""
+    return separateur.join(code)
+
+def cesar_decrypt(code,decalage):
+    lettres=code.split()
+    message=[]
+    for l in code:
+        i=alphabet.index(l)
+        i-=decalage
+        message.append(alphabet[i%len(alphabet)])
+    separateur=""
+    return separateur.join(message)
+
+def test():
+    code=cesar_encrypt("pip is fun",4)
+    print(code)
+    print(cesar_decrypt(code,4))
