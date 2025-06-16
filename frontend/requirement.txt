@@ -1,0 +1,18 @@
+# Installation des modules npm pour le projet frontend
+# ====================================================
+
+# Installation des dépendances de production
+npm install express@^5.1.0
+npm install express-handlebars@^7.1.3
+
+# Installation des dépendances de développement  
+npm install --save-dev morgan@^1.10.0
+npm install --save-dev nodemon@^3.1.10
+
+# OU installer toutes les dépendances en une seule commande :
+# npm install
+
+# Commandes pour démarrer le projet :
+# npm start        - Démarre le serveur en mode production
+# npm run dev      - Démarre le serveur en mode développement avec nodemon
+# node app.js      - Démarre directement le serveur

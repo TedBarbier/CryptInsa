@@ -36,10 +36,16 @@ flask run > ../flask.log 2>&1 &
 FLASK_PID=$!
 cd ..
 
-# Lancer le frontend
-echo "Demarrage du serveur web statique sur http://localhost:8000 ..."
+# Installer les dépendances npm du frontend
+echo "Installation des dependances npm..."
 cd frontend || exit
-python3 -m http.server 8000 > ../frontend.log 2>&1 &
+if [ ! -d "node_modules" ]; then
+  npm install || { echo "Echec de l'installation npm"; exit 1; }
+fi
+
+# Lancer le serveur Node.js/Express
+echo "Demarrage du serveur Express sur http://localhost:8000 ..."
+npm start > ../frontend.log 2>&1 &
 HTTP_PID=$!
 cd ..
 
