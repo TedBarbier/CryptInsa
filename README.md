@@ -72,7 +72,12 @@ Le script :
 *    Crée un environnement virtuel
 *    Installe les dépendances depuis requirements.txt
 *    Lance le serveur Flask sur http://127.0.0.1:5000 (uniquement présent pour faire le liens avec le serveur web)
-*    lance le serveur web sur [http://localhost:8000](http://localhost:8000)
+*    lance le serveur web sur [http://localhost:8000](http://localhost:8000) par 
+
+Commandes pour démarrer le serveur web :
+* npm start        - Démarre le serveur en mode production
+* npm run dev      - Démarre le serveur en mode développement avec nodemon
+* node app.js      - Démarre directement le serveur
 
 ## Roadmap
 - [x] Implémentation de l’API Flask
