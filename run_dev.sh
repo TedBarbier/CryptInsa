@@ -39,8 +39,19 @@ cd ..
 # Installer les dépendances npm du frontend
 echo "Installation des dependances npm..."
 cd frontend || exit
-if [ ! -d "node_modules" ]; then
+
+# Vérifier si package.json existe
+if [ ! -f "package.json" ]; then
+  echo "Erreur: package.json introuvable dans le dossier frontend"
+  exit 1
+fi
+
+# Installer les dépendances si node_modules n'existe pas ou si package.json est plus récent
+if [ ! -d "node_modules" ] || [ "package.json" -nt "node_modules" ]; then
+  echo "Installation/mise à jour des packages npm..."
   npm install || { echo "Echec de l'installation npm"; exit 1; }
+else
+  echo "Les packages npm sont déjà installés et à jour."
 fi
 
 # Lancer le serveur Node.js/Express
