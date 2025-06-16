@@ -25,40 +25,40 @@ def analyze():
 @app.route('/cesar', methods=['POST'])
 def route_cesar():
     data = request.get_json()
-    message = data.get('message', '')
+    message = data.get('message', '').lower().replace('\n', ' ')
     result = cesar_encrypt(message, int(data.get('shift', 3)))
-    response = {o:e for o,e in zip(message, result)}
+    response = {"encrypted" : result}
     # Retourne une réponse standardisée
-    return jsonify({response})
+    return jsonify(response)
 
 @app.route('/cesar/decrypt', methods=['POST'])
 def route_cesar_decrypt():
     data = request.get_json()
-    message = data.get('message', '')
+    message = data.get('message', '').lower().replace('\n', ' ')
     result = cesar_decrypt(message, int(data.get('shift', 3)))
-    response = {o:e for o,e in zip(message, result)}
+    response = {"decrypted" : result}
     # Retourne une réponse standardisée
-    return jsonify({response})
+    return jsonify(response)
 
 @app.route('/vigenere', methods=['POST'])
 def route_vigenere():
     data = request.get_json()
-    message = data.get('message', '')
-    key = data.get('key', '')
+    message = data.get('message', '').lower().replace('\n', ' ')
+    key = data.get('key', '').lower().replace('\n', ' ')
     result = vigenere_encrypt(message, key)
-    response = {o:e for o,e in zip(message, result)}
+    response = {"encrypted": result}
     # Retourne une réponse standardisée
-    return jsonify({response})
+    return jsonify(response)
 
 @app.route('/vigenere/decrypt', methods=['POST'])
 def route_vigenere_decrypt():
     data = request.get_json()
-    message = data.get('message', '')
-    key = data.get('key', '')
+    message = data.get('message', '').lower().replace('\n', ' ')
+    key = data.get('key', '').lower().replace('\n', ' ')
     result = vigenere_decrypt(message, key)
-    response = {o:e for o,e in zip(message, result)}
+    response = {"decrypted": result}
     # Retourne une réponse standardisée
-    return jsonify({response})
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(debug=True)

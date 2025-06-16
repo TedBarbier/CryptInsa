@@ -21,7 +21,7 @@ async function cesar() { // Recuperer le texte chiffré et l'envoyer à l'API po
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, shift })
     });
-
+    console.log("Cesar function called with message:", message, "and shift:", shift);
     const data = await res.json();
     return data;
 }
