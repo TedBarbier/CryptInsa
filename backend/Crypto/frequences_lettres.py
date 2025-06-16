@@ -4,8 +4,7 @@ import fitz
 
 alphabet = string.ascii_lowercase+' '+','+'.'
 
-combinaisons = ['on','ch','en','es','le','la','te','re','nt','st','it','ou','ne','an','un',
-               'er','es','se','ai','ou','au','eu','oi','et','de','qu','ion','eau']
+combinaisons = [ a + b for a in string.ascii_lowercase for b in string.ascii_lowercase]
 
 def extract_text_from_pdf(pdf_path):
     text = ""
@@ -29,7 +28,7 @@ def get_letter_frequencies(text):
             letter_frequencies[text[i]] += 1
     for letter in letter_frequencies:
         letter_frequencies[letter] = letter_frequencies[letter]*100/ size_text
-    return letter_frequencies, size_text
+    return letter_frequencies
 
 def get_combination_frequencies(text):
     size_text = len(text)
@@ -43,15 +42,15 @@ def get_combination_frequencies(text):
             combination_frequencies[comb] += 1
     for comb in combination_frequencies:
         combination_frequencies[comb] = combination_frequencies[comb]*100/size_text
-    return combination_frequencies, size_text
+    return combination_frequencies
 
-def display(frequencies,size_text):
+def display(frequencies):
     for letter, freq in frequencies.items():
         print(f"{letter}: {freq:.4f}")
 
-pdf_path = "miserables.pdf"
-text = extract_text_from_pdf(pdf_path)
-letter_freq,size= get_letter_frequencies(text)
-combination_freq,size2 = get_combination_frequencies(text)
-display(letter_freq,size)
-display(combination_freq,size2) 
+# pdf_path = "miserables.pdf"
+# text = extract_text_from_pdf(pdf_path)
+# letter_freq= get_letter_frequencies(text)
+# combination_freq = get_combination_frequencies(text)
+# display(letter_freq)
+# display(combination_freq) 
