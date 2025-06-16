@@ -24,6 +24,10 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
     res.render('test', { title: 'Test' });
 });
+app.get('/cesar', (req, res) => {
+    res.render('cesar', { title: 'Illustration du chiffrement de César' });
+});
+
 //Start the server: Use commande "node app.js" to start the server
 const server = app.listen(port, () => {
     console.log(`App listening at http://127.0.0.1:${port}`);

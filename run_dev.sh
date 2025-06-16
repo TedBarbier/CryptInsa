@@ -36,6 +36,10 @@ flask run > ../flask.log 2>&1 &
 FLASK_PID=$!
 cd ..
 
+#Installer le Node.js
+sudo apt-get install nodejs
+sudo apt-get install npm
+
 # Installer les dépendances npm du frontend
 echo "Installation des dependances npm..."
 cd frontend || exit
