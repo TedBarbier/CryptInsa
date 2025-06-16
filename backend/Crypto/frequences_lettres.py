@@ -27,6 +27,8 @@ def get_letter_frequencies(text):
     for i in range(len(text) - 1):
         if text[i] in letter_frequencies:
             letter_frequencies[text[i]] += 1
+    for letter in letter_frequencies:
+        letter_frequencies[letter] = letter_frequencies[letter]*100/ size_text
     return letter_frequencies, size_text
 
 def get_combination_frequencies(text):
@@ -39,11 +41,13 @@ def get_combination_frequencies(text):
             combination_frequencies[long_comb] += 1
         if comb in combination_frequencies:
             combination_frequencies[comb] += 1
+    for comb in combination_frequencies:
+        combination_frequencies[comb] = combination_frequencies[comb]*100/size_text
     return combination_frequencies, size_text
 
 def display(frequencies,size_text):
     for letter, freq in frequencies.items():
-        print(f"{letter}: {freq / size_text*100:.4f}")
+        print(f"{letter}: {freq:.4f}")
 
 pdf_path = "miserables.pdf"
 text = extract_text_from_pdf(pdf_path)
