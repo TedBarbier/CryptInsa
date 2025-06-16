@@ -15,6 +15,13 @@
 }
 
 /* === STYLES GÉNÉRAUX === */
+.cesar-page {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 120%;
+
+}
 .cesar-container {
     min-height: 100vh;
     background: linear-gradient(15deg, #ffffff 0%, #a50000 100%);
