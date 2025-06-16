@@ -30,7 +30,7 @@ def decrypt_lettre(frequence, chemin_dictionnaire):
     return decode
 
 def decrypt_message(message,pdf_path):
-    message=cesar.cesar_encrypt(message.lower(),3)
+    message=message.lower()
     frequences=freq.get_letter_frequencies(message)
     text = freq.extract_text_from_pdf(pdf_path)
     chemin_dictionnaire= freq.get_letter_frequencies(text)
@@ -67,7 +67,19 @@ def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
                 if c[i] == lettre_hypothétique:
                     potentials.append(c)
     return potentials 
-    
+
+def check_mot(mot,liste_mot):
+    diff=max(len(mot)-4,1)
+    result=None
+    for m in liste_mot:
+        cpt=abs(len(m)-len(mot))
+        for i in range(0,min(len(mot),len(m))):
+            if m[i]!=mot[i]:
+                cpt+=1
+        if cpt<=diff:
+            diff=cpt
+            result=m
+    return result
 
     
 
@@ -79,5 +91,15 @@ pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
 letter_freq= freq.get_letter_frequencies(text)
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
-code=decrypt_message(m,"miserables.pdf")
+m2=cesar.cesar_encrypt(m.lower(),3)
+code=decrypt_message(m2,"miserables.pdf")
+print(code)
+tabc=code.split(" ")
+tabm=m.split(" ")
+print(tabc)
+print(tabm)
 print(comparaison(code,m))
+for mot in tabc:
+    result=check_mot(mot,tabm)
+    if result==tabm[tabc.index(mot)]:
+        print("trouvé")
