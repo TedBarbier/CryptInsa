@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <title>{{title}}</title>
+        <!-- Favicon links
+        <link rel="icon" href="/images/logo.png" type="image/png">
+        <link rel="apple-touch-icon" href="/images/logo.png">
+        <meta name="msapplication-TileImage" content="/images/logo.png"> -->
+        
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/common/main.css">
+        <link rel="stylesheet" href="/css/common/header.css">
+        <link rel="stylesheet" href="/css/common/footer.css">
+    </head>
+
+    <body>
+        <div class="app">
+            {{> header}}
+            <main class="content">
+                {{{body}}}
+            </main>
+            {{> footer}}
+        </div>
+        
+        <!-- JavaScript -->
+        <script src="/js/common/header.js"></script>
+        <script src="/js/common/footer.js"></script>
+    </body>
+</html>
