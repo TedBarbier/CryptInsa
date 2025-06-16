@@ -68,18 +68,26 @@ def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
                     potentials.append(c)
     return potentials 
 
-def check_mot(mot,liste_mot):
-    diff=max(len(mot)-4,1)
-    result=None
-    for m in liste_mot:
-        cpt=abs(len(m)-len(mot))
-        for i in range(0,min(len(mot),len(m))):
-            if m[i]!=mot[i]:
-                cpt+=1
-        if cpt<=diff:
-            diff=cpt
-            result=m
-    return result
+def check_mot(mot):
+    # Ouvrir le fichier en lecture
+    with open("dict.txt", "r", encoding="utf-8") as f:
+        contenu = f.read()
+
+        # Séparer le contenu en mots
+        liste_mots = contenu.split()
+
+
+        diff=max(len(mot)-4,2)
+        result=None
+        for m in liste_mots:
+            cpt=abs(len(m)-len(mot))
+            for i in range(0,min(len(mot),len(m))):
+                if m[i]!=mot[i]:
+                    cpt+=1
+            if cpt<=diff:
+                diff=cpt
+                result=m
+        return result
 
     
 
@@ -95,11 +103,4 @@ m2=cesar.cesar_encrypt(m.lower(),3)
 code=decrypt_message(m2,"miserables.pdf")
 print(code)
 tabc=code.split(" ")
-tabm=m.split(" ")
-print(tabc)
-print(tabm)
 print(comparaison(code,m))
-for mot in tabc:
-    result=check_mot(mot,tabm)
-    if result==tabm[tabc.index(mot)]:
-        print("trouvé")
