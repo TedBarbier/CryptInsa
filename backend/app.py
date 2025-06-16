@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS # type: ignore
 from collections import Counter
 import string
-from Crypto.cesar import cesar_cipher
+from Crypto.cesar import *
+from Crypto.vigenere import *
 
 app = Flask(__name__)
 CORS(app)  # autorise les requêtes depuis le frontend
@@ -24,16 +25,40 @@ def analyze():
 @app.route('/cesar', methods=['POST'])
 def route_cesar():
     data = request.get_json()
-    result = cesar_cipher(data)
+    message = data.get('message', '')
+    result = cesar_encrypt(message, int(data.get('shift', 3)))
+    response = {o:e for o,e in zip(message, result)}
     # Retourne une réponse standardisée
-    return jsonify({
-        "status": "success",
-        "result": result,
-        "metadata": {
-            "algorithm": "cesar",
-            "shift": data.get('shift', 3)
-        }
-    })
+    return jsonify({response})
+
+@app.route('/cesar/decrypt', methods=['POST'])
+def route_cesar_decrypt():
+    data = request.get_json()
+    message = data.get('message', '')
+    result = cesar_decrypt(message, int(data.get('shift', 3)))
+    response = {o:e for o,e in zip(message, result)}
+    # Retourne une réponse standardisée
+    return jsonify({response})
+
+@app.route('/vigenere', methods=['POST'])
+def route_vigenere():
+    data = request.get_json()
+    message = data.get('message', '')
+    key = data.get('key', '')
+    result = vigenere_encrypt(message, key)
+    response = {o:e for o,e in zip(message, result)}
+    # Retourne une réponse standardisée
+    return jsonify({response})
+
+@app.route('/vigenere/decrypt', methods=['POST'])
+def route_vigenere_decrypt():
+    data = request.get_json()
+    message = data.get('message', '')
+    key = data.get('key', '')
+    result = vigenere_decrypt(message, key)
+    response = {o:e for o,e in zip(message, result)}
+    # Retourne une réponse standardisée
+    return jsonify({response})
 
 if __name__ == '__main__':
     app.run(debug=True)

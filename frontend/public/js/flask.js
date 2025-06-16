@@ -13,3 +13,58 @@ async function analyze() { // Recuperer le texte chiffré et l'envoyer à l'API 
 // Export the function to make it available for other modules
 window.analyze = analyze;
 
+async function cesar() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+    const message = document.getElementById("cipherText").value;
+    const shift = document.getElementById("shift").value;
+    const res = await fetch("http://localhost:5000/cesar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, shift })
+    });
+
+    const data = await res.json();
+    return data;
+}
+window.cesar = cesar;
+
+async function cesarDecrypt() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+    const message = document.getElementById("cipherText").value;
+    const shift = document.getElementById("shift").value;
+    const res = await fetch("http://localhost:5000/cesar/decrypt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, shift })
+    });
+
+    const data = await res.json();
+    return data;
+}
+window.cesarDecrypt = cesarDecrypt;
+
+async function vigenere() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+    const message = document.getElementById("cipherText").value;
+    const key = document.getElementById("key").value;
+    const res = await fetch("http://localhost:5000/vigenere", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, key })
+    });
+
+    const data = await res.json();
+    return data;
+}
+window.vigenere = vigenere;
+
+async function vigenereDecrypt() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+    const message = document.getElementById("cipherText").value;
+    const key = document.getElementById("key").value;
+    const res = await fetch("http://localhost:5000/vigenere/decrypt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, key })
+    });
+
+    const data = await res.json();
+    return data;
+}
+window.vigenereDecrypt = vigenereDecrypt;
