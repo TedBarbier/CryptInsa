@@ -21,18 +21,21 @@ def frequences_lettres(texte):
 def decrypt_message(message_chiffre, chemin_dictionnaire):
     pass
 
-def initial_mapping(message_chiffre):
-    frequences_lettres = frequences_lettres(message_chiffre)
-
-    sorted_chiffre = sorted(frequences_lettres.keys(), key=lambda x: -frequences_lettres[x])
-
-    sorted_langue = sorted(freq_francais.keys(), key=lambda x: -freq_francais[x])
-    mapping = {}
+def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
+    """le mot_chiffre est le mot ayant le plus grand nombre de caractère dans le message"""
+    L= []
+    potentials = []
+    candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-8')
+    for i in range(len(mot_chiffre)):
+        if mot_chiffre[i] == lettre_hypothétique:
+            L.append(i)
+    for c in candidat:
+        for i in L:
+            if len(c) > i:
+                if c[i] == lettre_hypothétique:
+                    potentials.append(c)
+    return potentials 
     
-    for chiffre, clair in zip(sorted_chiffre, sorted_langue):
-        mapping[chiffre] = clair
-
-    return mapping
 
     
 
