@@ -55,8 +55,16 @@ else
 fi
 
 # Lancer le serveur Node.js/Express
-echo "Demarrage du serveur Express sur http://localhost:8000 ..."
-npm start > ../frontend.log 2>&1 &
+echo "Demarrage du serveur Express sur http://127.0.0.1:8000 ..."
+echo ""
+echo "POUR UTILISER NODEMON DE MANIERE INTERACTIVE :"
+echo "1. Ouvrez un nouveau terminal"
+echo "2. Executez: cd frontend && npm run dev"
+echo "3. Utilisez 'rs' pour redemarrer le serveur"
+echo ""
+echo "POUR L'INSTANT: Demarrage en arriere-plan..."
+
+npm run dev > ../frontend.log 2>&1 &
 HTTP_PID=$!
 cd ..
 
@@ -64,8 +72,13 @@ cd ..
 sleep 2
 
 # Ouvrir le site dans le navigateur par défaut
-open_browser "http://localhost:8000"
+open_browser "http://127.0.0.1:8000"
 
 # Gestion du Ctrl+C
-trap "echo 'Arret des serveurs...'; kill $FLASK_PID $HTTP_PID" SIGINT
+echo "=== SERVEURS DEMARRES ==="
+echo "Frontend (Express + nodemon): http://127.0.0.1:8000"
+echo "Backend (Flask): http://127.0.0.1:5000"
+echo "=== Appuyez sur Ctrl+C pour arreter les serveurs ==="
+
+trap "echo 'Arret des serveurs...'; kill $FLASK_PID $HTTP_PID 2>/dev/null" SIGINT
 wait
