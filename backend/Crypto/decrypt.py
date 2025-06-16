@@ -23,8 +23,16 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
 
 def initial_mapping(message_chiffre):
     frequences_lettres = frequences_lettres(message_chiffre)
-    for lettre, frequence in frequences_lettres.items():
-        pass
+
+    sorted_chiffre = sorted(frequences_lettres.keys(), key=lambda x: -frequences_lettres[x])
+
+    sorted_langue = sorted(freq_francais.keys(), key=lambda x: -freq_francais[x])
+    mapping = {}
+    
+    for chiffre, clair in zip(sorted_chiffre, sorted_langue):
+        mapping[chiffre] = clair
+
+    return mapping
 
     
 
