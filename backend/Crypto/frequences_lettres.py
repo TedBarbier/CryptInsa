@@ -54,8 +54,11 @@ def get_combi_frequencies_for_a_letter(text, letter,position):   #avec e, positi
             combination_frequencies[comb] += 1
             total_combinations += 1
     for comb in combination_frequencies:
-        combination_frequencies[comb] = combination_frequencies[comb] * 100 / total_combinations
+        if total_combinations > 0:
+            combination_frequencies[comb] = combination_frequencies[comb] * 100 / total_combinations
     return combination_frequencies
+
+
 def display(frequencies):
     for letter, freq in frequencies.items():
         print(f"{letter}: {freq:.4f}")
@@ -64,5 +67,8 @@ pdf_path = "miserables.pdf"
 text = extract_text_from_pdf(pdf_path)
 # letter_freq= get_letter_frequencies(text)
 combination_freq = get_combination_frequencies(text)
+combi_e= get_combi_frequencies_for_a_letter(text, 'e', 0)
+combi_= get_combi_frequencies_for_a_letter(text, 'e', 0)
+display(combi_e)
 # display(letter_freq)
-display(combination_freq)
+# display(combination_freq)

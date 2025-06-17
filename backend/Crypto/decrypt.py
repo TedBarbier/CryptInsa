@@ -9,6 +9,8 @@ freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserabl
 
 freq_combination_francais = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 
+combinaisons= freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
+combinaison_frequentes = {k: v for k, v in combinaisons.items() if v > 0.8}
 
 N_ITERATIONS=50
 
@@ -21,32 +23,30 @@ def frequences_lettres(texte):
     return {lettre: (count / total) * 100 for lettre, count in compteur.items()} if total > 0 else {}
 
 def decrypt_lettre(frequence,seuil_frequence=None):
-    
     min_diff=1000
+    if seuil_frequence is not None and frequence < seuil_frequence:
+        return None
     
     for l,f in freq_francais.items():
         if abs(frequence-f)<min_diff:
             min_diff=abs(frequence-f)
             decode=l
-    if seuil_frequence is not None and frequence < seuil_frequence:
-        return None
     return decode
 
-def decrypt_lettre_combinaison(frequence):
+def decrypt_lettre_combinaison(frequence_combi,combinaison):
     min_diff=1000
     
-    for l,f in freq_combination_francais.items():
-        if abs(frequence-f)<min_diff:
-            min_diff=abs(frequence-f)
+    for l,f in combinaison.items():
+        if abs(frequence_combi-f)<min_diff:
+            min_diff=abs(frequence_combi-f)
             decode=l
     return decode
 
 def create_key(message):
     message=cesar.cesar_encrypt(message.lower(),3)
     frequences=freq.get_letter_frequencies(message)
-    print("frequences",frequences)
-    code=["-1"]*len(message)
-    code=["-1"]*len(message)
+    code=["0"]*len(message)
+    code=["0"]*len(message)
     for i in range(0,len(message)):
         l=message[i]
         if l in frequences.keys():
@@ -54,7 +54,7 @@ def create_key(message):
             code[i]=c
     key={}
     for i in range(0,len(message)):
-        if code[i]!="-1":
+        if code[i]!="0":
             key[message[i]]=code[i]
     return key
 
@@ -81,16 +81,15 @@ def find_score(message, key):
     #         score += len(mot) * 100
     return score/len(message)*100
 
-def decrypt_message(message):
-    message=cesar.cesar_encrypt(message.lower(),3)
+def decrypt_message(message,seuil_frequence=None):
     frequences=freq.get_letter_frequencies(message)
-    print("frequences",frequences)
-    code=["-1"]*len(message)
+    code=["0"]*len(message)
     for i in range(0,len(message)):
         l=message[i]
         if l in frequences.keys():
-            c=decrypt_lettre(frequences[l])
-            code[i]=c
+            c=decrypt_lettre(frequences[l],seuil_frequence)
+            if c is not None:
+                code[i]=c
     # for l,f in frequences.items():
     #     c=decrypt_lettre(f,chemin_dictionnaire)
     #     code[message.index(l)]=c
@@ -98,16 +97,36 @@ def decrypt_message(message):
     return separateur.join(code)
 
 def decrypt_message_with_combination(message):
-    message=cesar.cesar_encrypt(message.lower(),3)
-    frequences=freq.get_combination_frequencies(message)
-    print("frequences",frequences)
-    code=["-1"]*len(message)
-    for i in range(0,len(message)-1):
-        l=message[i:i+2]
-        if l in frequences.keys():
-            c=decrypt_lettre(frequences[l])
-            if code[i]=="-1" or code[i]==c[0]:
-                code[i]=c
+    code=decrypt_message(message,3)
+    bien_place=[]
+    bien_place=[a for a in code if a!="0" and a not in bien_place]
+    for j in range(N_ITERATIONS):
+
+        for i in range(0,len(code)-1):
+            if code[i] in bien_place and code[i+1]=="0":
+                l=code[i]+message[i+1]
+                frequences=freq.get_combi_frequencies_for_a_letter(message, code[i], 0)
+                if l in frequences.keys():
+                    c=decrypt_lettre_combinaison(frequences[l],frequences)
+                    if code[i]==c[0] and c is not None:
+                        code = code[:i] + str(c) + code[i+2:]
+            if code[i+1] in bien_place and code[i]=="0" :
+                l=message[i]+code[i+1]
+                frequences_message=freq.get_combi_frequencies_for_a_letter(message, message[i+1], 1)
+                fre=freq.get_combination_frequencies(message)
+                frequences=freq.get_combi_frequencies_for_a_letter(freq.extract_text_from_pdf(pdf_path), code[i+1], 1)
+                c=decrypt_lettre_combinaison(fre[message[i:i+2]],frequences)
+                if code[i+1]==c[1] and c is not None:
+                    code = code[:i] + str(c) + code[i+2:]
+        bien_place=[a for a in code if a!="0" and a not in bien_place]
+                    
+
+    # for i in range(0,len(code)-1):
+    #     l=code[i:i+2]
+    #     if l in frequences.keys():
+    #         c=decrypt_lettre_combinaison(frequences[l])
+    #         if (code[i]=="0" or code[i]==c[0]) and c is not None:
+    #             code = code[:i] + str(c) + code[i+2:]
     separateur=""
     return separateur.join(code)
 
