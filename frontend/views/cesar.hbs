@@ -1,175 +1,166 @@
 {{!-- CSS spécifique pour le chiffrement de César --}}
 <link rel="stylesheet" href="/css/cesar.css">
-
-<div class="cesar-container">
-    {{!-- Section Outil Interactif --}}
-    <section class="tool-section">
-        <div class="container">
-            <h2 class="section-title">Outil de Chiffrement/Déchiffrement</h2>
-            
-            <div class="tool-container">
-                {{!-- Roue rotative et contrôles --}}
-                <div class="controls-section">
-                    <div class="wheel-container">
-                        <h3>Roue de Chiffrement</h3>
-                        <div class="caesar-wheel">
-                            <div class="wheel-outer" id="wheelOuter">
-                                {{!-- Alphabet extérieur (fixe) --}}
-                                <div class="wheel-letters outer-letters">
-                                    <span class="letter" data-index="0">A</span>
-                                    <span class="letter" data-index="1">B</span>
-                                    <span class="letter" data-index="2">C</span>
-                                    <span class="letter" data-index="3">D</span>
-                                    <span class="letter" data-index="4">E</span>
-                                    <span class="letter" data-index="5">F</span>
-                                    <span class="letter" data-index="6">G</span>
-                                    <span class="letter" data-index="7">H</span>
-                                    <span class="letter" data-index="8">I</span>
-                                    <span class="letter" data-index="9">J</span>
-                                    <span class="letter" data-index="10">K</span>
-                                    <span class="letter" data-index="11">L</span>
-                                    <span class="letter" data-index="12">M</span>
-                                    <span class="letter" data-index="13">N</span>
-                                    <span class="letter" data-index="14">O</span>
-                                    <span class="letter" data-index="15">P</span>
-                                    <span class="letter" data-index="16">Q</span>
-                                    <span class="letter" data-index="17">R</span>
-                                    <span class="letter" data-index="18">S</span>
-                                    <span class="letter" data-index="19">T</span>
-                                    <span class="letter" data-index="20">U</span>
-                                    <span class="letter" data-index="21">V</span>
-                                    <span class="letter" data-index="22">W</span>
-                                    <span class="letter" data-index="23">X</span>
-                                    <span class="letter" data-index="24">Y</span>
-                                    <span class="letter" data-index="25">Z</span>
-                                    <span class="letter" data-index="26">__</span>
+<div class="cesar-page">
+    <div class="cesar-container">
+        {{!-- Section Outil Interactif --}}
+        <section class="tool-section">
+            <div class="container">
+                <h2 class="section-title">Outil de Chiffrement/Déchiffrement</h2>
+                
+                <div class="tool-container">
+                    {{!-- Roue rotative et contrôles --}}
+                    <div class="controls-section">
+                        <div class="wheel-container">
+                            <h3>Roue de Chiffrement</h3>
+                            <div class="caesar-wheel">
+                                <div class="wheel-outer" id="wheelOuter">
+                                    {{!-- Alphabet extérieur (fixe) --}}
+                                    <div class="wheel-letters outer-letters">
+                                        <span class="letter" data-index="0">A</span>
+                                        <span class="letter" data-index="1">B</span>
+                                        <span class="letter" data-index="2">C</span>
+                                        <span class="letter" data-index="3">D</span>
+                                        <span class="letter" data-index="4">E</span>
+                                        <span class="letter" data-index="5">F</span>
+                                        <span class="letter" data-index="6">G</span>
+                                        <span class="letter" data-index="7">H</span>
+                                        <span class="letter" data-index="8">I</span>
+                                        <span class="letter" data-index="9">J</span>
+                                        <span class="letter" data-index="10">K</span>
+                                        <span class="letter" data-index="11">L</span>
+                                        <span class="letter" data-index="12">M</span>
+                                        <span class="letter" data-index="13">N</span>
+                                        <span class="letter" data-index="14">O</span>
+                                        <span class="letter" data-index="15">P</span>
+                                        <span class="letter" data-index="16">Q</span>
+                                        <span class="letter" data-index="17">R</span>
+                                        <span class="letter" data-index="18">S</span>
+                                        <span class="letter" data-index="19">T</span>
+                                        <span class="letter" data-index="20">U</span>
+                                        <span class="letter" data-index="21">V</span>
+                                        <span class="letter" data-index="22">W</span>
+                                        <span class="letter" data-index="23">X</span>
+                                        <span class="letter" data-index="24">Y</span>
+                                        <span class="letter" data-index="25">Z</span>
+                                        <span class="letter" data-index="26">__</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="wheel-inner" id="wheelInner">
+                                    {{!-- Alphabet intérieur (rotatif) --}}
+                                    <div class="wheel-letters inner-letters">
+                                        <span class="letter" data-index="0">A</span>
+                                        <span class="letter" data-index="1">B</span>
+                                        <span class="letter" data-index="2">C</span>
+                                        <span class="letter" data-index="3">D</span>
+                                        <span class="letter" data-index="4">E</span>
+                                        <span class="letter" data-index="5">F</span>
+                                        <span class="letter" data-index="6">G</span>
+                                        <span class="letter" data-index="7">H</span>
+                                        <span class="letter" data-index="8">I</span>
+                                        <span class="letter" data-index="9">J</span>
+                                        <span class="letter" data-index="10">K</span>
+                                        <span class="letter" data-index="11">L</span>
+                                        <span class="letter" data-index="12">M</span>
+                                        <span class="letter" data-index="13">N</span>
+                                        <span class="letter" data-index="14">O</span>
+                                        <span class="letter" data-index="15">P</span>
+                                        <span class="letter" data-index="16">Q</span>
+                                        <span class="letter" data-index="17">R</span>
+                                        <span class="letter" data-index="18">S</span>
+                                        <span class="letter" data-index="19">T</span>
+                                        <span class="letter" data-index="20">U</span>
+                                        <span class="letter" data-index="21">V</span>
+                                        <span class="letter" data-index="22">W</span>
+                                        <span class="letter" data-index="23">X</span>
+                                        <span class="letter" data-index="24">Y</span>
+                                        <span class="letter" data-index="25">Z</span>
+                                        <span class="letter" data-index="26">__</span>
+                                    </div>
+                                    
+                                    {{!-- Cercle central décoratif --}}
+                                    <div class="wheel-center"></div>
+                                    
+                                    {{!-- Poignée de rotation --}}
+                                    <div class="wheel-handle" id="wheelHandle">
+                                        <i class="fas fa-arrows-rotate"></i>
+                                    </div>
+                                </div>
+                                
+                                {{!-- Indicateur de correspondance --}}
+                                <div class="wheel-indicator">
+                                    <div class="indicator-line"></div>
+                                    <div class="indicator-text">
+                                        <span id="originalLetter">A</span> → <span id="cipherLetter">D</span>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="wheel-inner" id="wheelInner">
-                                {{!-- Alphabet intérieur (rotatif) --}}
-                                <div class="wheel-letters inner-letters">
-                                    <span class="letter" data-index="0">A</span>
-                                    <span class="letter" data-index="1">B</span>
-                                    <span class="letter" data-index="2">C</span>
-                                    <span class="letter" data-index="3">D</span>
-                                    <span class="letter" data-index="4">E</span>
-                                    <span class="letter" data-index="5">F</span>
-                                    <span class="letter" data-index="6">G</span>
-                                    <span class="letter" data-index="7">H</span>
-                                    <span class="letter" data-index="8">I</span>
-                                    <span class="letter" data-index="9">J</span>
-                                    <span class="letter" data-index="10">K</span>
-                                    <span class="letter" data-index="11">L</span>
-                                    <span class="letter" data-index="12">M</span>
-                                    <span class="letter" data-index="13">N</span>
-                                    <span class="letter" data-index="14">O</span>
-                                    <span class="letter" data-index="15">P</span>
-                                    <span class="letter" data-index="16">Q</span>
-                                    <span class="letter" data-index="17">R</span>
-                                    <span class="letter" data-index="18">S</span>
-                                    <span class="letter" data-index="19">T</span>
-                                    <span class="letter" data-index="20">U</span>
-                                    <span class="letter" data-index="21">V</span>
-                                    <span class="letter" data-index="22">W</span>
-                                    <span class="letter" data-index="23">X</span>
-                                    <span class="letter" data-index="24">Y</span>
-                                    <span class="letter" data-index="25">Z</span>
-                                    <span class="letter" data-index="26">__</span>
+                            <div class="wheel-info">
+                                <div class="current-shift">
+                                    Décalage: <span id="currentShift">3</span>
                                 </div>
-                                
-                                {{!-- Cercle central décoratif --}}
-                                <div class="wheel-center"></div>
-                                
-                                {{!-- Poignée de rotation --}}
-                                <div class="wheel-handle" id="wheelHandle">
-                                    <i class="fas fa-arrows-rotate"></i>
-                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-areas">
+                        {{!-- Boutons d'action --}}
+                            <div class="action-buttons">
+                                <button id="clearText" class="btn btn-secondary" onclick="document.getElementById('inputText').value = ''; document.getElementById('outputText').value = '';">
+                                    <i class="fas fa-trash"></i>
+                                    Effacer
+                                </button>
+                            </div> 
+
+                            <div class="text-group">
+                                <label for="inputText">Texte d'entrée :</label>
+                                <textarea id="inputText" placeholder="Entrez votre texte ici..." rows="5"></textarea>
                             </div>
                             
-                            {{!-- Indicateur de correspondance --}}
-                            <div class="wheel-indicator">
-                                <div class="indicator-line"></div>
-                                <div class="indicator-text">
-                                    <span id="originalLetter">A</span> → <span id="cipherLetter">D</span>
-                                </div>
+                            <div class="transform-arrow">
+                                <i class="fas fa-arrow-down" id="transformIcon"></i>
                             </div>
-                        </div>
-                        
-                        <div class="wheel-info">
-                            <div class="current-shift">
-                                Décalage: <span id="currentShift">3</span>
+                            
+                            <div class="text-group">
+                                <label for="outputText">Résultat :</label>
+                                <textarea id="outputText" readonly rows="5"></textarea>
+                                <button id="copyResult" class="copy-btn" title="Copier le résultat">
+                                    <i class="fas fa-copy"></i>
+                                </button>
                             </div>
+                            
                         </div>
-                    </div>
-
-                    <div class="text-areas">
-                    {{!-- Boutons d'action --}}
-                        <div class="action-buttons">
-                            <button id="clearText" class="btn btn-secondary">
-                                <i class="fas fa-trash"></i>
-                                Effacer
-                            </button>
-                        </div> 
-
-                        <div class="text-group">
-                            <label for="inputText">Texte d'entrée :</label>
-                            <textarea id="inputText" placeholder="Entrez votre texte ici..." rows="5"></textarea>
-                        </div>
-                        
-                        <div class="transform-arrow">
-                            <i class="fas fa-arrow-down" id="transformIcon"></i>
-                        </div>
-                        
-                        <div class="text-group">
-                            <label for="outputText">Résultat :</label>
-                            <textarea id="outputText" readonly rows="5"></textarea>
-                            <button id="copyResult" class="copy-btn" title="Copier le résultat">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                        </div>
-
-                        <div class="traditional-controls">
-                            <div class="quick-keys">
-                                <span class="quick-key-label">Clés rapides :</span>
-                                <button class="quick-key" data-key="1">1</button>
-                                <button class="quick-key" data-key="3">3</button>
-                                <button class="quick-key" data-key="5">5</button>
-                                <button class="quick-key" data-key="13">13</button>
-                                <button class="quick-key" data-key="21">21</button>
-                            </div>
-                        </div>
-                    </div>
                     </div>
 
                 </div>
 
             </div>
 
-            {{!-- Exemples --}}
-            <div class="examples-section">
-                <h3>Exemples :</h3>
-                <div class="examples-grid">
-                    <div class="example-card" data-text="HELLO WORLD" data-key="3" data-mode="encrypt">
-                        <div class="example-input">HELLO WORLD</div>
-                        <div class="example-arrow">→ (clé: 3)</div>
-                        <div class="example-output">KHOOR ZRUOG</div>
-                    </div>
-                    <div class="example-card" data-text="CRYPTOGRAPHIE" data-key="5" data-mode="encrypt">
-                        <div class="example-input">CRYPTOGRAPHIE</div>
-                        <div class="example-arrow">→ (clé: 5)</div>
-                        <div class="example-output">HWNULTNLWUMJ</div>
-                    </div>
-                    <div class="example-card" data-text="VIVE LA FRANCE" data-key="13" data-mode="encrypt">
-                        <div class="example-input">VIVE LA FRANCE</div>
-                        <div class="example-arrow">→ (clé: 13)</div>
-                        <div class="example-output">IVIR YN SENAPR</div>
-                    </div>
-                </div>
+            
+        </section>
+    </div>
+ {{!-- Exemples --}}
+    <div class="examples-section">
+        <h3>Exemples :</h3>
+        <div class="examples-grid">
+            <div class="example-card" data-text="HELLO WORLD" data-key="3" data-mode="encrypt">
+                <div class="example-input">HELLO WORLD</div>
+                <div class="example-arrow">→ (clé: 3)</div>
+                <div class="example-output">KHOOR ZRUOG</div>
+            </div>
+            <div class="example-card" data-text="CRYPTOGRAPHIE" data-key="5" data-mode="encrypt">
+                <div class="example-input">CRYPTOGRAPHIE</div>
+                <div class="example-arrow">→ (clé: 5)</div>
+                <div class="example-output">HWNULTNLWUMJ</div>
+            </div>
+            <div class="example-card" data-text="VIVE LA FRANCE" data-key="13" data-mode="encrypt">
+                <div class="example-input">VIVE LA FRANCE</div>
+                <div class="example-arrow">→ (clé: 13)</div>
+                <div class="example-output">IVIR YN SENAPR</div>
             </div>
         </div>
-    </section>
-
+    </div>
+</div>
 {{!-- JavaScript pour les fonctionnalités interactives --}}
 <script src="/js/flask.js"></script>
 <script src="/js/cesar.js"></script>

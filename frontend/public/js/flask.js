@@ -38,9 +38,7 @@ async function cesarDecrypt(message, shift) { // Recuperer le texte chiffré et 
 }
 window.cesarDecrypt = cesarDecrypt;
 
-async function vigenere() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const message = document.getElementById("cipherText").value;
-    const key = document.getElementById("key").value;
+async function vigenere(message, key) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
     const res = await fetch("http://localhost:5000/vigenere", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,9 +50,7 @@ async function vigenere() { // Recuperer le texte chiffré et l'envoyer à l'API
 }
 window.vigenere = vigenere;
 
-async function vigenereDecrypt() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const message = document.getElementById("cipherText").value;
-    const key = document.getElementById("key").value;
+async function vigenereDecrypt(message, key) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
     const res = await fetch("http://localhost:5000/vigenere/decrypt", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
