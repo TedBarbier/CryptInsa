@@ -81,23 +81,45 @@ def find_score(message, key):
     #         score += len(mot) * 100
     return score/len(message)*100
 
+def find_score_lettre(l,t,traductions,message):
+    score=0
+    cpt=0
+    frequences=freq.get_letter_frequencies(message)
+
+    combi_freq= freq.get_combination_frequencies(message)
+    combinaisons = {k: v for k, v in combi_freq.items() if v > 0.3}
+    for combi in combinaisons.keys():
+        if combi[0] in traductions.keys() and combi[1] in traductions.keys() and l in combi:
+            c1=traductions[combi[0]]
+            c2=traductions[combi[1]]
+            trad_combi=c1+c2
+            f=freq_combination_francais[trad_combi]
+            score+=f
+            cpt+=1
+    if cpt!=0:
+        score=(score/cpt)/4
+    p=1-(abs(frequences[l]-freq_francais[t]))/19
+    score=0.3*p+0.7*score
+    return score
+
 def decrypt_message(message,seuil_frequence=None):
     frequences=freq.get_letter_frequencies(message)
     code=["0"]*len(message)
+    traductions=dict()
     for i in range(0,len(message)):
         l=message[i]
         if l in frequences.keys():
             c=decrypt_lettre(frequences[l],seuil_frequence)
             if c is not None:
                 code[i]=c
-    # for l,f in frequences.items():
-    #     c=decrypt_lettre(f,chemin_dictionnaire)
-    #     code[message.index(l)]=c
+            traductions[l]=c
     separateur=""
-    return separateur.join(code)
+    print(traductions.keys())
+    return separateur.join(code),traductions
+
 
 def decrypt_message_with_combination(message):
-    code=decrypt_message(message,3)
+    code,_=decrypt_message(message,3)
     bien_place=[]
     bien_place=[a for a in code if a!="0" and a not in bien_place]
     for j in range(N_ITERATIONS):
@@ -128,7 +150,7 @@ def decrypt_message_with_combination(message):
     #         if (code[i]=="0" or code[i]==c[0]) and c is not None:
     #             code = code[:i] + str(c) + code[i+2:]
     separateur=""
-    return separateur.join(code)
+    return separateur.join(code),traductions
 
 def check_mot(mot):
     # Ouvrir le fichier en lecture
@@ -138,8 +160,7 @@ def check_mot(mot):
         # Séparer le contenu en mots
         liste_mots = contenu.split()
 
-
-        diff=max(len(mot)-4,2)
+        diff=max(len(mot)-4,1)
         result=None
         for m in liste_mots:
             cpt=abs(len(m)-len(mot))
@@ -204,39 +225,15 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
-# m2=cesar.cesar_encrypt(m.lower(),3)
-code=decrypt_message(m2)
-# print("code",code)
-# print(comparaison(code,m))
-# print(freq_francais)
-# print("affiner_combinaison_par_mots", affiner_combinaison_par_mots(m))
+m2=cesar.cesar_encrypt(m.lower(),3)
 
-code=decrypt_message_with_combination(m)
-print("code",code)
-print(code)
+code,traductions=decrypt_message(m2)
+
 tabc=code.split(" ")
 print(comparaison(code,m))
-# print(freq_francais)
-# print("affiner_combinaison_par_mots", affiner_combinaison_par_mots(m))
 
-
-# meilleur_clef=create_key(m)
-# print("cle initiale", meilleur_clef)
-# print("longueur cle initiale", len(meilleur_clef))
-# meilleur_score=find_score(m, meilleur_clef)
-# for i in range(N_ITERATIONS):
-#     print("Iteration", i+1)
-#     key_test=swap_letters(meilleur_clef)
-#     score_test=find_score(text,key_test)
-#     if score_test>meilleur_score:
-#         print("meilleur score amélioré",score_test)
-#         meilleur_score=score_test
-#         meilleur_clef=key_test
-
-# print("Meilleure clé trouvée :", meilleur_clef)
-# print("Longueur de la clé :", len(meilleur_clef))
-# print("Meilleur score :", meilleur_score)
-# # Décryptage du message avec la meilleure clé trouvée
-# message_dechiffre = ''.join(meilleur_clef.get(c, c) for c in m)
-# print("Message déchiffré :", message_dechiffre)
-# print(comparaison(message_dechiffre, m))
+# for l,t in traductions.items(): 
+#     s=find_score_lettre(l,t,traductions,m2)
+#     print(l,t,s)
+# print(m)
+# print(m2)
