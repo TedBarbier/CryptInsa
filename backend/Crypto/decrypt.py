@@ -31,6 +31,8 @@ def decrypt_lettre(frequence,seuil_frequence=None):
         if abs(frequence-f)<min_diff:
             min_diff=abs(frequence-f)
             decode=l
+    if seuil_frequence is not None and frequence < seuil_frequence:
+        return None
     return decode
 
 def decrypt_lettre_combinaison(frequence_combi,combinaison):
@@ -109,7 +111,7 @@ def find_score_lettre(l,t,traductions,message):   #l lettre chifré et t lettre 
     if cpt!=0:
         score=(score/cpt)/4
     p=1-(abs(frequences[l]-freq_francais[t]))/19
-    score=0.3*p+0.7*score
+    score=0.4*p+0.6*score
     return score
 
 def change_traduction_with_word(traduction,mot_initial, mot_final):
@@ -194,12 +196,29 @@ def check_mot(mot):
                 result=m
         return result
 
+def score_mot(mot):
+    mot2=check_mot(mot)
+    distance=abs(len(mot2)-len(mot))
+    for i in range(min(len(mot),len(mot2))):
+        if mot[i]==mot2[i]:
+            distance+=1
+    return 1
+
+def score_message(traductions,message):
+    liste_mots=message.split(" ")
+    score=0
+    for mot in liste_mots:
+        score+=score_mot(mot)
+    for k,v in traductions.items():
+        score+=find_score_lettre(k,v,traductions,message)
+    return score
+
 def comparaison(m1,m2):
     cpt=0
     for i in range(0,min(len(m1),len(m2))):
         if m1[i]==m2[i]:
             cpt+=1
-            print("lettre",m1[i],"position",i)
+            #print("lettre",m1[i],"position",i)
     return cpt/len(m1)*100,cpt,len(m2)
 
 def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
@@ -243,14 +262,15 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 
 pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
-m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
+m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2=cesar.cesar_encrypt(m.lower(),3)
 
 # code,traductions=decrypt_message(m2)
 # print(comparaison(code,m))
 
-# for l,t in traductions.items(): 
-#     s=find_score_lettre(l,t,traductions,m2)
-#     print(l,t,s)
-# print(m)
-# print(m2)
+for l,t in traductions.items(): 
+    s=find_score_lettre(l,t,traductions,m2)
+    print(l,t,s)
+print(m)
+print(m2)
+print(score_message(traductions,m2))
