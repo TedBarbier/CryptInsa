@@ -64,7 +64,17 @@ def swap_letters(key):
     new_key[l1], new_key[l2] = new_key[l2], new_key[l1]
     return new_key
 
-def find_score(message, key):
+def message_from_key(message, traduction): #message apres cesar
+    new_message = ""
+    for char in message:
+        if char in traduction.keys() and traduction[char] is not None:
+            new_message += traduction[char]
+        else:
+            new_message += char
+    return new_message
+    
+
+def find_score(message, key):  # message juste après cesar et key = traduction
     score=0
     frequence=freq.get_letter_frequencies(message)
     for i in range(0,len(message)):
@@ -81,7 +91,7 @@ def find_score(message, key):
     #         score += len(mot) * 100
     return score/len(message)*100
 
-def find_score_lettre(l,t,traductions,message):
+def find_score_lettre(l,t,traductions,message):   #l lettre chifré et t lettre qu'on pense que c'est
     score=0
     cpt=0
     frequences=freq.get_letter_frequencies(message)
@@ -102,6 +112,19 @@ def find_score_lettre(l,t,traductions,message):
     score=0.3*p+0.7*score
     return score
 
+def change_traduction_with_word(traduction,mot_initial, mot_final):
+    for i in range(len(mot_initial)):
+        if mot_initial[i] in traduction.keys():
+            traduction[mot_initial[i]] = mot_final[i]
+    return traduction
+
+def change_traduction_with_letter(traduction, lettre_initiale, lettre_finale):
+    for key in traduction.keys():
+        if traduction[key] == lettre_initiale:
+            traduction[key] = lettre_finale
+    return traduction
+
+
 def decrypt_message(message,seuil_frequence=None):
     frequences=freq.get_letter_frequencies(message)
     code=["0"]*len(message)
@@ -114,7 +137,6 @@ def decrypt_message(message,seuil_frequence=None):
                 code[i]=c
             traductions[l]=c
     separateur=""
-    print(traductions.keys())
     return separateur.join(code),traductions
 
 
@@ -199,9 +221,7 @@ def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
     
 def affiner_combinaison_par_mots(message):
     message_chiffre= cesar.cesar_encrypt(message.lower(), 3)
-    print("message_chiffre", message_chiffre)
     message_dechiffre = decrypt_message(message_chiffre)
-    print("message_dechiffre", message_dechiffre)
     freq_combi_cesar=freq.get_combination_frequencies(message_chiffre)
     freq_combi_dechiffre=freq.get_combination_frequencies(message_dechiffre)
     k=0
@@ -213,7 +233,6 @@ def affiner_combinaison_par_mots(message):
             print("Incohérence de combinaison :", combi_cesar, "->", combi_dechiffre, "fréquence :", freq_combi_cesar.get(combi_cesar), "->", freq_combi_dechiffre.get(combi_dechiffre))
         else:
             k+=1
-    print(k)
             
 
     
@@ -227,10 +246,8 @@ text = freq.extract_text_from_pdf(pdf_path)
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2=cesar.cesar_encrypt(m.lower(),3)
 
-code,traductions=decrypt_message(m2)
-
-tabc=code.split(" ")
-print(comparaison(code,m))
+# code,traductions=decrypt_message(m2)
+# print(comparaison(code,m))
 
 # for l,t in traductions.items(): 
 #     s=find_score_lettre(l,t,traductions,m2)
