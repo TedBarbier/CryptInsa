@@ -29,13 +29,15 @@
     gap: 2rem;
     grid-template-columns: 2fr 1fr;
     align-items: start;
-    padding: -10rem;
 }
 
 /* ===== SECTION INPUT ===== */
 .input-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: 2rem;
+    box-shadow: var(--shadow-card);
 }
 
 .section-header {
@@ -370,9 +372,15 @@
 
 /* ===== SECTION ATTAQUE ===== */
 .attack-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    padding: 5rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-card);
     height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .attack-content {
@@ -445,68 +453,235 @@
 
 .attack-button-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     gap: 1.5rem;
-    width: 300%;
+    width: 100%;
+}
+
+/* ===== BOUTON ÉLECTRIQUE CRYPTO ===== */
+.voltage-button {
+    position: relative;
+    display: inline-block;
 }
 
 .btn-attack {
+    color: var(--text-primary);
+    background: var(--bg-darker);
+    padding: 1.5rem 3rem;
+    border-radius: 3rem;
+    border: 3px solid var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1em;
+    letter-spacing: 0.075em;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    min-width: 250px;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 2rem 3rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--accent-blue));
-    color: var(--bg-dark);
-    border: none;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition-normal);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-elevation);
-    min-width: 280px;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .btn-attack:not(:disabled):hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: var(--shadow-glow);
+    background: rgba(0, 255, 136, 0.1);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    transform: translateY(-2px);
 }
 
 .btn-attack:disabled {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-muted);
+    border-color: var(--border-color);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
 }
 
+.btn-attack:hover + svg, 
+.btn-attack:hover + svg + .dots {
+    opacity: 1;
+}
+
+.voltage-button svg {
+    display: block;
+    position: absolute;
+    top: -0.75em;
+    left: -0.25em;
+    width: calc(100% + 0.5em);
+    height: calc(100% + 1.5em);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+    transition-delay: 0.1s;
+}
+
+.voltage-button svg path {
+    stroke-dasharray: 100;
+    filter: url("#crypto-glow");
+}
+
+.voltage-button svg path.line-1 {
+    stroke: var(--primary-color);
+    stroke-dashoffset: 0;
+    animation: crypto-spark-1 3s linear infinite;
+}
+
+.voltage-button svg path.line-2 {
+    stroke: var(--accent-blue);
+    stroke-dashoffset: 500;
+    animation: crypto-spark-2 3s linear infinite;
+}
+
+.voltage-button .dots {
+    opacity: 0;
+    transition: opacity 0.3s;
+    transition-delay: 0.4s;
+}
+
+.voltage-button .dots .dot {
+    width: 0.8rem;
+    height: 0.8rem;
+    background: var(--primary-color);
+    border-radius: 100%;
+    position: absolute;
+    opacity: 0;
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+.voltage-button .dots .dot-1 {
+    top: 0;
+    left: 20%;
+    animation: crypto-fly-up 3s linear infinite;
+}
+
+.voltage-button .dots .dot-2 {
+    top: 0;
+    left: 55%;
+    animation: crypto-fly-up 3s linear infinite;
+    animation-delay: 0.5s;
+}
+
+.voltage-button .dots .dot-3 {
+    top: 0;
+    left: 80%;
+    animation: crypto-fly-up 3s linear infinite;
+    animation-delay: 1s;
+}
+
+.voltage-button .dots .dot-4 {
+    bottom: 0;
+    left: 30%;
+    animation: crypto-fly-down 3s linear infinite;
+    animation-delay: 2.5s;
+}
+
+.voltage-button .dots .dot-5 {
+    bottom: 0;
+    left: 65%;
+    animation: crypto-fly-down 3s linear infinite;
+    animation-delay: 1.5s;
+}
+
 .attack-icon {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    color: var(--primary-color);
     animation: pulse 2s infinite;
 }
 
 .btn-attack:disabled .attack-icon {
     animation: none;
+    color: var(--text-muted);
 }
 
 .attack-text {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
 }
 
 .attack-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1;
+    color: var(--text-primary);
 }
 
 .attack-subtitle {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     opacity: 0.8;
     font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* ===== ANIMATIONS CRYPTO ===== */
+@keyframes crypto-spark-1 {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
+
+@keyframes crypto-spark-2 {
+    to {
+        stroke-dashoffset: -500;
+    }
+}
+
+@keyframes crypto-fly-up {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.2);
+    }
+    5% {
+        opacity: 1;
+        transform: translateY(-1.5rem) scale(0.4);
+    }
+    10%, 100% {
+        opacity: 0;
+        transform: translateY(-3rem) scale(0.2);
+    }
+}
+
+@keyframes crypto-fly-down {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.2);
+    }
+    5% {
+        opacity: 1;
+        transform: translateY(1.5rem) scale(0.4);
+    }
+    10%, 100% {
+        opacity: 0;
+        transform: translateY(3rem) scale(0.2);
+    }
+}
+
+/* ===== STATUT D'ATTAQUE ===== */
+.attack-status {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    text-align: center;
+}
+
+.attack-status span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.attack-status.ready span {
+    color: var(--primary-color);
+}
+
+.attack-status.processing span {
+    color: var(--accent-blue);
 }
 
 .attack-options {
