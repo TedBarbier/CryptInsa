@@ -180,7 +180,7 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 
 
 
-resultat = decrypt_message("po qsfgfsf fusf eft ivnbjot rvf fusf eft bojnbvy", "dict.txt")
-print(f"Message déchiffré : {resultat[0]}")
-print(f"Mapping initial : {resultat[2]}")
+# resultat = decrypt_message("po qsfgfsf fusf eft ivnbjot rvf fusf eft bojnbvy", "dict.txt")
+# print(f"Message déchiffré : {resultat[0]}")
+# print(f"Mapping initial : {resultat[2]}")
 

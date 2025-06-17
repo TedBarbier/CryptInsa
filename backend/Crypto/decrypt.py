@@ -4,6 +4,7 @@ import string
 import cesar
 import random
 import dict_search as dict_search
+import mapping
 # Fréquence des lettres en français (environ)
 freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 
@@ -202,7 +203,9 @@ def score_mot(mot):
     for i in range(min(len(mot),len(mot2))):
         if mot[i]==mot2[i]:
             distance+=1
-    return 1
+    if mapping.generer_pattern(mot)==mapping.generer_pattern(mot2):
+        distance+=len(mot1)
+    return distance
 
 def score_message(traductions,message):
     liste_mots=message.split(" ")
