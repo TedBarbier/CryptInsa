@@ -33,8 +33,11 @@ app.get('/vigenere', (req, res) => {
 app.get('/substitution', (req, res) => {
     res.render('substitution', { title: 'Illustration du chiffrement par substitution' });
 });
+app.get('/about_us', (req, res) => {
+    res.render('about_us', { title: 'A propos de nous' });
+});
 
-//Start the server: Use commande "node app.js" to start the server
+//Start the server: Use commande "node app.js" to start the server. "npm run dev" to start the server with debug mode.
 const server = app.listen(port, () => {
     console.log(`App listening at http://127.0.0.1:${port}`);
   });
