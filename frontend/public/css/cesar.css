@@ -14,6 +14,8 @@
     --transition: all 0.3s ease;
 }
 
+
+
 /* === STYLES GÉNÉRAUX === */
 .cesar-page {
     display: flex;
@@ -927,4 +929,75 @@
     background: var(--warning-color) !important;
     transform: scale(1.2);
     z-index: 10;
+}
+
+/* === BOUTON DE SUPPRESSION ANIMÉ === */
+.delete-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgb(20, 20, 20);
+    border: none;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition-duration: 0.3s;
+    overflow: hidden;
+    position: relative;
+    gap: 1px;
+}
+
+.delete-button .svgIcon {
+    width: 12px;
+    transition-duration: 0.3s;
+}
+
+.delete-button .svgIcon path {
+    fill: white;
+}
+
+.delete-button:hover {
+    width: 140px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    background-color: rgb(255, 69, 69);
+    align-items: center;
+    gap: 0;
+}
+
+.delete-button:hover .bin-bottom {
+    width: 50px;
+    transition-duration: 0.3s;
+    transform: translateY(60%);
+}
+
+.bin-top {
+    transform-origin: bottom right;
+}
+
+.delete-button:hover .bin-top {
+    width: 50px;
+    transition-duration: 0.3s;
+    transform: translateY(60%) rotate(160deg);
+}
+
+.delete-button::before {
+    position: absolute;
+    top: -20px;
+    content: "Effacer";
+    color: white;
+    transition-duration: 0.3s;
+    font-size: 2px;
+    opacity: 0;
+}
+
+.delete-button:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(35px);
+    transition-duration: 0.3s;
 }
