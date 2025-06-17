@@ -216,24 +216,28 @@
 /* ===== TEAM SLIDESHOW SECTION ===== */
 .team-section {
     padding: 6rem 0;
+    /* Compensation pour la taille de police de base augmentée */
+    font-size: 0.75rem;
 }
 
 .team-slideshow {
     max-width: 800px;
     margin: 0 auto;
     position: relative;
+
 }
 
 .slideshow-container {
     position: relative;
     border-radius: var(--border-radius);
+    font-size: 12px !important;
     overflow: hidden;
 }
 
 .slides-wrapper {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 450px;
     overflow: hidden;
 }
 
@@ -249,7 +253,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 3rem;
+    padding: 2rem;
     box-sizing: border-box;
 }
 
@@ -267,8 +271,9 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    max-width: 600px;
+    max-width: 500px;
     width: 100%;
+    font-size: 1rem;
 }
 
 /* Navigation Buttons */
@@ -354,19 +359,19 @@
 
 /* Member Avatar in Slideshow */
 .team-slide .member-avatar {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .team-slide .avatar-placeholder {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     background: linear-gradient(45deg, var(--primary-color), var(--accent-blue));
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto;
-    font-size: 3rem;
+    font-size: 2.5rem;
     color: var(--bg-dark);
     transition: all var(--transition-normal);
     box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
@@ -396,9 +401,9 @@
 }
 
 .team-slide .member-name {
-    font-size: 2rem;
+    font-size: 1.4rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
     color: var(--text-primary);
     opacity: 0;
     transform: translateY(20px);
@@ -409,9 +414,9 @@
 }
 
 .team-slide .member-role {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     color: var(--primary-color);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-weight: 500;
     opacity: 0;
     transform: translateY(20px);
@@ -423,9 +428,9 @@
 
 .team-slide .member-description {
     color: var(--text-secondary);
-    line-height: 1.8;
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
     opacity: 0;
     transform: translateY(20px);
 }
@@ -445,17 +450,17 @@
 .team-slide .member-skills {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.8rem;
+    gap: 0.5rem;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .team-slide .skill {
     background: rgba(0, 255, 136, 0.1);
     color: var(--primary-color);
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-size: 0.9rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.65rem;
     font-weight: 500;
     border: 1px solid rgba(0, 255, 136, 0.2);
     opacity: 0;
@@ -487,13 +492,13 @@
 /* Social Links in Slideshow */
 .team-slide .member-social {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     justify-content: center;
 }
 
 .team-slide .social-link {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     background: var(--bg-darker);
     border: 1px solid var(--border-color);
     border-radius: 50%;
@@ -505,6 +510,7 @@
     transition: all var(--transition-normal);
     opacity: 0;
     transform: translateY(20px);
+    font-size: 0.9rem;
 }
 
 .team-slide.active .social-link {
