@@ -59,6 +59,24 @@ def route_vigenere_decrypt():
     response = {"decrypted": result}
     # Retourne une réponse standardisée
     return jsonify(response)
+def substitution_attack(ciphertext, language='fr'):
+    # Implémentez l'attaque par substitution ici
+    # Pour l'instant, on retourne un message d'erreur
+    return {"error": "Substitution attack not implemented yet"}
+@app.route('/analyse_frequences', methods=['GET'])
+def route_analyse_frequences():
+    data = request.get_json()
+    cipherText = data.get('ciphertext', '')
+    if not cipherText:
+        return jsonify({"error": "No message provided"}), 400
+    language = data.get('language', 'fr')
+    freqCipher, freqMessage, freqLang, message = substitution_attack(cipherText, language)
+    response = {
+        "freqCipher": freqCipher,
+        "freqMessage": freqMessage,
+        "freqLang": freqLang,
+        "message": message
+    }
 
 if __name__ == '__main__':
     app.run(debug=True)
