@@ -91,14 +91,18 @@
                                 <div class="wheel-indicator">
                                     <div class="indicator-line"></div>
                                     <div class="indicator-text">
-                                        <span id="originalLetter">A</span> → <span id="cipherLetter">D</span>
+                                        <div class="correspondence">
+                                            <span id="originalLetter" class="original-letter">A</span> 
+                                            <span class="arrow">→</span> 
+                                            <span id="cipherLetter" class="cipher-letter">A</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="wheel-info">
                                 <div class="current-shift">
-                                    Décalage: <span id="currentShift">3</span>
+                                    Décalage: <span id="currentShift">0</span>
                                 </div>
                             </div>
                         </div>
@@ -143,15 +147,15 @@
     <div class="examples-section">
         <h3>Exemples :</h3>
         <div class="examples-grid">
-            <div class="example-card" data-text="HELLO WORLD" data-key="3" data-mode="encrypt">
+            <div class="example-card" data-text="HELLO WORLD" data-key="0" data-mode="encrypt">
                 <div class="example-input">HELLO WORLD</div>
-                <div class="example-arrow">→ (clé: 3)</div>
-                <div class="example-output">KHOOR ZRUOG</div>
+                <div class="example-arrow">→ (clé: 0)</div>
+                <div class="example-output">HELLO WORLD</div>
             </div>
-            <div class="example-card" data-text="CRYPTOGRAPHIE" data-key="5" data-mode="encrypt">
+            <div class="example-card" data-text="CRYPTOGRAPHIE" data-key="3" data-mode="encrypt">
                 <div class="example-input">CRYPTOGRAPHIE</div>
-                <div class="example-arrow">→ (clé: 5)</div>
-                <div class="example-output">HWNULTNLWUMJ</div>
+                <div class="example-arrow">→ (clé: 3)</div>
+                <div class="example-output">FUBSWRJUDSKH</div>
             </div>
             <div class="example-card" data-text="VIVE LA FRANCE" data-key="13" data-mode="encrypt">
                 <div class="example-input">VIVE LA FRANCE</div>

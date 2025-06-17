@@ -1,5 +1,5 @@
 // === VARIABLES GLOBALES ===
-let currentShift = 3;
+let currentShift = 0; // Commencer avec décalage 1 (position neutre)
 let isRotating = false;
 let startAngle = 0;
 let currentAngle = 0;
@@ -158,8 +158,9 @@ function rotate(e) {
     const deltaAngle = currentMouseAngle - startAngle;
     
     // Convertir l'angle en décalage (27 lettres = 360°)
-    const deltaShift = Math.round((deltaAngle * 27) / (2 * Math.PI));
-    const newShift = Math.max(1, Math.min(27, currentShift + deltaShift));
+    // Inverser le sens pour que la roue suive le mouvement de la souris
+    const deltaShift = Math.round((-deltaAngle * 27) / (2 * Math.PI));
+    const newShift = Math.max(0, Math.min(26, currentShift + deltaShift));
     
     if (newShift !== currentShift) {
         setShift(newShift);
@@ -199,8 +200,9 @@ function rotateTouch(e) {
     const currentTouchAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX);
     const deltaAngle = currentTouchAngle - startAngle;
     
-    const deltaShift = Math.round((deltaAngle * 27) / (2 * Math.PI));
-    const newShift = Math.max(1, Math.min(26, currentShift + deltaShift));
+    // Inverser le sens pour que la roue suive le mouvement tactile
+    const deltaShift = Math.round((-deltaAngle * 27) / (2 * Math.PI));
+    const newShift = Math.max(0, Math.min(26, currentShift + deltaShift));
     
     if (newShift !== currentShift) {
         setShift(newShift);
@@ -221,12 +223,15 @@ function setShift(shift) {
 
 function updateWheel(shift) {
     // Rotation de la roue intérieure (360° / 27 lettres = 13.333° par lettre)
-    const rotation = (shift * 360) / 27;
+    // Rotation négative pour que le décalage visuel corresponde au chiffrement
+    const rotation = -(shift * 360) / 27;
     elements.wheelInner.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
     
-    // Mise à jour de l'indicateur
+    // Mise à jour de l'indicateur - correction du calcul de correspondance
     const originalLetter = 'A';
-    const cipherLetter = ALPHABET[(shift) % 27];
+    const originalIndex = 0; // Position de 'A' dans l'alphabet
+    const cipherIndex = (originalIndex + shift) % 27;
+    const cipherLetter = ALPHABET[cipherIndex];
     elements.originalLetter.textContent = originalLetter;
     elements.cipherLetter.textContent = cipherLetter;
 }
@@ -270,9 +275,11 @@ function updateInterface() {
         }
     }
     
-    // Mise à jour des exemples en temps réel
+    // Mise à jour des exemples en temps réel - correction du calcul
     const originalExample = 'A';
-    const cipherExample = ALPHABET[(currentShift) % 27];
+    const exampleOriginalIndex = 0; // Position de 'A' dans l'alphabet
+    const exampleCipherIndex = (exampleOriginalIndex + currentShift) % 27;
+    const cipherExample = ALPHABET[exampleCipherIndex];
     if (elements.highlightOriginal) {
         elements.highlightOriginal.textContent = originalExample;
     }
@@ -292,7 +299,7 @@ function handleModeChange() {
 
 function handleKeyChange() {
     const shift = parseInt(elements.cesarKey.value);
-    if (shift >= 1 && shift <= 26) {
+    if (shift >= 0 && shift <= 26) {
         setShift(shift);
     }
 }
