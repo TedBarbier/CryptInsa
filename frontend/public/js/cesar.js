@@ -159,7 +159,7 @@ function rotate(e) {
     
     // Convertir l'angle en décalage (27 lettres = 360°)
     const deltaShift = Math.round((deltaAngle * 27) / (2 * Math.PI));
-    const newShift = Math.max(1, Math.min(26, currentShift + deltaShift));
+    const newShift = Math.max(1, Math.min(27, currentShift + deltaShift));
     
     if (newShift !== currentShift) {
         setShift(newShift);
@@ -554,3 +554,5 @@ async function processText() {
         showNotification('Erreur lors du traitement du texte.', 'error');
     }
 }
+//Fin du chiffrement de cesa    r
+//Il faut ajouter des estapes pour comprendre le chiffrement de cesar

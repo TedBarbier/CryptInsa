@@ -16,7 +16,6 @@
 
 /* === STYLES GÉNÉRAUX === */
 .cesar-container {
-    min-height: 100vh;
     background: linear-gradient(15deg, #ffffff 0%, #a50000 100%);
     padding: 0;
     border-radius: 50px;

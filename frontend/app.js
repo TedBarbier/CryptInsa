@@ -27,6 +27,12 @@ app.get('/test', (req, res) => {
 app.get('/cesar', (req, res) => {
     res.render('cesar', { title: 'Illustration du chiffrement de César' });
 });
+app.get('/vigenere', (req, res) => {
+    res.render('vigenere', { title: 'Illustration du chiffrement de Vigenère' });
+});
+app.get('/substitution', (req, res) => {
+    res.render('substitution', { title: 'Illustration du chiffrement par substitution' });
+});
 
 //Start the server: Use commande "node app.js" to start the server
 const server = app.listen(port, () => {

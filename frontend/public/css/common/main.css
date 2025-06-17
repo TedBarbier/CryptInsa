@@ -86,16 +86,16 @@ body::before {
 
 /* ===== LAYOUT PRINCIPAL ===== */
 .app {
-    min-height: 100vh;
+    width: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .content {
     flex: 1;
-    padding: var(--spacing-xl) var(--spacing-md);
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1500px;
+    margin-left: 100px;
+    margin-right: 100px;
     width: 100%;
 }
 

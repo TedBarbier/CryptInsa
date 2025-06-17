@@ -1,0 +1,200 @@
+{{!-- CSS spécifique pour le chiffrement par substitution --}}
+<link rel="stylesheet" href="/css/substitution.css">
+
+<div class="substitution-container">
+    {{!-- Section Outil Interactif --}}
+    <section class="tool-section">
+        <div class="container">
+            <h2 class="section-title">Outil de Chiffrement par Substitution</h2>
+            
+            <div class="tool-container">
+                {{!-- Table de substitution et contrôles --}}
+                <div class="controls-section">
+                    <div class="substitution-table-container">
+                        <h3>Table de Substitution</h3>
+                        <div class="substitution-table">
+                            <div class="table-header">
+                                <div class="alphabet-row original">
+                                    <span class="alphabet-label">Original :</span>
+                                    <div class="letters-container">
+                                        <span class="letter" data-original="A">A</span>
+                                        <span class="letter" data-original="B">B</span>
+                                        <span class="letter" data-original="C">C</span>
+                                        <span class="letter" data-original="D">D</span>
+                                        <span class="letter" data-original="E">E</span>
+                                        <span class="letter" data-original="F">F</span>
+                                        <span class="letter" data-original="G">G</span>
+                                        <span class="letter" data-original="H">H</span>
+                                        <span class="letter" data-original="I">I</span>
+                                        <span class="letter" data-original="J">J</span>
+                                        <span class="letter" data-original="K">K</span>
+                                        <span class="letter" data-original="L">L</span>
+                                        <span class="letter" data-original="M">M</span>
+                                        <span class="letter" data-original="N">N</span>
+                                        <span class="letter" data-original="O">O</span>
+                                        <span class="letter" data-original="P">P</span>
+                                        <span class="letter" data-original="Q">Q</span>
+                                        <span class="letter" data-original="R">R</span>
+                                        <span class="letter" data-original="S">S</span>
+                                        <span class="letter" data-original="T">T</span>
+                                        <span class="letter" data-original="U">U</span>
+                                        <span class="letter" data-original="V">V</span>
+                                        <span class="letter" data-original="W">W</span>
+                                        <span class="letter" data-original="X">X</span>
+                                        <span class="letter" data-original="Y">Y</span>
+                                        <span class="letter" data-original="Z">Z</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mapping-arrows">
+                                    <span class="arrow" data-index="0">↓</span>
+                                    <span class="arrow" data-index="1">↓</span>
+                                    <span class="arrow" data-index="2">↓</span>
+                                    <span class="arrow" data-index="3">↓</span>
+                                    <span class="arrow" data-index="4">↓</span>
+                                    <span class="arrow" data-index="5">↓</span>
+                                    <span class="arrow" data-index="6">↓</span>
+                                    <span class="arrow" data-index="7">↓</span>
+                                    <span class="arrow" data-index="8">↓</span>
+                                    <span class="arrow" data-index="9">↓</span>
+                                    <span class="arrow" data-index="10">↓</span>
+                                    <span class="arrow" data-index="11">↓</span>
+                                    <span class="arrow" data-index="12">↓</span>
+                                    <span class="arrow" data-index="13">↓</span>
+                                    <span class="arrow" data-index="14">↓</span>
+                                    <span class="arrow" data-index="15">↓</span>
+                                    <span class="arrow" data-index="16">↓</span>
+                                    <span class="arrow" data-index="17">↓</span>
+                                    <span class="arrow" data-index="18">↓</span>
+                                    <span class="arrow" data-index="19">↓</span>
+                                    <span class="arrow" data-index="20">↓</span>
+                                    <span class="arrow" data-index="21">↓</span>
+                                    <span class="arrow" data-index="22">↓</span>
+                                    <span class="arrow" data-index="23">↓</span>
+                                    <span class="arrow" data-index="24">↓</span>
+                                    <span class="arrow" data-index="25">↓</span>
+                                </div>
+                                
+                                <div class="alphabet-row substitution">
+                                    <span class="alphabet-label">Substitué :</span>
+                                    <div class="letters-container">
+                                        <input type="text" class="substitution-input" data-index="0" value="A" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="1" value="B" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="2" value="C" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="3" value="D" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="4" value="E" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="5" value="F" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="6" value="G" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="7" value="H" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="8" value="I" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="9" value="J" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="10" value="K" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="11" value="L" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="12" value="M" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="13" value="N" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="14" value="O" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="15" value="P" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="16" value="Q" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="17" value="R" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="18" value="S" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="19" value="T" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="20" value="U" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="21" value="V" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="22" value="W" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="23" value="X" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="24" value="Y" maxlength="1">
+                                        <input type="text" class="substitution-input" data-index="25" value="Z" maxlength="1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="substitution-controls">
+                            <div class="key-controls">
+                                <h4>Clés prédéfinies :</h4>
+                                <div class="predefined-keys">
+                                    <button class="key-btn" data-key="reverse">Alphabet inversé</button>
+                                    <button class="key-btn" data-key="atbash">Atbash</button>
+                                    <button class="key-btn" data-key="random">Aléatoire</button>
+                                    <button class="key-btn" data-key="keyword" data-keyword="SECRET">Mot-clé: SECRET</button>
+                                </div>
+                            </div>
+                            
+                            <div class="custom-key">
+                                <h4>Clé personnalisée :</h4>
+                                <input type="text" id="customKey" placeholder="Entrez un mot-clé..." maxlength="26">
+                                <button id="applyCustomKey" class="btn btn-primary">Appliquer</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-areas">
+                        {{!-- Boutons d'action --}}
+                        <div class="action-buttons">
+                            <button id="clearText" class="btn btn-secondary">
+                                <i class="fas fa-trash"></i>
+                                Effacer
+                            </button>
+                            <button id="resetTable" class="btn btn-warning">
+                                <i class="fas fa-undo"></i>
+                                Reset Table
+                            </button>
+                        </div> 
+
+                        <div class="text-group">
+                            <label for="inputText">Texte d'entrée :</label>
+                            <textarea id="inputText" placeholder="Entrez votre texte ici..." rows="5"></textarea>
+                        </div>
+                        
+                        <div class="transform-arrow">
+                            <i class="fas fa-arrow-down" id="transformIcon"></i>
+                        </div>
+                        
+                        <div class="text-group">
+                            <label for="outputText">Résultat :</label>
+                            <textarea id="outputText" readonly rows="5"></textarea>
+                            <button id="copyResult" class="copy-btn" title="Copier le résultat">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+
+                        <div class="mode-controls">
+                            <div class="mode-toggle">
+                                <input type="radio" id="encryptMode" name="mode" value="encrypt" checked>
+                                <label for="encryptMode">Chiffrer</label>
+                                <input type="radio" id="decryptMode" name="mode" value="decrypt">
+                                <label for="decryptMode">Déchiffrer</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Exemples --}}
+            <div class="examples-section">
+                <h3>Exemples :</h3>
+                <div class="examples-grid">
+                    <div class="example-card" data-text="HELLO WORLD" data-key="reverse" data-mode="encrypt">
+                        <div class="example-input">HELLO WORLD</div>
+                        <div class="example-arrow">→ (alphabet inversé)</div>
+                        <div class="example-output">SVOOL DLIOW</div>
+                    </div>
+                    <div class="example-card" data-text="CRYPTOGRAPHIE" data-key="atbash" data-mode="encrypt">
+                        <div class="example-input">CRYPTOGRAPHIE</div>
+                        <div class="example-arrow">→ (Atbash)</div>
+                        <div class="example-output">XIBKGLTIZKSV</div>
+                    </div>
+                    <div class="example-card" data-text="SECRET MESSAGE" data-key="keyword" data-keyword="CIPHER" data-mode="encrypt">
+                        <div class="example-input">SECRET MESSAGE</div>
+                        <div class="example-arrow">→ (mot-clé: CIPHER)</div>
+                        <div class="example-output">QBEMBR JBQQCFB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{{!-- JavaScript pour les fonctionnalités interactives --}}
+<script src="/js/flask.js"></script>
+<script src="/js/substitution.js"></script>
