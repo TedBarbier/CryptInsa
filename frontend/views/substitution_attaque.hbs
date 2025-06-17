@@ -4,109 +4,66 @@
 <div class="substitution-container">
     <section class="tool-section">
         <div class="container">
-            <h2 class="section-title">Déchiffrement par Substitution</h2>
-            
+            <h2 class="section-title"><i class="fas fa-crosshairs"></i>  Attaque par Substitution</h2>
             <div class="main-grid">
-                {{!-- Rangée 1: Table de Substitution --}}
-                <div class="substitution-section">
-                    <div class="section-header">
-                        <h3>Table de Substitution</h3>
-                        <div class="table-controls">
-                            <button id="generateRandom" class="btn btn-generate">
-                                <i class="fas fa-dice"></i>
-                                Aléatoire
-                            </button>
-                            <button class="key-btn compact" data-key="identity">
-                                <i class="fas fa-equals"></i>
-                                Identité
-                            </button>
-                            <button class="key-btn compact" data-key="reverse">
-                                <i class="fas fa-exchange-alt"></i>
-                                Inversé
-                            </button>
-                            <button class="key-btn compact" data-key="atbash">
-                                <i class="fas fa-mirror"></i>
-                                Atbash
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="table-content">
-                        <div class="horizontal-table">
-                            <!-- Rangée des lettres originales -->
-                            <div class="table-row original-row">
-                                <div class="row-label">Original :</div>
-                                <div class="letters-container" id="originalLetters">
-                                    <!-- Généré par JavaScript -->
-                                </div>
+                {{!-- Colonne 1: Zone de saisie du texte chiffré --}}
+                <div class="input-section">
+                    <div class="input-content">
+                        <div class="main-input-area">
+                            <div class="input-actions">
+                                <button id="clearText" class="btn btn-secondary">
+                                    <i class="fas fa-eraser"></i>
+                                    Effacer
+                                </button>
+                                <button id="pasteText" class="btn btn-secondary">
+                                    <i class="fas fa-paste"></i>
+                                    Coller
+                                </button>
+                                <button id="loadExample" class="btn btn-secondary">
+                                    <i class="fas fa-file-import"></i>
+                                    Exemple
+                                </button>
                             </div>
                             
-                            <!-- Rangée des flèches -->
-                            <div class="table-row arrows-row">
-                                <div class="row-label"></div>
-                                <div class="arrows-container" id="arrowsContainer">
-                                    <!-- Généré par JavaScript -->
-                                </div>
+                            <div class="textarea-container">
+                                <textarea id="inputText" placeholder="Entrez votre texte chiffré ici... 
+
+L'analyse de fréquences nécessite au minimum 50 caractères pour des résultats fiables." rows="8"></textarea>
                             </div>
                             
-                            <!-- Rangée des lettres substituées -->
-                            <div class="table-row substitution-row">
-                                <div class="row-label">Substitué :</div>
-                                <div class="inputs-container" id="substitutionInputs">
-                                    <!-- Généré par JavaScript -->
+                            <div class="input-stats">
+                                <div class="stats-item">
+                                    <i class="fas fa-sort-numeric-up"></i>
+                                    <span>Caractères: <strong id="inputLength">0</strong></span>
+                                </div>
+                                <div class="stats-item">
+                                    <i class="fas fa-font"></i>
+                                    <span>Lettres: <strong id="letterCount">0</strong></span>
+                                </div>
+                                <div class="stats-item">
+                                    <i class="fas fa-percentage"></i>
+                                    <span>Uniques: <strong id="uniqueLetters">0</strong></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{!-- Rangée 2: Chiffrement --}}
-                <div class="cipher-section">
-                    <div class="cipher-content">
-                        <div class="text-input-area">
-                            <h3>Texte à chiffrer</h3>
-                            <textarea id="inputText" placeholder="Entrez votre texte..." rows="5"></textarea>
-                            
-                            <div class="input-actions">
-                                <button id="clearText" class="btn btn-secondary compact">
-                                    <i class="fas fa-eraser"></i>
-                                    Effacer
-                                </button>
-                                <button id="pasteText" class="btn btn-secondary compact">
-                                    <i class="fas fa-paste"></i>
-                                    Coller
+                {{!-- Colonne 2: Bouton d'attaque --}}
+                <div class="attack-section">
+                        <div class="attack-launch">
+                            <div class="attack-button-container">
+                                <button id="launchAttack" class="btn-attack" disabled>
+                                    <div class="attack-icon">
+                                        <i class="fas fa-rocket"></i>
+                                    </div>
+                                    <div class="attack-text">
+                                        <span class="attack-title">LANCER L'ATTAQUE</span>
+                                        <span class="attack-subtitle">Analyse de Fréquences</span>
+                                    </div>
                                 </button>
                             </div>
                         </div>
-
-                        <div class="transform-area">
-                            <div class="transform-indicator">
-                                <i class="fas fa-arrow-right transform-arrow"></i>
-                                <span class="transform-label">Chiffrement</span>
-                            </div>
-                        </div>
-
-                        <div class="text-output-area">
-                            <h3>Texte chiffré</h3>
-                            <div class="output-container">
-                                <textarea id="outputText" readonly rows="5"></textarea>
-                                <button id="copyResult" class="copy-btn" title="Copier">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="output-actions">
-                                <button id="copyToClipboard" class="btn btn-success compact">
-                                    <i class="fas fa-clipboard"></i>
-                                    Copier
-                                </button>
-                                <div class="stats">
-                                    <span id="inputLength">0</span> caractères → 
-                                    <span id="outputLength">0</span> caractères
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

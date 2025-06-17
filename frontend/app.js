@@ -36,6 +36,10 @@ app.get('/substitution', (req, res) => {
 app.get('/about_us', (req, res) => {
     res.render('about_us', { title: 'A propos de nous' });
 });
+app.get('/substitution_attaque', (req, res) => {
+    res.render('substitution_attaque', { title: 'Attaque par substitution' });
+});
+
 
 //Start the server: Use commande "node app.js" to start the server. "npm run dev" to start the server with debug mode.
 const server = app.listen(port, () => {
