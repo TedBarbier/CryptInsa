@@ -164,7 +164,16 @@
     border: 2px solid rgba(102, 126, 234, 0.3);
     flex-shrink: 0;
 }
-
+/* Style conditionnel pour .original-letter */
+/* Ajoutez une classe supplémentaire selon la condition dans votre JS/HTML, par exemple .highlighted */
+.original-letter.highlighted {
+    background: linear-gradient(135deg, #ffd700, #ffeaa7);
+    color: #b26500;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    transform: scale(1.08);
+    z-index: 2;
+}
 /* Flèches de mapping */
 .mapping-arrow {
     color: var(--accent-color);

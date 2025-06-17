@@ -68,11 +68,18 @@ function initializeHorizontalTable() {
 
 function handleSubstitutionInput(event) {
     const input = event.target;
-    const value = input.value.toUpperCase();
     const originalLetter = input.id.replace('sub-', '');
+    const tempLetter = currentMapping[originalLetter];
+    const value = input.value.toUpperCase();
     
     // Validation de l'entrée
     if (value && !/^[A-Z]$/.test(value)) {
+        input.classList.add('invalid');
+        setTimeout(() => input.classList.remove('invalid'), 500);
+        input.value = currentMapping[originalLetter] || '';
+        return;
+    }
+    if (value && Object.values(currentMapping).includes(value) && currentMapping[originalLetter] !== value) {
         input.classList.add('invalid');
         setTimeout(() => input.classList.remove('invalid'), 500);
         input.value = currentMapping[originalLetter] || '';
@@ -83,8 +90,20 @@ function handleSubstitutionInput(event) {
     if (value) {
         input.value = value;
         currentMapping[originalLetter] = value;
+        const originalDivs = document.querySelectorAll('.original-letter');
+        originalDivs.forEach(div => {
+            if (div.textContent === value) {
+                div.classList.remove('highlighted');
+            }
+        });
     } else {
         currentMapping[originalLetter] = '';
+        const originalDivs = document.querySelectorAll('.original-letter');
+        originalDivs.forEach(div => {
+            if (div.textContent === tempLetter) {
+                div.classList.add('highlighted');
+            }
+        });
     }
     
     // Mise à jour du chiffrement en temps réel
@@ -253,7 +272,15 @@ function updateEncryption() {
     const outputText = document.getElementById('outputText');
     const inputLength = document.getElementById('inputLength');
     const outputLength = document.getElementById('outputLength');
-    
+    // Vérifier si une correspondance est manquante
+    for (let key in currentMapping) {
+        if (!currentMapping[key]) {
+            // Afficher une alerte ou indiquer une erreur si besoin
+            outputText.value = '';
+            if (outputLength) outputLength.textContent = '0';
+            return;
+        }
+    }
     if (!inputText || !outputText) return;
     
     const text = inputText.value.toUpperCase();
