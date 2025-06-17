@@ -43,6 +43,28 @@ def decrypt_lettre_combinaison(frequence):
 
 def create_key(message):
     message=cesar.cesar_encrypt(message.lower(),3)
+def decrypt_lettre2(c,frequence, chemin_dictionnaire,traductions,f_autres):
+    
+    min_diff=1000
+    
+    for l,f in chemin_dictionnaire.items():
+        if abs(frequence-f)<min_diff:
+            if l in traductions.values():
+                for k,v in traductions.items():
+                    #si l est deja attribué a une autre lettre
+                    #on attribue à celle qui à la frequence la plus proche
+                    if v==l:
+                        if abs(f-frequence)<abs(f-f_autres[k]):
+                            min_diff=abs(frequence-f)
+                            decode=l
+
+                min_diff=abs(frequence-f)
+                decode=l
+    return decode
+
+def decrypt_message(message,pdf_path):
+    traductions=dict()
+    message=message.lower()
     frequences=freq.get_letter_frequencies(message)
     print("frequences",frequences)
     code=["-1"]*len(message)
@@ -91,11 +113,10 @@ def decrypt_message(message):
         if l in frequences.keys():
             c=decrypt_lettre(frequences[l])
             code[i]=c
-    # for l,f in frequences.items():
-    #     c=decrypt_lettre(f,chemin_dictionnaire)
-    #     code[message.index(l)]=c
+            traductions[l]=c
     separateur=""
-    return separateur.join(code)
+    return separateur.join(code),traductions
+
 
 def decrypt_message_with_combination(message):
     message=cesar.cesar_encrypt(message.lower(),3)
@@ -185,15 +206,8 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
-# m2=cesar.cesar_encrypt(m.lower(),3)
-code=decrypt_message(m2)
-# print("code",code)
-# print(comparaison(code,m))
-# print(freq_francais)
-# print("affiner_combinaison_par_mots", affiner_combinaison_par_mots(m))
-
-code=decrypt_message_with_combination(m)
-print("code",code)
+m2=cesar.cesar_encrypt(m.lower(),3)
+code,tradictions=decrypt_message(m2,"miserables.pdf")
 print(code)
 tabc=code.split(" ")
 print(comparaison(code,m))
