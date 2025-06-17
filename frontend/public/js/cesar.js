@@ -17,6 +17,8 @@ const elements = {
     cesarKeySlider: null,
     inputText: null,
     outputText: null,
+    inputLabel: null,
+    outputLabel: null,
     processBtn: null,
     processButtonText: null,
     clearBtn: null,
@@ -56,7 +58,7 @@ function initializeElements() {
     elements.processBtn = document.getElementById('processText');
     elements.processButtonText = document.getElementById('processButtonText');
     elements.clearBtn = document.getElementById('clearText');
-    elements.swapBtn = document.getElementById('swapTexts');
+    elements.swapBtn = document.getElementById('cesarMode');
     elements.copyBtn = document.getElementById('copyResult');
     elements.currentShiftSpan = document.getElementById('currentShift');
     elements.originalLetter = document.getElementById('originalLetter');
@@ -69,9 +71,13 @@ function initializeElements() {
     elements.highlightShift = document.getElementById('highlightShift');
     elements.quickKeys = document.querySelectorAll('.quick-key');
     elements.exampleCards = document.querySelectorAll('.example-card');
-    
+    elements.inputLabel = document.getElementById('inputLabel');
+    elements.outputLabel = document.getElementById('outputLabel');
     // Debug: vérifier si le bouton delete est trouvé
     console.log('Clear button found:', elements.clearBtn);
+    elements.cesarMode.value = 'encrypt'; // Initialiser le mode par défaut
+    elements.inputLabel.textContent = 'Message';
+    elements.outputLabel.textContent = 'Chiffré';
 }
 
 // === CONFIGURATION DES ÉVÉNEMENTS ===
@@ -406,8 +412,10 @@ function swapTexts() {
     elements.outputText.value = inputValue;
     
     // Inverser le mode
-    const newMode = mode === 'encrypt' ? 'decrypt' : 'encrypt';
+    const newMode = (mode === "encrypt" ? "decrypt" : "encrypt");
     elements.cesarMode.value = newMode;
+    elements.inputLabel.textContent = (newMode === "encrypt" ? 'Message' : 'Chiffré');
+    elements.outputLabel.textContent = (newMode === "encrypt" ? 'Chiffré' : 'Message');
     handleModeChange();
     
     showNotification('Textes inversés.', 'info');
