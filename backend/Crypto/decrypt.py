@@ -269,11 +269,11 @@ m="le chiffre des francs macons est une substitution simple, ou chaque lettre de
 m2=cesar.cesar_encrypt(m.lower(),3)
 
 # code,traductions=decrypt_message(m2)
-# print(comparaison(code,m))
+#  print(comparaison(code,m))
 
-for l,t in traductions.items(): 
-    s=find_score_lettre(l,t,traductions,m2)
-    print(l,t,s)
-print(m)
-print(m2)
-print(score_message(traductions,m2))
+# for l,t in traductions.items(): 
+#     s=find_score_lettre(l,t,traductions,m2)
+#     print(l,t,s)
+# print(m)
+# print(m2)
+# print(score_message(traductions,m2))
