@@ -69,21 +69,32 @@ function initializeElements() {
     elements.highlightShift = document.getElementById('highlightShift');
     elements.quickKeys = document.querySelectorAll('.quick-key');
     elements.exampleCards = document.querySelectorAll('.example-card');
+    
+    // Debug: vérifier si le bouton delete est trouvé
+    console.log('Clear button found:', elements.clearBtn);
 }
 
 // === CONFIGURATION DES ÉVÉNEMENTS ===
 function setupEventListeners() {
     // Roue rotative - Souris
-    elements.wheelInner.addEventListener('mousedown', startRotation);
-    elements.wheelHandle.addEventListener('mousedown', startRotation);
-    document.addEventListener('mousemove', rotate);
-    document.addEventListener('mouseup', stopRotation);
+    if (elements.wheelInner) {
+        elements.wheelInner.addEventListener('mousedown', startRotation);
+        document.addEventListener('mousemove', rotate);
+        document.addEventListener('mouseup', stopRotation);
+    }
+    if (elements.wheelHandle) {
+        elements.wheelHandle.addEventListener('mousedown', startRotation);
+    }
 
     // Roue rotative - Touch (mobile)
-    elements.wheelInner.addEventListener('touchstart', startRotationTouch, { passive: false });
-    elements.wheelHandle.addEventListener('touchstart', startRotationTouch, { passive: false });
-    document.addEventListener('touchmove', rotateTouch, { passive: false });
-    document.addEventListener('touchend', stopRotation);
+    if (elements.wheelInner) {
+        elements.wheelInner.addEventListener('touchstart', startRotationTouch, { passive: false });
+        document.addEventListener('touchmove', rotateTouch, { passive: false });
+        document.addEventListener('touchend', stopRotation);
+    }
+    if (elements.wheelHandle) {
+        elements.wheelHandle.addEventListener('touchstart', startRotationTouch, { passive: false });
+    }
 
 
     // Contrôles
@@ -96,13 +107,23 @@ function setupEventListeners() {
    
 
     // Boutons d'action
-    elements.processBtn.addEventListener('click', processText);
-    elements.clearBtn.addEventListener('click', clearText);
-    elements.swapBtn.addEventListener('click', swapTexts);
-    elements.copyBtn.addEventListener('click', copyResult);
+    if (elements.processBtn) {
+        elements.processBtn.addEventListener('click', processText);
+    }
+    if (elements.clearBtn) {
+        elements.clearBtn.addEventListener('click', clearText);
+    }
+    if (elements.swapBtn) {
+        elements.swapBtn.addEventListener('click', swapTexts);
+    }
+    if (elements.copyBtn) {
+        elements.copyBtn.addEventListener('click', copyResult);
+    }
 
     // Texte en temps réel
-    elements.inputText.addEventListener('input', processTextRealTime);
+    if (elements.inputText) {
+        elements.inputText.addEventListener('input', processTextRealTime);
+    }
 
     // Clés rapides
     if (elements.quickKeys) {
@@ -368,8 +389,12 @@ async function cesarDecryptText() {
 
 // === AUTRES FONCTIONS ===
 function clearText() {
-    elements.inputText.value = '';
-    elements.outputText.value = '';
+    if (elements.inputText) {
+        elements.inputText.value = '';
+    }
+    if (elements.outputText) {
+        elements.outputText.value = '';
+    }
     showNotification('Texte effacé.', 'info');
 }
 
