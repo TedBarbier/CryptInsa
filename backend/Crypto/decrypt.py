@@ -111,6 +111,27 @@ def decrypt_message_with_combination(message):
     separateur=""
     return separateur.join(code)
 
+def check_mot(mot):
+    # Ouvrir le fichier en lecture
+    with open("dict.txt", "r", encoding="utf-8") as f:
+        contenu = f.read()
+
+        # Séparer le contenu en mots
+        liste_mots = contenu.split()
+
+
+        diff=max(len(mot)-4,2)
+        result=None
+        for m in liste_mots:
+            cpt=abs(len(m)-len(mot))
+            for i in range(0,min(len(mot),len(m))):
+                if m[i]!=mot[i]:
+                    cpt+=1
+            if cpt<=diff:
+                diff=cpt
+                result=m
+        return result
+
 def comparaison(m1,m2):
     cpt=0
     for i in range(0,min(len(m1),len(m2))):
@@ -164,7 +185,8 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
-# code=decrypt_message(m)
+# m2=cesar.cesar_encrypt(m.lower(),3)
+code=decrypt_message(m2)
 # print("code",code)
 # print(comparaison(code,m))
 # print(freq_francais)
@@ -172,6 +194,8 @@ m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de
 
 code=decrypt_message_with_combination(m)
 print("code",code)
+print(code)
+tabc=code.split(" ")
 print(comparaison(code,m))
 # print(freq_francais)
 # print("affiner_combinaison_par_mots", affiner_combinaison_par_mots(m))
