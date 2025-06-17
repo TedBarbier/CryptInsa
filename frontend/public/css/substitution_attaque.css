@@ -33,11 +33,8 @@
 
 /* ===== SECTION INPUT ===== */
 .input-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     padding: 2rem;
-    box-shadow: var(--shadow-card);
 }
 
 .section-header {
@@ -66,7 +63,7 @@
     position: relative;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 50px;
     padding: 2rem;
     box-shadow: var(--shadow-card);
     transition: all 0.3s ease;
@@ -372,11 +369,7 @@
 
 /* ===== SECTION ATTAQUE ===== */
 .attack-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    box-shadow: var(--shadow-card);
+
     height: fit-content;
     display: flex;
     flex-direction: column;
