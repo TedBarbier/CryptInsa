@@ -1,6 +1,8 @@
 """
 
 Ce code sert à affiner les vhoix de mots dans le dictionnaire
+C'est à merger avec le reste du code
+je le ferais quand le code fonctionne à 100%
 
 """
 from collections import Counter
