@@ -153,7 +153,6 @@ def main1(message):
                 lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
                 if lettre_en_commun != []:
                     for lettre in lettre_en_commun:
-                        print(lettre)
                         traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
                         traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
     # print(traduction_sur)
