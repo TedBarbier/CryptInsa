@@ -4,8 +4,7 @@ import fitz
 
 alphabet = string.ascii_lowercase+' '+','+'.'
 
-combinaisons = ['on','ch','en','es','le','la','te','re','nt','st','it','ou','ne','an','un',
-               'er','es','se','ai','ou','au','eu','oi','et','de','qu','ion','eau']
+combinaisons = [ a + b for a in string.ascii_lowercase+' '+','+'.' for b in string.ascii_lowercase+' '+','+'.']
 
 def extract_text_from_pdf(pdf_path):
     text = ""
@@ -27,27 +26,49 @@ def get_letter_frequencies(text):
     for i in range(len(text) - 1):
         if text[i] in letter_frequencies:
             letter_frequencies[text[i]] += 1
-    return letter_frequencies, size_text
+    for letter in letter_frequencies:
+        letter_frequencies[letter] = letter_frequencies[letter]*100/ size_text
+    return letter_frequencies
 
 def get_combination_frequencies(text):
     size_text = len(text)
     combination_frequencies = {comb: 0 for comb in combinaisons}
+    total_combinations = 0
     for i in range(len(text) - 1):
         comb = text[i:i+2]
-        long_comb = text[i:i+3]
-        if long_comb in combinaisons:
-            combination_frequencies[long_comb] += 1
         if comb in combination_frequencies:
             combination_frequencies[comb] += 1
-    return combination_frequencies, size_text
+            total_combinations += 1
+    for comb in combination_frequencies:
+        combination_frequencies[comb] = combination_frequencies[comb] * 100 / total_combinations
+    return combination_frequencies
 
-def display(frequencies,size_text):
+def get_combi_frequencies_for_a_letter(text, letter,position):   #avec e, position =0 : e+lettre si =1 lettre+e
+    size_text = len(text)
+    combinations = [letter + c for c in alphabet] if position == 0 else [c + letter for c in alphabet]
+    combination_frequencies = {comb: 0 for comb in combinations}
+    total_combinations = 0
+    for i in range(len(text) - 1):
+        comb = text[i:i+2]
+        if comb in combination_frequencies:
+            combination_frequencies[comb] += 1
+            total_combinations += 1
+    for comb in combination_frequencies:
+        if total_combinations > 0:
+            combination_frequencies[comb] = combination_frequencies[comb] * 100 / total_combinations
+    return combination_frequencies
+
+
+def display(frequencies):
     for letter, freq in frequencies.items():
-        print(f"{letter}: {freq / size_text*100:.4f}")
+        print(f"{letter}: {freq:.4f}")
 
 pdf_path = "miserables.pdf"
 text = extract_text_from_pdf(pdf_path)
-letter_freq,size= get_letter_frequencies(text)
-combination_freq,size2 = get_combination_frequencies(text)
-display(letter_freq,size)
-display(combination_freq,size2) 
+# letter_freq= get_letter_frequencies(text)
+# combination_freq = get_combination_frequencies(text)
+# combi_e= get_combi_frequencies_for_a_letter(text, 'e', 0)
+# combi_= get_combi_frequencies_for_a_letter(text, 'e', 0)
+# display(combi_e)
+# display(letter_freq)
+# #display(combination_freq)
