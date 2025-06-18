@@ -63,7 +63,7 @@ def display(frequencies):
     for letter, freq in frequencies.items():
         print(f"{letter}: {freq:.4f}")
 
-pdf_path = "miserables.pdf"
+pdf_path = "Crypto/miserables.pdf"
 text = extract_text_from_pdf(pdf_path)
 # letter_freq= get_letter_frequencies(text)
 # combination_freq = get_combination_frequencies(text)

@@ -9,7 +9,7 @@ const FRENCH_FREQUENCIES = {
 };
 
 // Alphabet français
-const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz_';
+const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz_,.';
 
 // Variables globales
 let cipherFrequencies = {};
@@ -38,10 +38,14 @@ async function play() {
         console.log('Begin Attack');
         document.getElementById('play').disabled = true;
         document.getElementById('play').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        await window.substitutionAttack(cipherText);
+        await window.updateAttack(cipherText);
         //After 5 seconds, fetch to server to get the mapping
         setTimeout(async () => {
-            const data = await window.updateAttack;
+            const data = await window.updateAttack(cipherText);
+            console.log('Attack data received:', data);
+            if (!data || !data.dictionnaire) {
+                console.error('No mapping data received from server');
+            }
             currentMapping = data.dictionnaire;
             is_finished = data.is_finished;
             console.log(data.dictionnaire);

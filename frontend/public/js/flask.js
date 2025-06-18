@@ -62,22 +62,12 @@ async function vigenereDecrypt(message, key) { // Recuperer le texte chiffré et
 }
 window.vigenereDecrypt = vigenereDecrypt;
 
-async function substitutionAttack(ciphertext, language = 'fr') { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/analyse_frequences", {
+
+async function updateAttack(cipherText) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+    const res = await fetch("http://localhost:5000/update_attack", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ciphertext, language })
-    });
-
-    const data = await res.json();
-    return data;
-}
-window.substitutionAttack = substitutionAttack;
-
-async function updateAttack() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/update_attack", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" }
+        body: JSON.stringify({ cipherText })
     });
 
     const data = await res.json();
