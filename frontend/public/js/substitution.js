@@ -1,4 +1,54 @@
 // JavaScript pour le chiffrement par substitution - Table horizontale
+const EXAMPLE_TEXT =[ "Tant  qu il  existera,  par  le  fait  des  lois  et  des " +
+"mœurs, une damnation sociale créant artificiellement, " +
+"en pleine civilisation, des enfers, et compliquant " +
+"d une fatalité humaine la destinée qui est divine ; tant " +
+"que  les  trois  problèmes  du  siècle,  la  dégradation  de  " +
+"l homme par le prolétariat, la déchéance de la femme " +
+"par  la  faim,  l atrophie  de  l enfant  par  la  nuit,  ne " +
+"seront pas résolus ; tant que, dans de certaines " +
+"régions,  l asphyxie sociale sera possible ; en d autres " +
+"termes, et à un point de vue plus étendu encore, tant " +
+"qu il y aura sur la terre ignorance et misère, des livres " +
+"de la nature de celui ci pourront ne pas être inutiles. ", 
+
+"M. l eveque, pour avoir converti son carrosse en " +
+"aumones,  n en faisait pas moins ses tournées.  C est " +
+"un  diocèse  fatigant  que  celui  de  Digne.  Il  a  fort  peu " +
+"de  plaines,  beaucoup  de  montagnes,  presque  pas  de routes,  on  l a  vu  tout  à  l heure,  trente-deux  cures,  quarante  et  un  vicariats  et  deux  cent  quatre-vingt- " +
+"cinq succursales. Visiter tout cela, c est une affaire. M. " +
+"l eveque en venait à bout. Il allait à pied quand c est " +
+"dans le voisinage, en carriole dans la plaine, en cacolet  dans  la  montagne.  Les  deux  vieilles  femmes " +
+"l accompagnaient. Quand le trajet  etait trop penible " +
+"pour elles, il allait seul. Un jour il arriva a Senez, qui est une ancienne ville " +
+"episcopale, monte sur un ane. Sa bourse, fort a sec " +
+"dans  ce  moment, ne lui avait pas permis d autre " +
+"equipage. Le  maire  de  la  ville  vint  le  recevoir  a  la " +
+"porte de l eveche et le regarde descendre de son ane " +
+"avec des yeux scandalises. Quelques bourgeois riaient " +
+"autour  de  lui. Monsieur le maire, dit l eveque, et " +
+"messieurs les bourgeois, je vois ce qui vous " +
+"scandalise,  vous  trouvez  que  c est  bien  de  l orgueil  a " +
+"un  pauvre  pretre  de  monter  une  monture  qui  a  ete " +
+"celle de Jesus-Christ. Je l ai fait par necessite, je vous " +
+"assure, non par vanite.  Dans  ces  tournes  il  etait  " +
+"indulgent  et  doux,  et " +
+"pretchait moins qu il ne causait. Il n allait jamais " +
+"chercher bien loin ses raisonnements et ses modeles. " +
+"Aux habitants d un pays il cite l exemple du pays " +
+"voisin. Dans les cantons où on etait dur pour les " +
+"necessiteux, il disait : Voyez les gens de Briancon. " +
+"Ils ont donne aux indigents, aux veuves et aux " +
+"orphelins le droit de faire faucher leurs prairies trois  " +
+"jours avant tous les autres. Ils leur rebattissent " +
+"gratuitement leurs maisons quand elles sont en " +
+"ruines. Aussi est-ce un pays beni de Dieu. Durant " +
+"tout un siecle de cent ans, il n y a pas eu un meurtrier.", 
+
+"Je suis un exemple de texte pour le chiffrement par substitution. " +
+"Je suis un exemple de texte pour le chiffrement par substitution. " +
+"Je suis un exemple de texte pour le chiffrement par substitution. " +
+"Je suis un exemple de texte pour le chiffrement par substitution. "];
 
 let currentMapping = {};
 
@@ -16,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeHorizontalTable() {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
     
     // Conteneur des lettres originales
     const originalContainer = document.getElementById('originalLetters');
@@ -73,7 +123,7 @@ function handleSubstitutionInput(event) {
     const value = input.value.toUpperCase();
     
     // Validation de l'entrée
-    if (value && !/^[A-Z]$/.test(value)) {
+    if (value && !/^[A-Z ]$/.test(value)) {
         input.classList.add('invalid');
         setTimeout(() => input.classList.remove('invalid'), 500);
         input.value = currentMapping[originalLetter] || '';
@@ -148,7 +198,7 @@ function setupEventListeners() {
 }
 
 function generateRandomMapping() {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
     const shuffled = alphabet.split('').sort(() => Math.random() - 0.5);
     
     // Animation de génération
@@ -192,7 +242,7 @@ function generateRandomMapping() {
 }
 
 function applyPredefinedKey(keyType) {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
     let newMapping = {};
     
     switch (keyType) {
@@ -219,7 +269,7 @@ function applyPredefinedKey(keyType) {
 }
 
 function applyKeywordMapping(keyword) {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
     
     // Nettoyer le mot-clé
     const cleanKeyword = keyword.replace(/[^A-Z]/g, '');
@@ -369,6 +419,33 @@ function setupActionButtons() {
             });
         }
     });
+
+    //Generer un exemple de texte
+    const exampleTextBtn = document.getElementById('exampleText');
+    if (exampleTextBtn) {
+        exampleTextBtn.addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * EXAMPLE_TEXT.length);
+            const text = EXAMPLE_TEXT[randomIndex];
+            const inputText = document.getElementById('inputText');
+            if (inputText) {
+                inputText.value = text;
+                updateEncryption();
+            }
+        });
+    }
+
+    //Déchiffrer par attaque
+    const decryptTextBtn = document.getElementById('decryptText');
+    if (decryptTextBtn) {
+        decryptTextBtn.addEventListener('click', function() {
+            //Sauvegarder le plaintext dans local storage
+            const inputText = document.getElementById('inputText');
+            localStorage.setItem('plaintext', inputText.value);
+            localStorage.setItem('ciphertext', outputText.value);
+            //Rediriger vers la page de déchiffrement
+            window.location.href = '/substitution_attaque';
+        });
+    }
 }
 
 function setupMiniExamples() {
