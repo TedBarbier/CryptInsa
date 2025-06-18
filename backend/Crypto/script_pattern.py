@@ -47,12 +47,8 @@ def analyser_mot(mot):
         "mot": mot,
         "isomorphique": pattern_isomorphique(mot),
         "cv_pattern": pattern_cv(mot),
-        "bigrammes": bigrammes(mot),
-        "trigrammes": trigrammes(mot),
         "lettres_doubles": lettres_doubles(mot),
         "lettres_frequentes": lettres_freq(mot),
-        "prefixe": detect_prefixe(mot),
-        "suffixe": detect_suffixe(mot)
     }
 
 def main():

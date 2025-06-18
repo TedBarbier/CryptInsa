@@ -46,4 +46,3 @@ instance/
 .env
 .env.local
 
-dict_patterns.json
