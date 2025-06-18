@@ -16,8 +16,9 @@ chemin_dictionnaire = "dict.txt"
 
 
 def main0(message):
+    print("start")
     traduction = {}
-    code, traduction = decrypt.decrypt_message(message)
+    _, traduction = decrypt.decrypt_message(message)
     _,traduction_sur = decrypt.decrypt_message(message,10)
     message_split = decrypt.message_initiial_with_letter(message, traduction," ").split()
     espace=message[len(message_split[0])]
@@ -25,24 +26,56 @@ def main0(message):
     traduction[espace]=" "
     traduction[ponctuation['point']]="."
     traduction[ponctuation['virgule']]=","
+    traduction_sur[espace]=" "
     traduction_sur[ponctuation['point']]="."
     traduction_sur[ponctuation['virgule']]=","
-    for i in range(len(message_split)):
-        mot= message_split[i%len(message_split)]
-        if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
-            mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot, chemin_dictionnaire)
-        else:
-            mots_correspondants,taille =dict_search.trouver_mots_correspondants(mot[:-1],chemin_dictionnaire)
-
-        if taille == 1:
-            traduction = decrypt.change_traduction_with_word(traduction, mot, mots_correspondants[0])
-            traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mots_correspondants[0])
-        elif taille > 1:
-            lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
-            if lettre_en_commun != []:
-                for lettre in lettre_en_commun:
-                    traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
-                    traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
+    for j in range(2):
+        print("traduction",traduction,"iteration",j)
+        print("compare cle",decrypt.comparaison_clé(vraie_cle,traduction),"iteration",j)
+        print("comparaison",decrypt.comparaison(m,decrypt.message_from_key(m2,traduction)))
+        for i in range(len(message_split)):
+            mot= message_split[i%len(message_split)]
+            keys_sur=[k for k,v in traduction_sur.items() if v is not None and k in mot]
+            lettre= None
+            for char in keys_sur:
+                if char in mot:
+                    lettre=char
+            if keys_sur != []:
+                if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire)
+                    mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot,chemin_dictionnaire)
+                    print(j, i, mots_correspondants, mots_correspondants2)
+                    taille=len(mots_correspondants)
+                else:
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire)
+                    mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot[:-1],chemin_dictionnaire)
+                    print(j, i, mots_correspondants, mots_correspondants2)
+                    taille=len(mots_correspondants)
+            elif decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
+                mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot, chemin_dictionnaire)
+            else:
+                mots_correspondants,taille =dict_search.trouver_mots_correspondants(mot[:-1],chemin_dictionnaire)
+            if taille == 1:
+                traduction = decrypt.change_traduction_with_word(traduction, mot, mots_correspondants[0])
+                traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mots_correspondants[0])
+            elif taille > 1:
+                lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
+                if lettre_en_commun != []:
+                    for lettre in lettre_en_commun:
+                        traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
+                        traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
+    print(traduction_sur)
+    print(decrypt.comparaison_clé(vraie_cle,traduction_sur))
+    lettre_non_trouve=[k for k,v in traduction_sur.items() if v is None]
+    lettre_trouve=[v for k,v in traduction_sur.items()]
+    for let in lettre_non_trouve:
+        let_trad_list=decrypt.decrypt_lettre_liste((freq.get_letter_frequencies(message)[let]))
+        t=0
+        for l in let_trad_list:
+            if l not in lettre_trouve and t==0:
+                traduction[let]=l
+                lettre_non_trouve.remove(let)
+                t=1
     return traduction
 
 
@@ -60,7 +93,7 @@ def main1(message):
     traduction_sur[espace]=" "
     traduction_sur[ponctuation['point']]="."
     traduction_sur[ponctuation['virgule']]=","
-    for j in range(10):
+    for j in range(2):
         for i in range(len(message_split)):
             keys_sur=[k for k,v in traduction_sur.items() if v is not None]
             mot= message_split[i%len(message_split)]
@@ -80,14 +113,29 @@ def main1(message):
             else:
                 mots_correspondants,taille =dict_search.trouver_mots_correspondants(mot[:-1],chemin_dictionnaire)
             if taille == 1:
+                print(mots_correspondants)
+                print("taille == 1 ")
                 traduction = decrypt.change_traduction_with_word(traduction, mot, mots_correspondants[0])
                 traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mots_correspondants[0])
             elif taille > 1:
                 lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
                 if lettre_en_commun != []:
                     for lettre in lettre_en_commun:
+                        print(lettre)
                         traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
                         traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
+    # print(traduction_sur)
+    # print(decrypt.comparaison_clé(vraie_cle,traduction_sur))
+    # lettre_non_trouve=[k for k,v in traduction_sur.items() if v is None]
+    # lettre_trouve=[v for k,v in traduction_sur.items()]
+    # for let in lettre_non_trouve:
+    #     let_trad_list=decrypt.decrypt_lettre_liste((freq.get_letter_frequencies(message)[let]))
+    #     t=0
+    #     for l in let_trad_list:
+    #         if l not in lettre_trouve and t==0:
+    #             traduction[let]=l
+    #             lettre_non_trouve.remove(let)
+    #             t=1
     return traduction
 
 
@@ -190,7 +238,7 @@ def main2(message_cesar,m):
                 traduction=temp
                 code=code_temp
         print("score=",score_max,"mot",mot_final,mot_chiffre)
-      
+        
     return code, traduction
 
 

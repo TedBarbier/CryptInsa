@@ -41,6 +41,13 @@ def frequences_lettres(texte):
     total = sum(compteur.values())
     return {lettre: (count / total) * 100 for lettre, count in compteur.items()} if total > 0 else {}
 
+
+def decrypt_lettre_liste(frequence):
+    
+    proches = [(lettre, abs(freq - frequence)) for lettre, freq in freq_francais.items()]
+    proches.sort(key=lambda x: x[1])
+    return [lettre for lettre, _ in proches]
+
 def decrypt_lettre(frequence,seuil_frequence=None):
     min_diff=1000
     if seuil_frequence is not None and frequence < seuil_frequence:
@@ -50,8 +57,7 @@ def decrypt_lettre(frequence,seuil_frequence=None):
         if abs(frequence-f)<min_diff:
             min_diff=abs(frequence-f)
             decode=l
-    if seuil_frequence is not None and frequence < seuil_frequence:
-        return None
+    
     return decode
 
 def decrypt_lettre_combinaison(frequence_combi,combinaison):
@@ -263,6 +269,23 @@ def check_mot(mot, dico_par_longueur):
                         return meilleur_mot
                         
     return meilleur_mot
+
+def lettre_en_commun_new(mots):   #mots est une liste de mots
+    commun=[]
+    if len(mots)==1:
+        commun=[(mots[i],i) for i in range(len(mots))]
+    elif mots==[]:
+        return []
+    else:
+        for i in range(0,len(mots[0])):
+            lettre=mots[0][i]
+            for mot in mots:
+                if i>=len(mot) or mot[i]!=lettre:
+                    lettre=None
+                    break
+            if lettre is not None:
+                commun.append((lettre,i))
+    return commun
 
 def lettre_en_commun(mots):   #mots est une liste de mots
     commun=[]
