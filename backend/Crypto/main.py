@@ -5,6 +5,8 @@ import random
 import string
 import dict_search
 import mapping
+import json
+
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
 N_ITERATIONS = 150
@@ -14,6 +16,33 @@ freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("
 combinaisons_frequentes = {k: v for k, v in freq_combination.items() if v > 0.8}
 chemin_dictionnaire = "dict.txt"
 
+
+import json
+
+def lire_json(nom_fichier='donnees.json'):
+    with open(nom_fichier, 'r', encoding='utf-8') as f:
+        return json.load(f)
+import json
+
+def initialiser_json_vide(nom_fichier='donnees.json'):
+    donnees = {
+        "texte": "",
+        "dictionnaire": {}
+    }
+    with open(nom_fichier, 'w', encoding='utf-8') as f:
+        json.dump(donnees, f, ensure_ascii=False, indent=4)
+
+
+def enregistrer_en_json(message, dict_val, nom_fichier='donnees.json'):
+    donnees = {
+        'chiffré':message,
+        'dictionnaire': dict_val
+    }
+    with open(nom_fichier, 'w', encoding='utf-8') as f:
+        json.dump(donnees, f, ensure_ascii=False, indent=4)
+
+
+initialiser_json_vide()
 
 def main0(message):
     traduction = {}
@@ -62,6 +91,9 @@ def main1(message):
     traduction_sur[ponctuation['virgule']]=","
     for j in range(10):
         for i in range(len(message_split)):
+            enregistrer_en_json(message,traduction)
+            # donnees = lire_json()
+            # print(json.dumps(donnees, ensure_ascii=False, indent=4))
             keys_sur=[k for k,v in traduction_sur.items() if v is not None]
             mot= message_split[i%len(message_split)]
             lettre= None
@@ -142,58 +174,6 @@ def main(message_cesar,m):
             print("score=",score_max,"mot",mot_final,mot_chiffre)
       
     return code, traduction
-
-
-def main2(message_cesar,m):
-    frequences = freq.get_letter_frequencies(message_cesar)
-    traduction = {}
-    #clé avec fonction decrypt message pour un premier score
-    code, traduction = decrypt.decrypt_message(message_cesar)
-    score = decrypt.score_message(traduction,code)
-    #score,a,b=decrypt.comparaison(code,m)
-    score_max=score
-    
-    liste_mots=code.split(" ")
-    liste_temp=[]
-    espace=0
-    for k,l in traduction.items():
-        if l==" ":
-            espace=k
-    liste_initial=message_cesar.split(espace)
-    for i in range(N_ITERATIONS):
-        temp=traduction.copy()
-        if liste_temp==[]:
-            liste_temp=code.split(" ")
-        mot_chiffre=liste_temp.pop(0)
-        mot_initial=liste_initial[liste_mots.index(mot_chiffre)]
-        l,t=mapping.trouver_mots_correspondants(mot_initial,"dict.txt")
-
-        mot_final=decrypt.check_mot(mot_chiffre,l)
-        if mot_final is None and l!=[]:
-            mot_final=l[0]
-        if mot_final is not None:
-            mot_initial=liste_initial[liste_mots.index(mot_chiffre)]
-            temp=decrypt.change_traduction_with_word(temp,mot_initial,mot_final)
-            #changé le code partiel
-            code_temp=[]
-            
-            for c in message_cesar:
-                code_temp.append(temp[c])
-
-            code_temp="".join(code_temp)
-            print(code_temp)
-            score = decrypt.score_message(temp,code_temp)
-            #score,a,b=decrypt.comparaison(code_temp,m)
-            if score>score_max:
-                print("ok")
-                score_max=score
-                traduction=temp
-                code=code_temp
-        print("score=",score_max,"mot",mot_final,mot_chiffre)
-      
-    return code, traduction
-
-
 
 
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
