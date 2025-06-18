@@ -114,6 +114,28 @@ def find_score_lettre(l,t,traductions,message):   #l lettre chifré et t lettre 
     score=0.4*p+0.6*score
     return score
 
+def message_initiial_with_letter(message, traduction, letter): # letter en char
+    new_message = ""
+    trad_letter = [k for k, v in traduction.items() if v == letter]
+    trad_inverse =[ value for key, value in traduction.items() if key == letter]
+    if len(trad_letter) == 0:
+        return None
+    if len(trad_inverse) == 1:
+        for char in message:
+            if char in trad_letter:
+                new_message += letter
+            elif char == letter:
+                new_message += trad_inverse[0]
+            else:
+                new_message += char
+    else:
+        for char in message:
+            if char in trad_letter:
+                new_message += letter
+            else:
+                new_message += char
+    return new_message
+
 def change_traduction_with_word(traduction,mot_initial, mot_final):
     for i in range(len(mot_initial)):
         if mot_initial[i] in traduction.keys():
@@ -121,11 +143,15 @@ def change_traduction_with_word(traduction,mot_initial, mot_final):
     return traduction
 
 def change_traduction_with_letter(traduction, lettre_initiale, lettre_finale):
-    for key in traduction.keys():
-        if traduction[key] == lettre_initiale:
-            traduction[key] = lettre_finale
+    traduction[lettre_initiale]=lettre_finale
     return traduction
 
+
+def is_mot_sans_virgule(mot,virgule_chiffre):
+    return(mot[-1]!=virgule_chiffre)
+
+def is_mot_sans_point(mot,point_chiffre):
+    return(mot[-1]!=point_chiffre)
 
 def decrypt_message(message,seuil_frequence=None):
     frequences=freq.get_letter_frequencies(message)
@@ -196,6 +222,18 @@ def check_mot(mot):
                 result=m
         return result
 
+def lettre_en_commun(mots):   #mots est une liste de mots
+    commun=[]
+    for i in range(0,len(mots[0])):
+        lettre=mots[0][i]
+        for mot in mots:
+            if i>=len(mot) or mot[i]!=lettre:
+                lettre=None
+                break
+        if lettre is not None:
+            commun.append((lettre,i))
+    return commun
+
 def score_mot(mot):
     mot2=check_mot(mot)
     distance=abs(len(mot2)-len(mot))
@@ -218,7 +256,7 @@ def comparaison(m1,m2):
     for i in range(0,min(len(m1),len(m2))):
         if m1[i]==m2[i]:
             cpt+=1
-            #print("lettre",m1[i],"position",i)
+            # print("lettre",m1[i],"position",i)
     return cpt/len(m1)*100,cpt,len(m2)
 
 def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
@@ -254,7 +292,29 @@ def affiner_combinaison_par_mots(message):
             k+=1
             
 
-    
+def crée_clé(message, chiffre):
+    """
+    Crée une clé de substitution à partir d'un message clair et de son texte chiffré.
+    La clé est un dictionnaire : lettre_chiffre -> lettre_claire
+    """
+    clé = {}
+    for m, c in zip(message, chiffre):
+        if m in alphabet and c in alphabet:
+            clé[c] = m
+    return clé
+
+def comparaison_clé(clé1, clé2):
+    """
+    Compare deux clés de substitution (dictionnaires).
+    Retourne le nombre de correspondances exactes.
+    """
+    count = 0
+    liste=[]
+    for k in clé1:
+        if k in clé2 and clé1[k] == clé2[k]:
+            count += 1
+            liste.append((k,clé1[k]))
+    return count, liste
 
 def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
     pass
@@ -268,9 +328,9 @@ m2=cesar.cesar_encrypt(m.lower(),3)
 # code,traductions=decrypt_message(m2)
 # print(comparaison(code,m))
 
-for l,t in traductions.items(): 
-    s=find_score_lettre(l,t,traductions,m2)
-    print(l,t,s)
-print(m)
-print(m2)
-print(score_message(traductions,m2))
+# for l,t in traductions.items(): 
+#     s=find_score_lettre(l,t,traductions,m2)
+#     print(l,t,s)
+# print(m)
+# print(m2)
+# print(score_message(traductions,m2))
