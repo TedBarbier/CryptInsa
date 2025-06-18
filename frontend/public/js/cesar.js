@@ -6,7 +6,7 @@ let currentAngle = 0;
 let mode = 'encrypt'; // 'encrypt' ou 'decrypt'
 
 // === ALPHABET FRANÇAIS ===
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ__';
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_,.';
 
 // === ÉLÉMENTS DOM ===
 const elements = {
@@ -184,10 +184,10 @@ function rotate(e) {
     const currentMouseAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
     const deltaAngle = currentMouseAngle - startAngle;
     
-    // Convertir l'angle en décalage (27 lettres = 360°)
+    // Convertir l'angle en décalage (29 lettres = 360°)
     // Inverser le sens pour que la roue suive le mouvement de la souris
-    const deltaShift = Math.round((-deltaAngle * 27) / (2 * Math.PI));
-    const newShift = Math.max(0, Math.min(26, currentShift + deltaShift));
+    const deltaShift = Math.round((-deltaAngle * 29) / (2 * Math.PI));
+    const newShift = Math.max(0, Math.min(28, currentShift + deltaShift));
     
     if (newShift !== currentShift) {
         setShift(newShift);
@@ -228,8 +228,8 @@ function rotateTouch(e) {
     const deltaAngle = currentTouchAngle - startAngle;
     
     // Inverser le sens pour que la roue suive le mouvement tactile
-    const deltaShift = Math.round((-deltaAngle * 27) / (2 * Math.PI));
-    const newShift = Math.max(0, Math.min(26, currentShift + deltaShift));
+    const deltaShift = Math.round((-deltaAngle * 29) / (2 * Math.PI));
+    const newShift = Math.max(0, Math.min(28, currentShift + deltaShift));
     
     if (newShift !== currentShift) {
         setShift(newShift);
@@ -249,15 +249,15 @@ function setShift(shift) {
 }
 
 function updateWheel(shift) {
-    // Rotation de la roue intérieure (360° / 27 lettres = 13.333° par lettre)
+    // Rotation de la roue intérieure (360° / 29 lettres = 13.333° par lettre)
     // Rotation négative pour que le décalage visuel corresponde au chiffrement
-    const rotation = -(shift * 360) / 27;
+    const rotation = -(shift * 360) / 29;
     elements.wheelInner.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
     
     // Mise à jour de l'indicateur - correction du calcul de correspondance
     const originalLetter = 'A';
     const originalIndex = 0; // Position de 'A' dans l'alphabet
-    const cipherIndex = (originalIndex + shift) % 27;
+    const cipherIndex = (originalIndex + shift) % 29;
     const cipherLetter = ALPHABET[cipherIndex];
     elements.originalLetter.textContent = originalLetter;
     elements.cipherLetter.textContent = cipherLetter;
@@ -305,7 +305,7 @@ function updateInterface() {
     // Mise à jour des exemples en temps réel - correction du calcul
     const originalExample = 'A';
     const exampleOriginalIndex = 0; // Position de 'A' dans l'alphabet
-    const exampleCipherIndex = (exampleOriginalIndex + currentShift) % 27;
+    const exampleCipherIndex = (exampleOriginalIndex + currentShift) % 29;
     const cipherExample = ALPHABET[exampleCipherIndex];
     if (elements.highlightOriginal) {
         elements.highlightOriginal.textContent = originalExample;
