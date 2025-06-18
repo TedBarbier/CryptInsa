@@ -245,10 +245,28 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire
                     potentials.append(c)
     return potentials
 
-    
 
-def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
-    pass
+#pas encore fini 
+def mapping_plusieurs(dictionnaire,mot_chiffre,chemin_dictionnaire):
+    L= []
+    potentials = []
+    mot_liste = list(mot_chiffre)
+    candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
+    for i in range(len(mot_chiffre)):
+        if mot_chiffre[i] in dictionnaire.keys():
+            L.append(i)
+    for c in candidat[0]:
+        test=True
+        for i in L:
+            if len(c) >= i:
+                if c[i] != dictionnaire[mot_chiffre[i]]:
+                    test=False
+        if test:
+            potentials.append(c)
+    return potentials
+
+# def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
+#     pass
 
 
 

@@ -342,7 +342,7 @@ text = freq.extract_text_from_pdf(pdf_path)
 m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2=cesar.cesar_encrypt(m.lower(),3)
 
-code,traductions=decrypt_message(m2)
+# code,traductions=decrypt_message(m2)
 #  print(comparaison(code,m))
 
 # for l,t in traductions.items(): 
@@ -351,5 +351,5 @@ code,traductions=decrypt_message(m2)
 # print(m)
 # print(m2)
 # print(score_message(traductions,m2))
-traductions["x"]="u"
-print(score_message(traductions,m2))
+# traductions["x"]="u"
+# print(score_message(traductions,m2))
