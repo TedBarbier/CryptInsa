@@ -4,6 +4,7 @@ import string
 import cesar
 import random
 import dict_search as dict_search
+import mapping
 # Fréquence des lettres en français (environ)
 freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 
@@ -137,7 +138,7 @@ def message_initiial_with_letter(message, traduction, letter): # letter en char
     return new_message
 
 def change_traduction_with_word(traduction,mot_initial, mot_final):
-    for i in range(len(mot_initial)):
+    for i in range(min(len(mot_initial),len(mot_final))):
         if mot_initial[i] in traduction.keys():
             traduction[mot_initial[i]] = mot_final[i]
     return traduction
@@ -202,24 +203,18 @@ def decrypt_message_with_combination(message):
     separateur=""
     return separateur.join(code),traductions
 
-def check_mot(mot):
-    # Ouvrir le fichier en lecture
-    with open("dict.txt", "r", encoding="utf-8") as f:
-        contenu = f.read()
-
-        # Séparer le contenu en mots
-        liste_mots = contenu.split()
-
-        diff=max(len(mot)-4,1)
+def check_mot(mot,liste_mots):
+        diff=max(len(mot),5)
         result=None
         for m in liste_mots:
-            cpt=abs(len(m)-len(mot))
-            for i in range(0,min(len(mot),len(m))):
-                if m[i]!=mot[i]:
-                    cpt+=1
-            if cpt<=diff:
-                diff=cpt
-                result=m
+            if(type(m)==str):   
+                cpt=abs(len(m)-len(mot))
+                for i in range(0,min(len(mot),len(m))):
+                    if m[i]!=mot[i]:
+                        cpt+=1
+                if cpt<=diff:
+                    diff=cpt
+                    result=m
         return result
 
 def lettre_en_commun(mots):   #mots est une liste de mots
@@ -235,21 +230,38 @@ def lettre_en_commun(mots):   #mots est une liste de mots
     return commun
 
 def score_mot(mot):
-    mot2=check_mot(mot)
+    # Ouvrir le fichier en lecture
+    with open("dict.txt", "r", encoding="utf-8") as f:
+        contenu = f.read()
+
+        # Séparer le contenu en mots
+        liste_mots = contenu.split()
+
+
+    mot2=check_mot(mot,liste_mots)
     distance=abs(len(mot2)-len(mot))
     for i in range(min(len(mot),len(mot2))):
         if mot[i]==mot2[i]:
             distance+=1
-    return 1
+    # if mapping.generer_pattern(mot)==mapping.generer_pattern(mot2):
+    #     distance+=len(mot1)
+    if len(mot)==0:
+        return 0
+    #print(distance,len(mot))
+    return distance/len(mot)
 
 def score_message(traductions,message):
     liste_mots=message.split(" ")
     score=0
     for mot in liste_mots:
         score+=score_mot(mot)
+    score=(1-score/len(liste_mots))
+    #print("score_mot",score)
+    score_lettre=0
     for k,v in traductions.items():
-        score+=find_score_lettre(k,v,traductions,message)
-    return score
+        score_lettre+=find_score_lettre(k,v,traductions,message)
+    score+=score_lettre/len(traductions)
+    return score*100
 
 def comparaison(m1,m2):
     cpt=0
@@ -325,8 +337,8 @@ text = freq.extract_text_from_pdf(pdf_path)
 m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2=cesar.cesar_encrypt(m.lower(),3)
 
-# code,traductions=decrypt_message(m2)
-# print(comparaison(code,m))
+code,traductions=decrypt_message(m2)
+#  print(comparaison(code,m))
 
 # for l,t in traductions.items(): 
 #     s=find_score_lettre(l,t,traductions,m2)

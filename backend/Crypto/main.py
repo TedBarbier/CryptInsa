@@ -7,7 +7,11 @@ import dict_search
 import mapping
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
+<<<<<<< HEAD
 N_ITERATIONS = 50
+=======
+N_ITERATIONS = 30
+>>>>>>> 8e4ebf7be8b18b65f51affc51bd7164a07eb6253
 
 freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
@@ -15,6 +19,7 @@ combinaisons_frequentes = {k: v for k, v in freq_combination.items() if v > 0.8}
 chemin_dictionnaire = "dict.txt"
 
 
+<<<<<<< HEAD
 def main(message):
     traduction = {}
     code, traduction = decrypt.decrypt_message(message)
@@ -42,13 +47,137 @@ def main(message):
                 traduction = temp_traduction
                 
     return traduction
+=======
+def main(message_cesar,m):
+    frequences = freq.get_letter_frequencies(message_cesar)
+    traduction = {}
+    #clé avec fonction decrypt message pour un premier score
+    code, traduction = decrypt.decrypt_message(message_cesar)
+    #score = decrypt.score_message(traduction,message_cesar)
+    print("ok")
+    score,a,b=decrypt.comparaison(code,m)
+    score_max=score
+    
+    liste_mots=code.split(" ")
+    liste_temp=[]
+    espace=0
+    for k,l in traduction.items():
+        if l==" ":
+            espace=k
+    liste_initial=message_cesar.split(espace)
+    for i in range(N_ITERATIONS):
+        print(i)
+        temp=traduction.copy()
+        if liste_temp==[]:
+            liste_temp=code.split(" ")
+        mot_chiffre=liste_temp.pop(0)
+        mot_initial=liste_initial[liste_mots.index(mot_chiffre)]
+        l,t=mapping.trouver_mots_correspondants(mot_initial,"dict.txt")
+
+        #mot_final=decrypt.check_mot(mot_chiffre,l)
+        for mot_final in l:
+            if mot_final is None and l!=[]:
+                mot_final=l[0]
+            if mot_final is not None:
+                mot_initial=liste_initial[liste_mots.index(mot_chiffre)]
+                temp=decrypt.change_traduction_with_word(temp,mot_initial,mot_final)
+                #changé le code partiel
+                code_temp=[]
+                for c in message_cesar:
+                    code_temp.append(temp[c])
+
+                code_temp="".join(code_temp)
+
+                score = decrypt.score_message(temp,code_temp)
+                #score,a,b=decrypt.comparaison(code_temp,m)
+                if score>score_max:
+                    score_max=score
+                    traduction=temp
+                    code=code_temp
+            print("score=",score_max,"mot",mot_final,mot_chiffre)
+      
+    return code, traduction
+
+>>>>>>> 8e4ebf7be8b18b65f51affc51bd7164a07eb6253
+
+def main2(message_cesar,m):
+    frequences = freq.get_letter_frequencies(message_cesar)
+    traduction = {}
+    #clé avec fonction decrypt message pour un premier score
+    code, traduction = decrypt.decrypt_message(message_cesar)
+    score = decrypt.score_message(traduction,message_cesar)
+    #score,a,b=decrypt.comparaison(code,m)
+    score_max=score
+    
+    liste_mots=code.split(" ")
+    liste_temp=[]
+    espace=0
+    for k,l in traduction.items():
+        if l==" ":
+            espace=k
+    liste_initial=message_cesar.split(espace)
+    for i in range(N_ITERATIONS):
+        temp=traduction.copy()
+        if liste_temp==[]:
+            liste_temp=code.split(" ")
+        mot_chiffre=liste_temp.pop(0)
+        mot_initial=liste_initial[liste_mots.index(mot_chiffre)]
+        l,t=mapping.trouver_mots_correspondants(mot_initial,"dict.txt")
+
+        mot_final=decrypt.check_mot(mot_chiffre,l)
+        if mot_final is None and l!=[]:
+            mot_final=l[0]
+        if mot_final is not None:
+            mot_initial=liste_initial[liste_mots.index(mot_chiffre)]
+            temp=decrypt.change_traduction_with_word(temp,mot_initial,mot_final)
+            #changé le code partiel
+            code_temp=[]
+            
+            for c in message_cesar:
+                code_temp.append(temp[c])
+
+            code_temp="".join(code_temp)
+            print(code_temp)
+            score = decrypt.score_message(temp,code_temp)
+            #score,a,b=decrypt.comparaison(code_temp,m)
+            if score>score_max:
+                print("ok")
+                score_max=score
+                traduction=temp
+                code=code_temp
+        print("score=",score_max,"mot",mot_final,mot_chiffre)
+      
+    return code, traduction
+
+
 
 
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2 = cesar.cesar_encrypt(m.lower(), 3)
+<<<<<<< HEAD
 vraie_cle=decrypt.crée_clé(m,m2)
 traduction= main(m2)
 print("Traductions:", traduction)
 print("compar clé", decrypt.comparaison_clé(traduction,vraie_cle))
 code=decrypt.message_from_key(m2,traduction)
+=======
+print(m2)
+code, traductions = main2(m2,m)
+code_temp=[]
+#traductions["x"]="u"
+traductions["a"]="A"
+#print("***************************************************************************",temp,"***************************************************************************")
+# for c in m2:
+
+#     #print(c,temp[c])
+#     a=traductions[c]
+#     print(a)
+#     code_temp.append(a)
+    
+# #code_temp="".join(code)
+# print("*********************",code_temp,"******************************")
+
+print("Code:", code)
+print("Traductions:", traductions)
+>>>>>>> 8e4ebf7be8b18b65f51affc51bd7164a07eb6253
 print("comparaison:", decrypt.comparaison(code, m))
