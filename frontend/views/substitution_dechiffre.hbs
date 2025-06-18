@@ -1,0 +1,50 @@
+{{!-- CSS spécifique pour l'analyse de fréquences --}}
+<link rel="stylesheet" href="/css/substitution_dechiffre.css">
+
+<div class="mapping-container">
+    <section class="mapping-section">
+        <h2 class="section-title">
+            <i class="fas fa-exchange-alt"></i>
+            Table de Substitution
+        </h2>
+        {{!-- DEUXIÈME LIGNE: Table de Mapping --}}
+        <div class="row-2">
+            <div class="mapping-section">
+                <h3><i class="fas fa-exchange-alt"></i> Table de Substitution</h3>
+                
+                <div class="mapping-controls">
+                    <button id="play" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Play
+                    </button>
+                    <button id="stop" class="btn btn-success">
+                        <i class="fas fa-stop"></i> Arrêter
+                    </button>
+                </div>
+                
+                <div class="substitution-table">
+                    <div class="table-row">
+                        <div class="row-label">Chiffré:</div>
+                        <div class="letters-container" id="cipherAlphabet"></div>
+                    </div>
+                    
+                    <div class="table-row">
+                        <div class="row-label">Clair:</div>
+                        <div class="letters-container" id="clearAlphabet"></div>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <h4>Texte Déchiffré:</h4>
+                    <textarea id="decryptedText" placeholder="Le texte déchiffré apparaîtra ici..." rows="4" readonly></textarea>
+                    <button id="copyResult" class="copy-btn">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{{!-- JavaScript --}}
+<script src="/js/flask.js"></script>
+<script src="/js/substitution_dechiffre.js"></script>

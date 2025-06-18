@@ -65,7 +65,7 @@ def substitution_attack(ciphertext, language='fr'):
     # Implémentez l'attaque par substitution ici
     # Pour l'instant, on retourne un message d'erreur
     return {"error": "Substitution attack not implemented yet"}
-@app.route('/analyse_frequences', methods=['GET'])
+@app.route('/analyse_frequences', methods=['POST'])
 def route_analyse_frequences():
     data = request.get_json()
     cipherText = data.get('ciphertext', '')
@@ -79,6 +79,7 @@ def route_analyse_frequences():
         "freqLang": freqLang,
         "message": message
     }
+    return jsonify(response)
 @app.route('/update_attack', methods=['GET'])
 def route_substitution_attack():
     def read_donnees_json():

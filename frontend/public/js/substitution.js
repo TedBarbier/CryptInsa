@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeHorizontalTable() {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ,.';
     
     // Conteneur des lettres originales
     const originalContainer = document.getElementById('originalLetters');
@@ -123,7 +123,7 @@ function handleSubstitutionInput(event) {
     const value = input.value.toUpperCase();
     
     // Validation de l'entrée
-    if (value && !/^[A-Z ]$/.test(value)) {
+    if (value && !/^[A-Z ,.]$/.test(value)) {
         input.classList.add('invalid');
         setTimeout(() => input.classList.remove('invalid'), 500);
         input.value = currentMapping[originalLetter] || '';
@@ -198,7 +198,7 @@ function setupEventListeners() {
 }
 
 function generateRandomMapping() {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ,.';
     const shuffled = alphabet.split('').sort(() => Math.random() - 0.5);
     
     // Animation de génération
@@ -242,7 +242,7 @@ function generateRandomMapping() {
 }
 
 function applyPredefinedKey(keyType) {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ,.';
     let newMapping = {};
     
     switch (keyType) {
@@ -269,10 +269,10 @@ function applyPredefinedKey(keyType) {
 }
 
 function applyKeywordMapping(keyword) {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ,.';
     
     // Nettoyer le mot-clé
-    const cleanKeyword = keyword.replace(/[^A-Z]/g, '');
+    const cleanKeyword = keyword.replace(/[^A-Z ,.]/g, '');
     if (!cleanKeyword) return;
     
     // Créer l'alphabet de substitution avec le mot-clé

@@ -34,16 +34,10 @@
                 <div class="cipher-preview" id="cipherPreview">
                     <span class="placeholder-text">En attente du texte chiffré...</span>
                 </div>
-                <div class="cipher-status" id="cipherStatus">
-                    <span class="status-info">En attente du texte chiffré...</span>
-                </div>
 
                 <div class="control-buttons">
                     <button id="refreshAnalysis" class="btn btn-primary">
                         <i class="fas fa-sync-alt"></i> Actualiser
-                    </button>
-                    <button id="loadTestData" class="btn btn-secondary">
-                        <i class="fas fa-vial"></i> Test
                     </button>
                 </div>
             </div>
@@ -71,45 +65,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        {{!-- DEUXIÈME LIGNE: Table de Mapping --}}
-        <div class="row-2">
-            <div class="mapping-section">
-                <h3><i class="fas fa-exchange-alt"></i> Table de Substitution</h3>
-                
-                <div class="mapping-controls">
-                    <button id="autoMap" class="btn btn-success">
-                        <i class="fas fa-magic"></i> Auto Mapping
-                    </button>
-                    <button id="clearMapping" class="btn btn-secondary">
-                        <i class="fas fa-undo"></i> Reset
-                    </button>
-                    <button id="applyMapping" class="btn btn-primary">
-                        <i class="fas fa-play"></i> Déchiffrer
-                    </button>
-                </div>
-                
-                <div class="substitution-table">
-                    <div class="table-row">
-                        <div class="row-label">Chiffré:</div>
-                        <div class="letters-container" id="cipherAlphabet"></div>
-                    </div>
-                    
-                    <div class="table-row">
-                        <div class="row-label">Clair:</div>
-                        <div class="letters-container" id="clearAlphabet"></div>
-                    </div>
-                </div>
-                
-                <div class="result-section">
-                    <h4>Texte Déchiffré:</h4>
-                    <textarea id="decryptedText" placeholder="Le texte déchiffré apparaîtra ici..." rows="4" readonly></textarea>
-                    <button id="copyResult" class="copy-btn">
-                        <i class="fas fa-copy"></i> Copier
-                    </button>
-                </div>
+                <button id="nextStep" class="btn btn-primary next-step-btn">
+                    <i class="fas fa-angle-right"></i> Etape suivante
+                </button>
             </div>
         </div>
     </section>

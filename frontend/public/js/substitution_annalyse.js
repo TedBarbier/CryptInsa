@@ -6,11 +6,12 @@ const FRENCH_FREQUENCIES = {
     'i': 7.23, 'r': 6.81, 'u': 6.05, 'l': 5.89, 'o': 5.34,
     'd': 3.69, 'c': 3.32, 'p': 2.24, 'm': 2.23, 'v': 1.28,
     'g': 1.10, 'f': 1.06, 'b': 0.80, 'h': 0.64, 'q': 0.54,
-    'y': 0.46, 'x': 0.38, 'j': 0.31, 'k': 0.16, 'w': 0.08, 'z': 0.07
+    'y': 0.46, 'x': 0.38, 'j': 0.31, 'k': 0.16, 'w': 0.08, 
+    'z': 0.07, '_':6.00, '.':6.00, ',':6.00
 };
 
 // Alphabet français
-const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz ,.';
 
 // Variables globales
 let cipherFrequencies = {};
@@ -29,9 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== INITIALISATION ===== //
 function initializeAnalysis() {
-    // Clear seulement le mapping, pas les données
-    clearMapping();
-    
+
     // Initialiser le graphique français
     initializeFrenchChart();
     
@@ -43,16 +42,16 @@ function initializeAnalysis() {
 
 function setupEventListeners() {
     document.getElementById('refreshAnalysis').addEventListener('click', loadCipherTextFromStorage);
-    document.getElementById('loadTestData').addEventListener('click', loadTestData);
-    document.getElementById('autoMap').addEventListener('click', generateAutoMapping);
-    document.getElementById('clearMapping').addEventListener('click', clearMapping);
-    document.getElementById('applyMapping').addEventListener('click', applyDecryption);
-    document.getElementById('copyResult').addEventListener('click', copyResult);
+    document.getElementById('nextStep').addEventListener('click', nextStep);
+}
+// ===== NEXT STEP ===== //
+function nextStep() {    
+    window.location.href = '/substitution_dechiffre';
+
 }
 
 // ===== CHARGEMENT DES DONNÉES ===== //
 function loadCipherTextFromStorage() {
-    updateCipherStatus('Recherche du texte chiffré...', 'loading');
     
     let cipherText = null;
     let source = '';
@@ -81,36 +80,14 @@ function loadCipherTextFromStorage() {
     
     // 3. Vérifier le résultat final
     if (!cipherText || cipherText.trim().length === 0) {
-        updateCipherStatus('❌ Aucun texte trouvé. Utilisez la page d\'attaque ou les données de test.', 'error');
-        showNotification('Aucun texte chiffré trouvé. Utilisez d\'abord la page d\'attaque ou les données de test.', 'error');
+        showNotification('Aucun texte chiffré trouvé. Utilisez d\'abord la page d\'attaque.', 'error');
         return false;
     }
     
-    updateCipherStatus(`✓ Texte chargé depuis ${source} (${cipherText.length} caractères)`, 'success');
     
     // Lancer l'analyse
     analyzeCipherText(cipherText);
     return true;
-}
-
-function updateCipherStatus(message, type = 'info') {
-    const statusElement = document.getElementById('cipherStatus');
-    const statusInfo = statusElement.querySelector('.status-info');
-    
-    statusInfo.textContent = message;
-    statusElement.classList.remove('success', 'error', 'loading');
-    
-    if (type !== 'info') {
-        statusElement.classList.add(type);
-    }
-}
-
-// ===== DONNÉES DE TEST ===== //
-function loadTestData() {
-    const testText = "QHOV VBJA BHJ VB PEJM FBJA UB DIJOH ZBV DBJVPO BV VB PEJM UB ZIJM EJJFM MVJM EPJM EJJFM ZB DIBM POB NBJVDM QHOV VBJA BHJ VB PEJM FBJA UB DIJOH ZBV DBJVPO BV VB PEJM UB ZIJM EJJFM MVJM EPJM EJJFM ZB DIBM POB NBJVDM";
-    localStorage.setItem('cipherText', testText);
-    analyzeCipherText(testText);
-    showNotification('Données de test chargées', 'success');
 }
 
 // ===== ANALYSE DU TEXTE ===== //
@@ -120,7 +97,7 @@ function analyzeCipherText(text) {
         return;
     }
 
-    const cleanText = text.trim();
+    const cleanText = text;
     if (cleanText.length < 20) {
         showNotification('Texte trop court pour une analyse fiable (minimum 20 caractères)', 'error');
         return;
@@ -131,7 +108,7 @@ function analyzeCipherText(text) {
     document.getElementById('cipherPreview').innerHTML = `<span title="Texte complet: ${cleanText}">${previewText}</span>`;
     
     // Nettoyer le texte pour l'analyse
-    analyzedText = cleanText.toLowerCase().replace(/[^a-z]/g, '');
+    analyzedText = cleanText.toLowerCase().replace(/[^a-z ,.]/g, '');
     
     if (analyzedText.length === 0) {
         showNotification('Aucune lettre trouvée dans le texte', 'error');
@@ -181,7 +158,7 @@ function drawCipherChart() {
     const sortedLetters = Object.entries(cipherFrequencies)
         .filter(([, freq]) => freq > 0)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 12); // Limiter à 12 pour plus de clarté
+        .slice(0, 30); // Limiter à 30 pour plus de clarté
     
     if (sortedLetters.length === 0) {
         chartBars.innerHTML = `
@@ -223,7 +200,7 @@ function initializeFrenchChart() {
     
     const sortedFrench = Object.entries(FRENCH_FREQUENCIES)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 12); // Limiter à 12 pour plus de clarté
+        .slice(0, 27); // Limiter à 27 pour plus de clarté
     
     const maxFreq = Math.max(...sortedFrench.map(([, freq]) => freq));
     
@@ -356,7 +333,7 @@ function showTooltip(tooltip, x, y, barInfo) {
         </div>
         ${rankText}
         <div style="color: #999999; font-size: 12px; margin-top: 6px; text-align: center; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 4px;">
-            ${barInfo.type === 'cipher' ? '🔒 Texte chiffré' : '🇫🇷 Référence française'}
+            ${barInfo.type === 'cipher' ? '🔒 Texte chiffré' : ' Référence française'}
         </div>
     `;
     
@@ -426,7 +403,7 @@ function generateSuggestedMatches() {
     const container = document.getElementById('suggestedMatches');
     container.innerHTML = '';
     
-    const maxMatches = Math.min(sortedCipher.length, 10);
+    const maxMatches = Math.min(sortedCipher.length, 29);
     
     for (let i = 0; i < maxMatches; i++) {
         if (i < sortedFrench.length) {
@@ -438,6 +415,36 @@ function generateSuggestedMatches() {
             container.appendChild(match);
         }
     }
+    generateAutoMapping();
+}
+function generateAutoMapping() {
+    if (!Object.keys(cipherFrequencies).length) {
+        showNotification('Analysez d\'abord un texte chiffré', 'error');
+        return;
+    }
+    
+    const sortedCipher = Object.entries(cipherFrequencies)
+        .filter(([, freq]) => freq > 0)
+        .sort((a, b) => b[1] - a[1]);
+    
+    const sortedFrench = Object.entries(FRENCH_FREQUENCIES)
+        .sort((a, b) => b[1] - a[1]);
+    
+    currentMapping = {};
+    
+    const maxMappings = Math.min(sortedCipher.length, sortedFrench.length);
+    
+    for (let i = 0; i < maxMappings; i++) {
+        const cipherLetter = sortedCipher[i][0];
+        const frenchLetter = sortedFrench[i][0];
+        currentMapping[cipherLetter] = frenchLetter;
+    }
+    
+    showNotification('Mapping automatique généré', 'success');
+}
+
+function saveMappingToStorage() {
+    localStorage.setItem('mapping', JSON.stringify(currentMapping));
 }
 
 function createMatchItem(cipherLetter, frenchLetter, confidence) {
@@ -467,148 +474,7 @@ function calculateConfidence(cipherFreq, frenchFreq) {
     return Math.round(similarity);
 }
 
-// ===== MAPPING ===== //
-function generateAutoMapping() {
-    if (!Object.keys(cipherFrequencies).length) {
-        showNotification('Analysez d\'abord un texte chiffré', 'error');
-        return;
-    }
-    
-    const sortedCipher = Object.entries(cipherFrequencies)
-        .filter(([, freq]) => freq > 0)
-        .sort((a, b) => b[1] - a[1]);
-    
-    const sortedFrench = Object.entries(FRENCH_FREQUENCIES)
-        .sort((a, b) => b[1] - a[1]);
-    
-    currentMapping = {};
-    
-    const maxMappings = Math.min(sortedCipher.length, sortedFrench.length);
-    
-    for (let i = 0; i < maxMappings; i++) {
-        const cipherLetter = sortedCipher[i][0];
-        const frenchLetter = sortedFrench[i][0];
-        currentMapping[cipherLetter] = frenchLetter;
-    }
-    
-    updateMappingDisplay();
-    showNotification('Mapping automatique généré', 'success');
-}
 
-function updateMappingDisplay() {
-    updateCipherAlphabet();
-    updateClearAlphabet();
-}
-
-function updateCipherAlphabet() {
-    const container = document.getElementById('cipherAlphabet');
-    container.innerHTML = '';
-    
-    const presentLetters = Object.keys(cipherFrequencies)
-        .filter(letter => cipherFrequencies[letter] > 0)
-        .sort();
-    
-    presentLetters.forEach(letter => {
-        const box = document.createElement('div');
-        box.className = 'letter-box cipher-letter';
-        box.textContent = letter.toUpperCase();
-        container.appendChild(box);
-    });
-}
-
-function updateClearAlphabet() {
-    const container = document.getElementById('clearAlphabet');
-    container.innerHTML = '';
-    
-    const presentLetters = Object.keys(cipherFrequencies)
-        .filter(letter => cipherFrequencies[letter] > 0)
-        .sort();
-    
-    presentLetters.forEach(letter => {
-        const box = document.createElement('div');
-        box.className = 'letter-box clear-letter';
-        
-        const input = document.createElement('input');
-        input.className = 'substitution-input';
-        input.type = 'text';
-        input.maxLength = 1;
-        input.value = currentMapping[letter] ? currentMapping[letter].toUpperCase() : '';
-        input.setAttribute('data-cipher', letter);
-        
-        input.addEventListener('input', function() {
-            const value = this.value.toLowerCase();
-            if (value && /[a-z]/.test(value)) {
-                currentMapping[letter] = value;
-                updateLiveDecryption();
-            } else {
-                delete currentMapping[letter];
-                this.value = '';
-            }
-        });
-        
-        box.appendChild(input);
-        container.appendChild(box);
-    });
-}
-
-// ===== DÉCHIFFREMENT ===== //
-function applyDecryption() {
-    if (!analyzedText) {
-        showNotification('Aucun texte à déchiffrer', 'error');
-        return;
-    }
-    
-    if (Object.keys(currentMapping).length === 0) {
-        showNotification('Aucune correspondance définie', 'error');
-        return;
-    }
-    
-    const originalText = localStorage.getItem('cipherText') || '';
-    const decryptedText = decryptText(originalText, currentMapping);
-    
-    document.getElementById('decryptedText').value = decryptedText;
-    
-    showNotification('Déchiffrement appliqué', 'success');
-}
-
-function decryptText(text, mapping) {
-    return text.split('').map(char => {
-        const lowerChar = char.toLowerCase();
-        if (mapping[lowerChar]) {
-            return char === char.toUpperCase() ? 
-                mapping[lowerChar].toUpperCase() : 
-                mapping[lowerChar];
-        }
-        return char;
-    }).join('');
-}
-
-function updateLiveDecryption() {
-    if (analyzedText) {
-        applyDecryption();
-    }
-}
-
-// ===== UTILITAIRES ===== //
-function applyMatch(cipherLetter, clearLetter) {
-    currentMapping[cipherLetter] = clearLetter;
-    updateMappingDisplay();
-    updateLiveDecryption();
-}
-
-function clearMapping() {
-    currentMapping = {};
-    updateMappingDisplay();
-    document.getElementById('decryptedText').value = '';
-    showNotification('Mapping réinitialisé', 'success');
-}
-
-function copyResult() {
-    const textarea = document.getElementById('decryptedText');
-    textarea.select();
-    document.execCommand('copy');
-    showNotification('Texte copié dans le presse-papiers', 'success');
-}
 
 // ===== NOTIFICATIONS ===== //
 function showNotification(message, type = 'info') {

@@ -64,7 +64,7 @@ window.vigenereDecrypt = vigenereDecrypt;
 
 async function substitutionAttack(ciphertext, language = 'fr') { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
     const res = await fetch("http://localhost:5000/analyse_frequences", {
-        method: "GET",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ciphertext, language })
     });
@@ -74,7 +74,7 @@ async function substitutionAttack(ciphertext, language = 'fr') { // Recuperer le
 }
 window.substitutionAttack = substitutionAttack;
 
-async function updateAttack(ciphertext, language = 'fr') { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+async function updateAttack() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
     const res = await fetch("http://localhost:5000/update_attack", {
         method: "GET",
         headers: { "Content-Type": "application/json" }
