@@ -182,14 +182,19 @@ def check_mot(mot,liste_mots):
         diff=max(len(mot),5)
         result=None
         for m in liste_mots:
+            
             if(type(m)==str):   
                 cpt=abs(len(m)-len(mot))
+                if cpt<1:
+                    continue
+                #print(m)
                 for i in range(0,min(len(mot),len(m))):
                     if m[i]!=mot[i]:
                         cpt+=1
                 if cpt<=diff:
                     diff=cpt
                     result=m
+       # print("***************")
         return result
 
 def score_mot(mot):
@@ -202,7 +207,7 @@ def score_mot(mot):
 
 
     mot2=check_mot(mot,liste_mots)
-    distance=abs(len(mot2)-len(mot))
+    distance=0
     for i in range(min(len(mot),len(mot2))):
         if mot[i]==mot2[i]:
             distance+=1
@@ -286,4 +291,6 @@ code,traductions=decrypt_message(m2)
 #     print(l,t,s)
 # print(m)
 # print(m2)
+print(score_message(traductions,m2))
+traductions["x"]="u"
 print(score_message(traductions,m2))
