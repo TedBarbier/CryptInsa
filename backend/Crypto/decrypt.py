@@ -17,6 +17,24 @@ N_ITERATIONS=50
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
 
+def charger_dictionnaire_optimise(chemin_fichier="dict.txt"):
+    """
+    Charge le dictionnaire et le groupe par longueur de mot pour une recherche rapide.
+    Retourne un dictionnaire où les clés sont les longueurs et les valeurs sont des sets de mots.
+    Ex: {3: {'les', 'des'}, 4: {'pour', 'avec'}}
+    """
+    mots_par_longueur = {}
+    with open(chemin_fichier, "r", encoding="utf-8") as f:
+        for mot in f.read().split():
+            longueur = len(mot)
+            if longueur not in mots_par_longueur:
+                mots_par_longueur[longueur] = set()
+            mots_par_longueur[longueur].add(mot)
+    return mots_par_longueur
+
+DICO_OPTIMISE = charger_dictionnaire_optimise("dict.txt")
+
+
 def frequences_lettres(texte):
     texte = ''.join(filter(lambda c: c in string.ascii_letters, texte.lower()))
     compteur = Counter(texte)
@@ -94,26 +112,36 @@ def find_score(message, key):  # message juste après cesar et key = traduction
     #         score += len(mot) * 100
     return score/len(message)*100
 
-def find_score_lettre(l,t,traductions,message):   #l lettre chifré et t lettre qu'on pense que c'est
-    score=0
-    cpt=0
-    frequences=freq.get_letter_frequencies(message)
+def find_score_lettre(l, t, traductions, freqs_message, freqs_combi_message):
+    """
+    Calcule le score d'une lettre en utilisant les fréquences pré-calculées.
+    """
+    score_combi = 0
+    cpt = 0
+    
+    # On filtre les combinaisons pertinentes une seule fois
+    combinaisons_pertinentes = {k: v for k, v in freqs_combi_message.items() if v > 0.003} # Seuil ajusté
+    
+    for combi in combinaisons_pertinentes:
+        if l in combi and combi[0] in traductions and combi[1] in traductions:
+            c1 = traductions[combi[0]]
+            c2 = traductions[combi[1]]
+            trad_combi = c1 + c2
+            if trad_combi in freq_combination_francais:
+                score_combi += freq_combination_francais[trad_combi]
+                cpt += 1
 
-    combi_freq= freq.get_combination_frequencies(message)
-    combinaisons = {k: v for k, v in combi_freq.items() if v > 0.3}
-    for combi in combinaisons.keys():
-        if combi[0] in traductions.keys() and combi[1] in traductions.keys() and l in combi:
-            c1=traductions[combi[0]]
-            c2=traductions[combi[1]]
-            trad_combi=c1+c2
-            f=freq_combination_francais[trad_combi]
-            score+=f
-            cpt+=1
-    if cpt!=0:
-        score=(score/cpt)/4
-    p=1-(abs(frequences[l]-freq_francais[t]))/19
-    score=0.4*p+0.6*score
-    return score
+    if cpt > 0:
+        score_combi = (score_combi / cpt) / 4 # Normalisation
+    
+    # Score basé sur la fréquence de la lettre
+    # On évite la division par zéro si la fréquence est nulle.
+    freq_ref = freq_francais.get(t, 0)
+    p = 1 - (abs(freqs_message.get(l, 0) - freq_ref) / 19) # 19 est une constante magique, peut-être à revoir
+    
+    # Pondération des deux scores
+    score_final = 0.4 * p + 0.6 * score_combi
+    return score_final
 
 def message_initiial_with_letter(message, traduction, letter): # letter en char
     new_message = ""
@@ -203,24 +231,38 @@ def decrypt_message_with_combination(message):
     separateur=""
     return separateur.join(code),traductions
 
-def check_mot(mot,liste_mots):
-        diff=max(len(mot),5)
-        result=None
-        for m in liste_mots:
-            
-            if(type(m)==str):   
-                cpt=abs(len(m)-len(mot))
-                if cpt<1:
-                    continue
-                #print(m)
-                for i in range(0,min(len(mot),len(m))):
-                    if m[i]!=mot[i]:
-                        cpt+=1
-                if cpt<=diff:
-                    diff=cpt
-                    result=m
-       # print("***************")
-        return result
+def check_mot(mot, dico_par_longueur):
+    """
+    Trouve le mot le plus proche dans le dictionnaire optimisé.
+    La recherche est limitée aux mots de longueur similaire.
+    """
+    longueur_mot = len(mot)
+    if longueur_mot == 0:
+        return None
+
+    # Définir la plage de recherche (ex: mots de longueur -1, même longueur, et +1)
+    longueurs_a_chercher = range(max(1, longueur_mot - 1), longueur_mot + 2)
+    
+    meilleur_mot = None
+    diff_min = len(mot) # La différence maximale est la longueur du mot lui-même
+
+    for l in longueurs_a_chercher:
+        if l in dico_par_longueur:
+            # On cherche dans un sous-ensemble beaucoup plus petit du dictionnaire
+            for mot_dico in dico_par_longueur[l]:
+                cpt = abs(longueur_mot - len(mot_dico))
+                for i in range(min(longueur_mot, len(mot_dico))):
+                    if mot[i] != mot_dico[i]:
+                        cpt += 1
+                
+                if cpt < diff_min:
+                    diff_min = cpt
+                    meilleur_mot = mot_dico
+                    # Petite optimisation : si le mot est presque parfait, on peut s'arrêter
+                    if diff_min <= 1:
+                        return meilleur_mot
+                        
+    return meilleur_mot
 
 def lettre_en_commun(mots):   #mots est une liste de mots
     commun=[]
@@ -234,39 +276,68 @@ def lettre_en_commun(mots):   #mots est une liste de mots
             commun.append((lettre,i))
     return commun
 
-def score_mot(mot):
-    # Ouvrir le fichier en lecture
-    with open("dict.txt", "r", encoding="utf-8") as f:
-        contenu = f.read()
-
-        # Séparer le contenu en mots
-        liste_mots = contenu.split()
-
-
-    mot2=check_mot(mot,liste_mots)
-    distance=0
-    for i in range(min(len(mot),len(mot2))):
-        if mot[i]==mot2[i]:
-            distance+=1
-    # if mapping.generer_pattern(mot)==mapping.generer_pattern(mot2):
-    #     distance+=len(mot1)
-    if len(mot)==0:
+def score_mot(mot, dico_par_longueur):
+    """
+    Calcule le score d'un mot en utilisant le dictionnaire pré-chargé.
+    """
+    if len(mot) == 0:
         return 0
-    #print(distance,len(mot))
-    return distance/len(mot)
 
-def score_message(traductions,message):
-    liste_mots=message.split(" ")
-    score=0
+    mot_proche = check_mot(mot, dico_par_longueur)
+
+    if mot_proche is None:
+        return 0
+
+    # Calcul de la similarité (nombre de lettres communes au début)
+    distance = 0
+    for i in range(min(len(mot), len(mot_proche))):
+        if mot[i] == mot_proche[i]:
+            distance += 1
+    
+    return distance / len(mot)
+
+def score_message(traductions, message):
+    """
+    Fonction principale optimisée.
+    """
+    # 1. Calculer les fréquences une seule fois
+    freqs_lettres_msg = freq.get_letter_frequencies(message)
+    freqs_combi_msg = freq.get_combination_frequencies(message)
+
+    # 2. Calculer le score des mots
+    liste_mots = message.split(" ")
+    if not liste_mots:
+        return 0
+        
+    score_mots_total = 0
     for mot in liste_mots:
-        score+=score_mot(mot)
-    score=(1-score/len(liste_mots))
-    #print("score_mot",score)
-    score_lettre=0
-    for k,v in traductions.items():
-        score_lettre+=find_score_lettre(k,v,traductions,message)
-    score+=score_lettre/len(traductions)
-    return score*100
+        # On passe le dictionnaire pré-chargé
+        score_mots_total += score_mot(mot, DICO_OPTIMISE)
+    
+    score_mots_moyen = score_mots_total / len(liste_mots)
+    
+    # 3. Calculer le score des lettres
+    score_lettres_total = 0
+    if not traductions:
+        return (1 - score_mots_moyen) * 100
+
+    for lettre_chiffree, lettre_traduite in traductions.items():
+        # On passe les fréquences pré-calculées
+        score_lettres_total += find_score_lettre(
+            lettre_chiffree, lettre_traduite, traductions, freqs_lettres_msg, freqs_combi_msg
+        )
+    
+    score_lettres_moyen = score_lettres_total / len(traductions)
+
+    # 4. Combiner les scores
+    # La formule originale était un peu étrange, je la clarifie
+    # score = (1 - score_mots_moyen) + score_lettres_moyen
+    # Votre formule:
+    score = (1 - score_mots_moyen) + score_lettres_moyen/len(traductions) # C'est ce que vous aviez
+    # Le score_lettre était déjà divisé par len(traductions), donc je l'enlève ici
+    score = (1 - score_mots_moyen) + score_lettres_moyen
+    
+    return score * 100
 
 def comparaison(m1,m2):
     cpt=0
