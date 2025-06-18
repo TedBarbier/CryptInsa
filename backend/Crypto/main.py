@@ -7,11 +7,7 @@ import dict_search
 import mapping
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
-<<<<<<< HEAD
 N_ITERATIONS = 50
-=======
-N_ITERATIONS = 30
->>>>>>> 8e4ebf7be8b18b65f51affc51bd7164a07eb6253
 
 freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
@@ -19,7 +15,6 @@ combinaisons_frequentes = {k: v for k, v in freq_combination.items() if v > 0.8}
 chemin_dictionnaire = "dict.txt"
 
 
-<<<<<<< HEAD
 def main(message):
     traduction = {}
     code, traduction = decrypt.decrypt_message(message)
@@ -47,7 +42,6 @@ def main(message):
                 traduction = temp_traduction
                 
     return traduction
-=======
 def main(message_cesar,m):
     frequences = freq.get_letter_frequencies(message_cesar)
     traduction = {}
@@ -98,7 +92,6 @@ def main(message_cesar,m):
       
     return code, traduction
 
->>>>>>> 8e4ebf7be8b18b65f51affc51bd7164a07eb6253
 
 def main2(message_cesar,m):
     frequences = freq.get_letter_frequencies(message_cesar)
@@ -154,13 +147,11 @@ def main2(message_cesar,m):
 
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2 = cesar.cesar_encrypt(m.lower(), 3)
-<<<<<<< HEAD
 vraie_cle=decrypt.crée_clé(m,m2)
 traduction= main(m2)
 print("Traductions:", traduction)
 print("compar clé", decrypt.comparaison_clé(traduction,vraie_cle))
 code=decrypt.message_from_key(m2,traduction)
-=======
 print(m2)
 code, traductions = main2(m2,m)
 code_temp=[]
@@ -179,5 +170,4 @@ traductions["a"]="A"
 
 print("Code:", code)
 print("Traductions:", traductions)
->>>>>>> 8e4ebf7be8b18b65f51affc51bd7164a07eb6253
 print("comparaison:", decrypt.comparaison(code, m))
