@@ -5,7 +5,7 @@ C'est à merger avec le reste du code
 je le ferais quand le code fonctionne à 100%
 
 """
-from collections import Counter
+from collections import Counter, defaultdict
 import string
 #from Crypto.dict_search import trouver_mots_correspondants
 import unicodedata
@@ -26,6 +26,80 @@ def trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-
                     mots_correspondants.append(mot)
     return mots_correspondants, len(mots_correspondants)
 
+
+def trouver_dernier_char_non_espace(texte: str, caractere_espace: str):
+    """Utilitaire pour trouver le dernier caractère significatif du texte."""
+    for char in reversed(texte):
+        if char != caractere_espace:
+            return char
+    return None
+
+def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.95):
+    """
+    Détecte la ponctuation en identifiant d'abord le point comme étant le
+    dernier caractère du texte, puis en cherchant la virgule.
+
+    Args:
+        texte_chiffre: Le texte chiffré à analyser.
+        caractere_espace: Le caractère qui représente l'espace dans le chiffré.
+        score_seuil: Le score minimum pour qu'un caractère soit un candidat virgule.
+
+    Returns:
+        Un dictionnaire avec les caractères trouvés pour 'virgule' et 'point'.
+    """
+    if not texte_chiffre:
+        return {'virgule': None, 'point': None}
+
+    # --- Étape 1 : Identifier le point de manière quasi certaine ---
+    char_point_candidat = trouver_dernier_char_non_espace(texte_chiffre, caractere_espace)
+    
+    resultat = {'virgule': None, 'point': char_point_candidat}
+
+    if not char_point_candidat:
+        # Si le texte ne contient que des espaces ou est vide
+        return resultat
+
+    # --- Étape 2 : Chercher la virgule parmi les autres caractères ---
+    
+    # Profil de chaque caractère : {'avant_espace': count, 'autre_position': count}
+    profils = defaultdict(lambda: {'avant_espace': 0, 'autre_position': 0})
+    
+    # On construit le profil comme avant
+    for i in range(len(texte_chiffre) - 1):
+        char_actuel = texte_chiffre[i]
+        char_suivant = texte_chiffre[i+1]
+        
+        if char_actuel == caractere_espace:
+            continue
+        
+        # On ignore le caractère déjà identifié comme point
+        if char_actuel == char_point_candidat:
+            continue
+
+        if char_suivant == caractere_espace:
+            profils[char_actuel]['avant_espace'] += 1
+        else:
+            profils[char_actuel]['autre_position'] += 1
+    
+    # --- Étape 3 : Calculer le score et trouver le meilleur candidat pour la virgule ---
+    candidats_virgule = []
+    for char, profil in profils.items():
+        total_apparitions = profil['avant_espace'] + profil['autre_position']
+        if total_apparitions == 0:
+            continue
+
+        score = profil['avant_espace'] / total_apparitions
+        
+        if score >= score_seuil:
+            candidats_virgule.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
+
+    # Trier les candidats (le meilleur est en premier)
+    candidats_virgule.sort(key=lambda item: (item['score'], item['freq']), reverse=True)
+
+    if candidats_virgule:
+        resultat['virgule'] = candidats_virgule[0]['char']
+
+    return resultat
 
 def generer_pattern(mot):
     mapping = {}
