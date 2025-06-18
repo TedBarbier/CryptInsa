@@ -207,13 +207,14 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
     print(f"Mapping initial pour {frequences_francais[i]} dans le mot le plus long :", mot_final)
 
     message_dechiffre = list(message_chiffre)
-    if len(imapping) > 1 :
-        for j in range(len(mot_final)) :
-            for k in range(len(message_chiffre)) :
-                if mot_final[j] == message_chiffre[k] :
-                    message_dechiffre[k] = imapping [0][j]
-                elif  message_dechiffre[k] == lettre_fréquente:
-                    message_dechiffre[k] = frequences_francais[i]
+    mapping_mot = d_general(mot_final, imapping, message_chiffre, chemin_dictionnaire)[1]
+
+    for j in range(len(mot_final)) :
+        for k in range(len(message_chiffre)) :
+            if mot_final[j] == message_chiffre[k] :
+                message_dechiffre[k] = mapping_mot[j]
+            elif  message_dechiffre[k] == lettre_fréquente:
+                message_dechiffre[k] = frequences_francais[i]
     
     
     #for j in range(len(message_dechiffre)):
@@ -223,10 +224,59 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
     print(message_original)
                 
     #for mot in message_original.split() :
+    #    if mot not in chemin_dictionnaire:
+    #        i2mapping = initial_mapping(frequences_francais[i], sorted_chiffre[i], mot, chemin_dictionnaire)
+    #        while len(i2mapping) == 0 and i < len(frequences_francais):
+    #            i += 1
+    #            i2mapping = initial_mapping(frequences_francais[i], sorted_chiffre[i], mot, chemin_dictionnaire)
+    #            list_mot = list(mot)
+    #        for j in range(len(list_mot)):
+    #                i = i - 1
+    #                print(i)
+    #                list_mot[j] =  i2mapping[i][j]
+
+    #        mot_f = ''.join(list_mot)
+    #message_original = message_original.replace(mot, mot_f)
 
         
 
-    return mot_final, imapping, message_original
+    return mot_final, message_original
+        
+def d(mot, chemin_dictionnaire) :
+    distance_min = len(mot)
+    mot_sa = enlever_accents(mot)
+    mot_correspondants = trouver_mots_correspondants(mot_sa, chemin_dictionnaire, encoding='utf-8')[0]
+    
+    for mot_p in mot_correspondants:
+        mot_p_sa = enlever_accents(mot_p)
+        distance = sum(1 for a, b in zip(mot_sa, mot_p_sa) if a != b)
+        distance_min = min(distance_min, distance)
+    
+    return distance_min
+
+def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
+    mot_choisi = None
+    distance_min = len(message_chiffre)
+    message_sa = enlever_accents(message_chiffre)
+    message_dechiffre = list(message_sa)
+
+    for mot_p in imapping:
+        mot_p_sa = enlever_accents(mot_p)
+        for j in range(len(mot_p_sa)) :
+            for k in range(len(message_chiffre)) :
+                if mot_long[j] == message_chiffre[k] :
+                    message_dechiffre[k] = mot_p_sa[j]
+                #elif  message_dechiffre[k] == lettre_fréquente:
+                #    message_dechiffre[k] = frequences_francais[i]
+        message_dechiffre_str = ''.join(message_dechiffre)
+        distance = sum(d(mot, chemin_dictionnaire) for mot in message_dechiffre_str.split())
+        
+        if distance < distance_min:
+            distance_min = distance
+            mot_choisi = mot_p
+                
+
+    return distance_min, mot_choisi
         
 
 
