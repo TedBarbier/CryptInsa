@@ -9,7 +9,7 @@ import json
 
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
-N_ITERATIONS = 150
+N_ITERATIONS = 2
 
 freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
@@ -27,16 +27,20 @@ import json
 def initialiser_json_vide(nom_fichier='donnees.json'):
     donnees = {
         "texte": "",
-        "dictionnaire": {}
+        "dictionnaire": {},
+        'is_finish':False
     }
     with open(nom_fichier, 'w', encoding='utf-8') as f:
         json.dump(donnees, f, ensure_ascii=False, indent=4)
 
 
-def enregistrer_en_json(message, dict_val, nom_fichier='donnees.json'):
+def enregistrer_en_json(message, dict_val,iteration, nom_fichier='donnees.json'):
+    b=iteration>=N_ITERATIONS-1
+
     donnees = {
         'chiffré':message,
-        'dictionnaire': dict_val
+        'dictionnaire': dict_val,
+        'is_finish':b
     }
     with open(nom_fichier, 'w', encoding='utf-8') as f:
         json.dump(donnees, f, ensure_ascii=False, indent=4)
@@ -169,9 +173,6 @@ def main1(message):
     #             lettre_non_trouve.remove(let)
     #             t=1
     return traduction
-
-
-
 
 def main(message_cesar,m):
     frequences = freq.get_letter_frequencies(message_cesar)

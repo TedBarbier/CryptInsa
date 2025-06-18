@@ -264,9 +264,9 @@ def check_mot(mot, dico_par_longueur):
                 if cpt < diff_min:
                     diff_min = cpt
                     meilleur_mot = mot_dico
-                    # Petite optimisation : si le mot est presque parfait, on peut s'arrêter
-                    if diff_min <= 1:
-                        return meilleur_mot
+                    # # Petite optimisation : si le mot est presque parfait, on peut s'arrêter
+                    # if diff_min <= 1:
+                    #     return meilleur_mot
                         
     return meilleur_mot
 
