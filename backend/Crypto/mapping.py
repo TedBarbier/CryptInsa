@@ -24,7 +24,7 @@ def trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-
                 pattern_mot = generer_pattern(mot_sans_accents)
                 if pattern_mot == pattern_recherche:
                     mots_correspondants.append(mot)
-    return mots_correspondants
+    return mots_correspondants, len(mots_correspondants)
 
 
 def trouver_dernier_char_non_espace(texte: str, caractere_espace: str):
