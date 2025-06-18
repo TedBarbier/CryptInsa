@@ -98,7 +98,7 @@ def main2(message_cesar,m):
     traduction = {}
     #clé avec fonction decrypt message pour un premier score
     code, traduction = decrypt.decrypt_message(message_cesar)
-    score = decrypt.score_message(traduction,message_cesar)
+    score = decrypt.score_message(traduction,code)
     #score,a,b=decrypt.comparaison(code,m)
     score_max=score
     
