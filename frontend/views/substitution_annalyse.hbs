@@ -1,0 +1,120 @@
+{{!-- CSS spécifique pour l'analyse de fréquences --}}
+<link rel="stylesheet" href="/css/substitution_annalyse.css">
+
+<div class="frequency-analysis-container">
+    <section class="analysis-section">
+        <h2 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Analyse de Fréquences
+        </h2>
+
+        {{!-- PREMIÈRE LIGNE: Fréquences Chiffrées + Comparaison Française --}}
+        <div class="row-1">
+            {{!-- Colonne 1: Fréquences du texte chiffré --}}
+            <div class="cipher-frequency-column">
+                <h3><i class="fas fa-lock"></i> Fréquences du Texte Chiffré</h3>
+                <div class="chart-container">
+                    <div id="cipherChart" class="custom-chart cipher-chart">
+                        <div class="chart-title">🔒 FRÉQUENCES CHIFFRÉES</div>
+                        <div class="chart-bars" id="cipherBars">
+                            <div class="empty-state">
+                                <div class="empty-icon">🔒</div>
+                                <div class="empty-message">Aucun texte chiffré analysé</div>
+                            </div>
+                        </div>
+                        <div class="chart-legend" id="cipherLegend"></div>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <span>Lettres: <strong id="cipherLetterCount">0</strong></span>
+                    <span>Uniques: <strong id="cipherUniqueCount">0</strong></span>
+                </div>
+                
+                <div class="cipher-preview" id="cipherPreview">
+                    <span class="placeholder-text">En attente du texte chiffré...</span>
+                </div>
+                <div class="cipher-status" id="cipherStatus">
+                    <span class="status-info">En attente du texte chiffré...</span>
+                </div>
+
+                <div class="control-buttons">
+                    <button id="refreshAnalysis" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Actualiser
+                    </button>
+                    <button id="loadTestData" class="btn btn-secondary">
+                        <i class="fas fa-vial"></i> Test
+                    </button>
+                </div>
+            </div>
+
+            {{!-- Colonne 2: Comparaison avec le français --}}
+            <div class="french-comparison-column">
+                <h3><i class="fas fa-balance-scale"></i> Comparaison Française</h3>
+                
+                <div class="chart-container">
+                    <div id="frenchChart" class="custom-chart french-chart">
+                        <div class="chart-title">FRÉQUENCES FRANÇAISES</div>
+                        <div class="chart-bars" id="frenchBars">
+                            <!-- French frequency bars will be generated here -->
+                        </div>
+                        <div class="chart-legend" id="frenchLegend"></div>
+                    </div>
+                </div>
+                
+                <div class="suggested-matches">
+                    <h4>Correspondances Suggérées</h4>
+                    <div class="matches-container" id="suggestedMatches">
+                        <div class="match-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Analysez un texte pour voir les correspondances</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- DEUXIÈME LIGNE: Table de Mapping --}}
+        <div class="row-2">
+            <div class="mapping-section">
+                <h3><i class="fas fa-exchange-alt"></i> Table de Substitution</h3>
+                
+                <div class="mapping-controls">
+                    <button id="autoMap" class="btn btn-success">
+                        <i class="fas fa-magic"></i> Auto Mapping
+                    </button>
+                    <button id="clearMapping" class="btn btn-secondary">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+                    <button id="applyMapping" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Déchiffrer
+                    </button>
+                </div>
+                
+                <div class="substitution-table">
+                    <div class="table-row">
+                        <div class="row-label">Chiffré:</div>
+                        <div class="letters-container" id="cipherAlphabet"></div>
+                    </div>
+                    
+                    <div class="table-row">
+                        <div class="row-label">Clair:</div>
+                        <div class="letters-container" id="clearAlphabet"></div>
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <h4>Texte Déchiffré:</h4>
+                    <textarea id="decryptedText" placeholder="Le texte déchiffré apparaîtra ici..." rows="4" readonly></textarea>
+                    <button id="copyResult" class="copy-btn">
+                        <i class="fas fa-copy"></i> Copier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{{!-- JavaScript --}}
+<script src="/js/flask.js"></script>
+<script src="/js/substitution_annalyse.js"></script>

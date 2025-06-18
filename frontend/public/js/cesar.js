@@ -440,45 +440,85 @@ async function copyResult() {
 }
 
 // === NOTIFICATIONS ===
+let notificationTimeout = null;
+
 function showNotification(message, type = 'info') {
-    // Supprimer les notifications existantes
+    // Annuler le timeout précédent s'il existe
+    if (notificationTimeout) {
+        clearTimeout(notificationTimeout);
+        notificationTimeout = null;
+    }
+    
+    // Supprimer toutes les notifications existantes immédiatement
     const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
+    existingNotifications.forEach(notification => {
+        notification.style.animation = 'slideOut 0.2s ease';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 200);
+    });
     
-    // Créer la notification
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <i class="fas fa-${getNotificationIcon(type)}"></i>
-        <span>${message}</span>
-    `;
-    
-    // Styles pour la notification
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${getNotificationColor(type)};
-        color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-weight: 500;
-        max-width: 300px;
-        animation: slideIn 0.3s ease;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Supprimer après 3 secondes
+    // Attendre un petit délai pour que l'animation de sortie se termine
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
+        // Créer la nouvelle notification
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+        `;
+        
+        // Styles pour la notification
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${getNotificationColor(type)};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+            pointer-events: auto;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Permettre à l'utilisateur de fermer la notification en cliquant dessus
+        notification.addEventListener('click', () => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+            if (notificationTimeout) {
+                clearTimeout(notificationTimeout);
+                notificationTimeout = null;
+            }
+        });
+        
+        // Supprimer après 3 secondes
+        notificationTimeout = setTimeout(() => {
+            if (notification.parentNode) {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+            notificationTimeout = null;
+        }, 3000);
+    }, 250);
 }
 
 function getNotificationIcon(type) {

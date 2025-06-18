@@ -6,7 +6,7 @@ let cipherText = '';
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ ';
 
 // Exemple de texte chiffré pour la démonstration
-const EXAMPLE_TEXT = "QHOV VBJA BHJ VB PEJM FBJA UB DIJOH ZBV DBJVPO, BV VB PEJM UB ZIJM, EJJFM MVJM EPJM EJJFM ZB DIBM POB NBJVDM.";
+const EXAMPLE_TEXT = "QHOV VBJA BHJ VB PEJM FBJA UB DIJOH ZBV DBJVPO BV VB PEJM UB ZIJM EJJFM MVJM EPJM EJJFM ZB DIBM POB NBJVDM";
 
 // === ÉLÉMENTS DOM ===
 const elements = {
@@ -80,6 +80,8 @@ function setupEventListeners() {
     document.getElementById('pasteText').addEventListener('click', pasteText);
     document.getElementById('loadExample').addEventListener('click', loadExample);
     
+
+    
     // Bouton d'attaque
     elements.launchAttack.addEventListener('click', launchAttack);
     
@@ -96,6 +98,12 @@ function clearText() {
     elements.inputText.value = '';
     updateStats();
     updateAttackButton();
+    
+    // Nettoyer aussi le storage
+    localStorage.removeItem('cipherText');
+    sessionStorage.removeItem('cipherText');
+    sessionStorage.removeItem('attackData');
+    
     showNotification('Texte effacé', 'info');
 }
 
@@ -116,6 +124,9 @@ function loadExample() {
     updateStats();
     updateAttackButton();
     showNotification('Exemple chargé', 'success');
+    
+    // Force save to localStorage
+    localStorage.setItem('cipherText', EXAMPLE_TEXT);
 }
 
 // === STATISTIQUES ET MISE À JOUR ===
@@ -135,6 +146,17 @@ function updateStats() {
     elements.uniqueLetters.textContent = uniqueLetters;
     
     cipherText = text;
+    
+    // Sauvegarder automatiquement le texte dans localStorage
+    if (text.trim()) {
+        try {
+            localStorage.setItem('cipherText', text);
+        } catch (error) {
+            // Erreur silencieuse
+        }
+    } else {
+        localStorage.removeItem('cipherText');
+    }
 }
 
 function updateAttackButton() {
@@ -156,15 +178,20 @@ function updateAttackButton() {
 
 // === LANCEMENT DE L'ATTAQUE ===
 function launchAttack() {
-    if (!cipherText.trim()) {
+    const currentText = elements.inputText.value.trim();
+    
+    if (!currentText) {
         showNotification('Aucun texte à analyser', 'error');
         return;
     }
     
-    if (cipherText.length < 50) {
+    if (currentText.length < 50) {
         showNotification('Texte trop court pour une analyse fiable', 'warning');
         return;
     }
+    
+    // Forcer la mise à jour de cipherText
+    cipherText = currentText.toUpperCase();
     
     // Sauvegarder les données pour la page d'analyse
     const attackData = {
@@ -173,8 +200,14 @@ function launchAttack() {
         timestamp: Date.now()
     };
     
-    // Stocker dans sessionStorage pour la page suivante
-    sessionStorage.setItem('attackData', JSON.stringify(attackData));
+    try {
+        // Stocker dans localStorage pour la page suivante
+        localStorage.setItem('attackData', JSON.stringify(attackData));
+        localStorage.setItem('cipherText', cipherText);
+    } catch (error) {
+        showNotification('Erreur lors de la sauvegarde', 'error');
+        return;
+    }
     
     // Animation de lancement
     elements.launchAttack.innerHTML = `
@@ -189,11 +222,14 @@ function launchAttack() {
     
     elements.launchAttack.disabled = true;
     
-    // Redirection vers la page d'analyse (remplacez par l'URL appropriée)
+    // Redirection vers la page d'analyse
     setTimeout(() => {
-        // TODO: Remplacer par l'URL de votre page d'analyse de fréquences
-        window.location.href = '/analyse_frequences';
-        // Pour le moment, simulation avec une alerte
+        // Sauvegarder dans localStorage
+        localStorage.setItem('cipherText', cipherText);
+        localStorage.setItem('attackData', JSON.stringify(attackData));
+        
+        // Redirection vers la page d'analyse de fréquences
+        window.location.href = 'substitution_annalyse';
         showNotification('Redirection vers l\'analyse de fréquences...', 'info');
         
         // Restaurer le bouton après la simulation
