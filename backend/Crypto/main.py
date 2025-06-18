@@ -225,19 +225,22 @@ def main(message_cesar,m):
     return code, traduction
 
 
-m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
-m0="elle ne trouve de reconfort que dans les lettres ecrites a son frere, porte disparu, qu elle glisse sous sa garde robe et qui disparaissent mysterieusement. Lorsqu elle recoit des reponses anonymes, elle y repond, sans savoir que leur auteur n est autre que son plus grand rival. alors qu un lien indefectible se noue entre eux, iris accepte une mission au front en tant que correspondante. dans un pays ou les humains ne sont que les pions de puissances divines, iris et roman se font la promesse de continuer a s ecrire. mais, confrontes aux horreurs de la guerre, leur avenir sera de plus en plus incertain. "
+m_autre="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
+m3="elle ne trouve de reconfort que dans les lettres ecrites a son frere, porte disparu, qu elle glisse sous sa garde robe et qui disparaissent mysterieusement. Lorsqu elle recoit des reponses anonymes, elle y repond, sans savoir que leur auteur n est autre que son plus grand rival. alors qu un lien indefectible se noue entre eux, iris accepte une mission au front en tant que correspondante. dans un pays ou les humains ne sont que les pions de puissances divines, iris et roman se font la promesse de continuer a s ecrire. mais, confrontes aux horreurs de la guerre, leur avenir sera de plus en plus incertain. "
 
+m0="cette serie policiere est caracterisee par un changement frequent de l equipe et de son inspecteur. L inspecteur de la police britannique richard, plutot pointilleux, est envoye sur l ile, une ile fictive, pour enqueter sur la mort de l inspecteur britannique local."
 
+m2 = cesar.cesar_encrypt(m_autre.lower(), 3)
 
-m2 = cesar.cesar_encrypt(m.lower(), 3)
-vraie_cle=decrypt.crée_clé(m,m2)
+vraie_cle=decrypt.crée_clé(m_autre,m2)
 traduction= main0(m2)
 print("Traductions:", traduction)
 print("vraie trad", vraie_cle)
 print("compar clé", decrypt.comparaison_clé(traduction,vraie_cle))
 code=decrypt.message_from_key(m2,traduction)
-print("score:", decrypt.comparaison(m,code))
+print("score:", decrypt.comparaison(m_autre,code))
+test=decrypt.decrypt_message(m2)
+print("score:", decrypt.comparaison(m_autre,code))
 
 print(m2)
 print(code)
