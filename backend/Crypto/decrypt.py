@@ -165,10 +165,10 @@ def message_initiial_with_letter(message, traduction, letter): # letter en char
                 new_message += char
     return new_message
 
-def change_traduction_with_word(traduction,mot_initial, mot_final):
-    for i in range(min(len(mot_initial),len(mot_final))):
-        if mot_initial[i] in traduction.keys():
-            traduction[mot_initial[i]] = mot_final[i]
+def change_traduction_with_word(traduction, mot_initial, mot_final):
+    for i, lettre in enumerate(mot_initial):
+        if i < len(mot_final) and lettre in traduction:
+            traduction[lettre] = mot_final[i]
     return traduction
 
 def change_traduction_with_letter(traduction, lettre_initiale, lettre_finale):
