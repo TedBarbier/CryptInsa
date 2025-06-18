@@ -45,3 +45,5 @@ instance/
 # fichiers secrets (à ne pas commiter)
 .env
 .env.local
+
+dict_patterns.json
