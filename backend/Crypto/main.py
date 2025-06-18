@@ -59,9 +59,6 @@ def main0(message):
     traduction_sur[ponctuation['point']]="."
     traduction_sur[ponctuation['virgule']]=","
     for j in range(2):
-        print("traduction",traduction,"iteration",j)
-        print("compare cle",decrypt.comparaison_clé(vraie_cle,traduction),"iteration",j)
-        print("comparaison",decrypt.comparaison(m,decrypt.message_from_key(m2,traduction)))
         for i in range(len(message_split)):
             mot= message_split[i%len(message_split)]
             keys_sur=[k for k,v in traduction_sur.items() if v is not None and k in mot]
@@ -73,12 +70,12 @@ def main0(message):
                 if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
                     mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire)
                     mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot,chemin_dictionnaire)
-                    print(j, i, mots_correspondants, mots_correspondants2)
+                    # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
                 else:
                     mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire)
                     mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot[:-1],chemin_dictionnaire)
-                    print(j, i, mots_correspondants, mots_correspondants2)
+                    # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
             elif decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
                 mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot, chemin_dictionnaire)
@@ -89,12 +86,14 @@ def main0(message):
                 traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mots_correspondants[0])
             elif taille > 1:
                 lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
+                if taille < 10:
+                    print(taille,mots_correspondants, traduction_sur, keys_sur)
                 if lettre_en_commun != []:
                     for lettre in lettre_en_commun:
                         traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
                         traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
-    print(traduction_sur)
-    print(decrypt.comparaison_clé(vraie_cle,traduction_sur))
+    # print(traduction_sur)
+    # print(decrypt.comparaison_clé(vraie_cle,traduction_sur))
     lettre_non_trouve=[k for k,v in traduction_sur.items() if v is None]
     lettre_trouve=[v for k,v in traduction_sur.items()]
     for let in lettre_non_trouve:
@@ -151,6 +150,8 @@ def main1(message):
                 traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mots_correspondants[0])
             elif taille > 1:
                 lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
+                if taille < 10:
+                    print(taille,mots_correspondants, traduction_sur, keys_sur)
                 if lettre_en_commun != []:
                     for lettre in lettre_en_commun:
                         traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
@@ -224,9 +225,13 @@ def main(message_cesar,m):
 
 
 m="Le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
+m0="elle ne trouve de reconfort que dans les lettres ecrites a son frere, porte disparu, qu elle glisse sous sa garde robe et qui disparaissent mysterieusement. Lorsqu elle recoit des reponses anonymes, elle y repond, sans savoir que leur auteur n est autre que son plus grand rival. alors qu un lien indefectible se noue entre eux, iris accepte une mission au front en tant que correspondante. dans un pays ou les humains ne sont que les pions de puissances divines, iris et roman se font la promesse de continuer a s ecrire. mais, confrontes aux horreurs de la guerre, leur avenir sera de plus en plus incertain. "
+
+
+
 m2 = cesar.cesar_encrypt(m.lower(), 3)
 vraie_cle=decrypt.crée_clé(m,m2)
-traduction= main1(m2)
+traduction= main0(m2)
 print("Traductions:", traduction)
 print("vraie trad", vraie_cle)
 print("compar clé", decrypt.comparaison_clé(traduction,vraie_cle))

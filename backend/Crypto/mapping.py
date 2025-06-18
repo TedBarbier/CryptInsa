@@ -293,14 +293,16 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire
     for c in candidat[0]:
         for i in L:
             if len(c) >= i:
-                if c[i] == lettre_freq:
+                if c[i] == lettre_freq and c not in potentials:
                     potentials.append(c)
     return potentials
 
 
 #pas encore fini 
 def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
+    # print(mot_chiffre)
     L= []
+    Ln=[]
     D=[]
     potentials = []
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
@@ -310,7 +312,10 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
             if mot_chiffre[i]==lettre:
                 L.append(i)
                 D.append(lettre)
+            # else:
+            #     Ln.append(i)
 
+    # print(L,D)
 
     for c in candidat[0]:
         test=True
@@ -318,10 +323,15 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
         for i in L:
             if test and len(c)>=i :
                 if c[i] != traduction[D[j]]:
+                    print(c,c[i],traduction[D[j]])
                     test=False
-        j+=1
+            j+=1
         if test:
-            potentials.append(c)
+            for j in Ln:
+                if c[j] in traduction.values():
+                    test=False
+            if test:
+                potentials.append(c)
     return potentials
 
 # def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
