@@ -10,24 +10,11 @@
                     <div class="input-content">
                         <div class="main-input-area">
                             <div class="input-actions">
-                                <button id="clearText" class="btn btn-secondary">
-                                    <i class="fas fa-eraser"></i>
-                                    Effacer
-                                </button>
-                                <button id="pasteText" class="btn btn-secondary">
-                                    <i class="fas fa-paste"></i>
-                                    Coller
-                                </button>
-                                <button id="loadExample" class="btn btn-secondary">
-                                    <i class="fas fa-file-import"></i>
-                                    Exemple
-                                </button>
                             </div>
                             
                             <div class="textarea-container">
-                                <textarea id="inputText" placeholder="Entrez votre texte chiffré ici... 
-
-L'analyse de fréquences nécessite au minimum 50 caractères pour des résultats fiables." rows="8"></textarea>
+                                <label for="inputText" class="input-label">Texte Chiffré</label>
+                                <textarea id="inputText" rows="8" disabled></textarea>
                             </div>
                             
                             <div class="input-stats">
@@ -49,10 +36,18 @@ L'analyse de fréquences nécessite au minimum 50 caractères pour des résultat
 
                 {{!-- Colonne 2: Bouton d'attaque --}}
                 <div class="attack-section">
+                    <div class="main-input-area">
+                            
+                            <div class="textarea-container">
+                                <label for="outputText" class="input-label">Message à trouver</label>
+                                <textarea id="outputText" rows="8" disabled></textarea>
+                            </div>
+                            
+                        </div>
                     <div class="attack-launch">
                         <div class="attack-button-container">
                             <div class="voltage-button">
-                                <button id="launchAttack" class="btn-attack" disabled>
+                                <button id="launchAttack" class="btn-attack">
                                     <div class="attack-icon">
                                         <i class="fas fa-rocket"></i>
                                     </div>

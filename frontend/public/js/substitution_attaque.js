@@ -27,10 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // === INITIALISATION DES ÉLÉMENTS DOM ===
 function initializeElements() {
     elements.inputText = document.getElementById('inputText');
+    elements.outputText = document.getElementById('outputText');
     elements.inputLength = document.getElementById('inputLength');
     elements.letterCount = document.getElementById('letterCount');
     elements.uniqueLetters = document.getElementById('uniqueLetters');
     elements.launchAttack = document.getElementById('launchAttack');
+    outputText.value = localStorage.getItem('plaintext');
+    inputText.value = localStorage.getItem('ciphertext');
 }
 
 // === INITIALISATION DE LA TABLE DE SUBSTITUTION ===
@@ -76,10 +79,6 @@ function setupEventListeners() {
     });
     
     // Boutons d'action
-    document.getElementById('clearText').addEventListener('click', clearText);
-    document.getElementById('pasteText').addEventListener('click', pasteText);
-    document.getElementById('loadExample').addEventListener('click', loadExample);
-    
 
     
     // Bouton d'attaque
@@ -94,40 +93,7 @@ function setupEventListeners() {
 }
 
 // === ACTIONS SUR LE TEXTE ===
-function clearText() {
-    elements.inputText.value = '';
-    updateStats();
-    updateAttackButton();
-    
-    // Nettoyer aussi le storage
-    localStorage.removeItem('cipherText');
-    sessionStorage.removeItem('cipherText');
-    sessionStorage.removeItem('attackData');
-    
-    showNotification('Texte effacé', 'info');
-}
 
-async function pasteText() {
-    try {
-        const text = await navigator.clipboard.readText();
-        elements.inputText.value = text;
-        updateStats();
-        updateAttackButton();
-        showNotification('Texte collé', 'success');
-    } catch (error) {
-        showNotification('Impossible de coller le texte', 'error');
-    }
-}
-
-function loadExample() {
-    elements.inputText.value = EXAMPLE_TEXT;
-    updateStats();
-    updateAttackButton();
-    showNotification('Exemple chargé', 'success');
-    
-    // Force save to localStorage
-    localStorage.setItem('cipherText', EXAMPLE_TEXT);
-}
 
 // === STATISTIQUES ET MISE À JOUR ===
 function updateStats() {

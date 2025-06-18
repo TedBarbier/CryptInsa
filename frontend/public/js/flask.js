@@ -72,3 +72,4 @@ async function substitutionAttack(ciphertext, language = 'fr') { // Recuperer le
     const data = await res.json();
     return data;
 }
+window.substitutionAttack = substitutionAttack;
