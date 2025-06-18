@@ -15,7 +15,7 @@ combinaisons_frequentes = {k: v for k, v in freq_combination.items() if v > 0.8}
 chemin_dictionnaire = "dict.txt"
 
 
-def main(message):
+def main0(message):
     traduction = {}
     code, traduction = decrypt.decrypt_message(message)
     _,traduction_sur = decrypt.decrypt_message(message,10)
