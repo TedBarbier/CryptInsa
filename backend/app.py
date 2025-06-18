@@ -4,6 +4,8 @@ from collections import Counter
 import string
 from Crypto.cesar import *
 from Crypto.vigenere import *
+import json
+from flask import make_response
 
 app = Flask(__name__)
 CORS(app)  # autorise les requêtes depuis le frontend
@@ -77,6 +79,18 @@ def route_analyse_frequences():
         "freqLang": freqLang,
         "message": message
     }
+@app.route('/update_attack', methods=['GET'])
+def route_substitution_attack():
+    def read_donnees_json():
+        try:
+            with open('donnees.json', 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return data
+        except Exception as e:
+            return {"error": str(e)}
+
+    data = read_donnees_json()
+    return make_response(jsonify(data), 200)
 
 if __name__ == '__main__':
     app.run(debug=True)

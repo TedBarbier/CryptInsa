@@ -73,3 +73,14 @@ async function substitutionAttack(ciphertext, language = 'fr') { // Recuperer le
     return data;
 }
 window.substitutionAttack = substitutionAttack;
+
+async function updateAttack(ciphertext, language = 'fr') { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+    const res = await fetch("http://localhost:5000/update_attack", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    });
+
+    const data = await res.json();
+    return data;
+}
+window.updateAttack = updateAttack;
