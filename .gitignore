@@ -48,4 +48,4 @@ instance/
 .env.local
 
 
-:Zone.Identifier
+.Identifier
