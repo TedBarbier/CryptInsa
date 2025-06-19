@@ -21,6 +21,7 @@ __pycache__/
 *.sqlite3
 *.db
 
+
 # Dossier de configuration IDEs courants
 .vscode/
 .idea/
@@ -46,3 +47,5 @@ instance/
 .env
 .env.local
 
+
+:Zone.Identifier
