@@ -49,6 +49,7 @@ def analyser_mot(mot):
         "cv_pattern": pattern_cv(mot),
         "lettres_doubles": lettres_doubles(mot),
         "lettres_frequentes": lettres_freq(mot),
+        "longueur": len(mot),
     }
 
 def main():
