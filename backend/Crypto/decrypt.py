@@ -24,7 +24,7 @@ def charger_dictionnaire_pattern(chemin_fichier="dict_patterns.json"):
     Retourne un dictionnaire où les clés sont les longueurs et les valeurs sont des sets de mots.
     Ex: {3: {'les', 'des'}, 4: {'pour', 'avec'}}
     """
-    with open("mots.json", "r", encoding="utf-8") as f:
+    with open(chemin_fichier, "r", encoding="utf-8") as f:
         donnees = json.load(f)
     index_isomorphique = defaultdict(set)
     index_double = defaultdict(set)
