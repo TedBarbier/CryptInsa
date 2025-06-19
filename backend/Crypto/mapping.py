@@ -1,45 +1,18 @@
-"""
-
-Ce code sert à affiner les vhoix de mots dans le dictionnaire
-C'est à merger avec le reste du code
-je le ferais quand le code fonctionne à 100%
-
-"""
 from collections import Counter, defaultdict
-import string
-import json
-#from Crypto.dict_search import trouver_mots_correspondants
+import Crypto.dict_search as dict_search
 import unicodedata
 
-def trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-8'):
-    mot_chiffre_sans_accents = enlever_accents(mot_chiffre)
-    pattern_recherche = generer_pattern(mot_chiffre_sans_accents)
-    longueur_recherche = len(mot_chiffre_sans_accents)
-    mots_correspondants = []
 
-    with open(chemin_dictionnaire, 'r', encoding=encoding) as fichier:
-        for ligne in fichier:
-            mot = ligne.strip().lower()
-            mot_sans_accents = enlever_accents(mot)
-            if len(mot_sans_accents) == longueur_recherche and mot.isalpha():
-                pattern_mot = generer_pattern(mot_sans_accents)
-                if pattern_mot == pattern_recherche:
-                    mots_correspondants.append(mot)
-    return mots_correspondants, len(mots_correspondants)
+# Fréquence des lettres en français (environ)
+freq_francais = {
+    'e': 12.10, 'a': 7.10, 'i': 6.50, 's': 6.20, 'n': 6.10,
+    't': 5.90, 'r': 5.30, 'o': 5.10, 'l': 4.80, 'd': 3.50,
+    'c': 3.10, 'u': 2.90, 'm': 2.70, 'h': 2.10, 'g': 1.40,
+    'b': 1.10, 'f': 1.10, 'p': 1.00, 'v': 0.80, 'w': 0.20,
+    'y': 0.10, 'j': 0.10, 'k': 0.05, 'x': 0.04, 'q': 0.03, 'z': 0.01
+}
+frequences_francais = list(freq_francais.keys())
 
-def trouver_mots_correspondants_optimise(mot_chiffre, chemin_json, encoding='utf-8'):
-    mot_chiffre_sans_accents = enlever_accents(mot_chiffre)
-    pattern_recherche = generer_pattern(mot_chiffre_sans_accents)
-    longueur_recherche = len(mot_chiffre_sans_accents)
-    mots_correspondants = []
-
-    with open(chemin_json, 'r', encoding=encoding) as fichier:
-        data = json.load(fichier)
-        for entree in data:
-            if entree['longueur'] == longueur_recherche and entree['isomorphique'] == pattern_recherche:
-                mots_correspondants.append(entree['mot'])
-
-    return mots_correspondants, len(mots_correspondants)
 
 def trouver_dernier_char_non_espace(texte: str, espace: str):
     """Retourne le dernier caractère non-espace du texte, sinon None."""
@@ -107,38 +80,6 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
 
     return resultat
 
-def generer_pattern(mot):
-    mapping = {}
-    compteur = 1
-    pattern = []
-    for lettre in mot:
-        if lettre not in mapping:
-            mapping[lettre] = compteur
-            compteur += 1
-        pattern.append(mapping[lettre])
-    return tuple(pattern)
-
-def enlever_accents(texte):
-    texte_normalise = unicodedata.normalize('NFD', texte)
-    texte_sans_accents = ''.join(c for c in texte_normalise if unicodedata.category(c) != 'Mn')
-    return texte_sans_accents
-
-# Fréquence des lettres en français (environ)
-freq_francais = {
-    'e': 12.10, 'a': 7.10, 'i': 6.50, 's': 6.20, 'n': 6.10,
-    't': 5.90, 'r': 5.30, 'o': 5.10, 'l': 4.80, 'd': 3.50,
-    'c': 3.10, 'u': 2.90, 'm': 2.70, 'h': 2.10, 'g': 1.40,
-    'b': 1.10, 'f': 1.10, 'p': 1.00, 'v': 0.80, 'w': 0.20,
-    'y': 0.10, 'j': 0.10, 'k': 0.05, 'x': 0.04, 'q': 0.03, 'z': 0.01
-}
-frequences_francais = list(freq_francais.keys())
-
-#def frequences_lettres(texte):
-#    texte = ''.join(filter(lambda c: c in string.ascii_letters, texte.lower()))
-#    compteur = Counter(texte)
-#    total = sum(compteur.values())
-#    return {lettre: (count / total) * 100 for lettre, count in compteur.items()} if total > 0 else {}
-
 def decrypt_message(message_chiffre, chemin_dictionnaire):
     maximum = 0
     c1 = 0
@@ -150,10 +91,6 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
             raise ValueError("Le message chiffré ne doit contenir que des lettres et des espaces.")
     lettres_chiffrees = [c.lower() for c in message_chiffre if c.isalpha()]
     
-    #for mot in message_chiffre.split():
-    #    maximum = max(len(mot), maximum)
-    #    if len(mot) == maximum:
-    #        max_mot = mot
     mots_tries = sorted(
         set(message_chiffre.split()),
         key=lambda mot: (-len(mot), mot)
@@ -201,14 +138,6 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
 
     i=i-1
     print(f"Mots correspondants pour {frequences_francais[i]} dans le mot le plus long :", imapping)
-    #for j in range(len(max_mot)):
-    #    if c != lettre_fréquente:
-    #        new_mot[j] = max_mot[j]
-    #    else:
-    #        new_mot[j] = frequences_francais[i]
-
-    #for j in range(len(max_mot)):
-    #    new_mot = max_mot.replace(max_mot[j], imapping[0][j])
     mot_final = ''.join(temp_mot)
     print(f"Mapping initial pour {frequences_francais[i]} dans le mot le plus long :", mot_final)
 
@@ -223,39 +152,20 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
                 message_dechiffre[k] = frequences_francais[i]
     
     
-    #for j in range(len(message_dechiffre)):
-    #    if message_dechiffre[j] == lettre_fréquente:
-    #        message_dechiffre[j] = frequences_francais[i]
+
     message_original = ''.join(message_dechiffre)
     print(message_original)
-                
-    #for mot in message_original.split() :
-    #    if mot not in chemin_dictionnaire:
-    #        i2mapping = initial_mapping(frequences_francais[i], sorted_chiffre[i], mot, chemin_dictionnaire)
-    #        while len(i2mapping) == 0 and i < len(frequences_francais):
-    #            i += 1
-    #            i2mapping = initial_mapping(frequences_francais[i], sorted_chiffre[i], mot, chemin_dictionnaire)
-    #            list_mot = list(mot)
-    #        for j in range(len(list_mot)):
-    #                i = i - 1
-    #                print(i)
-    #                list_mot[j] =  i2mapping[i][j]
 
-    #        mot_f = ''.join(list_mot)
-    #message_original = message_original.replace(mot, mot_f)
-
-        
 
     return mot_final, message_original
         
-def d(mot, chemin_dictionnaire, chemin_json) :
+def d(mot, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE) :
     distance_min = len(mot)
-    mot_sa = enlever_accents(mot)
-    mot_correspondants = trouver_mots_correspondants(mot_sa, chemin_dictionnaire, encoding='utf-8')[0]
-    mot_correspondants_opit = trouver_mots_correspondants_optimise(mot_sa, chemin_json, encoding='utf-8')
+    mot_sa = dict_search.enlever_accents(mot)
+    mot_correspondants = dict_search.trouver_mots_correspondants(mot_sa, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE)[0]
     
     for mot_p in mot_correspondants:
-        mot_p_sa = enlever_accents(mot_p)
+        mot_p_sa = dict_search.enlever_accents(mot_p)
         distance = sum(1 for a, b in zip(mot_sa, mot_p_sa) if a != b)
         distance_min = min(distance_min, distance)
     
@@ -264,17 +174,15 @@ def d(mot, chemin_dictionnaire, chemin_json) :
 def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
     mot_choisi = None
     distance_min = len(message_chiffre)
-    message_sa = enlever_accents(message_chiffre)
+    message_sa = dict_search.enlever_accents(message_chiffre)
     message_dechiffre = list(message_sa)
 
     for mot_p in imapping:
-        mot_p_sa = enlever_accents(mot_p)
+        mot_p_sa = dict_search.enlever_accents(mot_p)
         for j in range(len(mot_p_sa)) :
             for k in range(len(message_chiffre)) :
                 if mot_long[j] == message_chiffre[k] :
                     message_dechiffre[k] = mot_p_sa[j]
-                #elif  message_dechiffre[k] == lettre_fréquente:
-                #    message_dechiffre[k] = frequences_francais[i]
         message_dechiffre_str = ''.join(message_dechiffre)
         distance = sum(d(mot, chemin_dictionnaire) for mot in message_dechiffre_str.split())
         
@@ -287,14 +195,11 @@ def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
         
 
 
-def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire, chemin_json):
+def initial_mapping(lettre_freq, lettre_change, mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE):
     L= []
     potentials = []
     mot_liste = list(mot_chiffre)
-    candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-8')
-    candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json, encoding='utf-8')
-    print("candidat", candidat)
-    print("candidat pattern", candidat_pattern)
+    candidat = dict_search.trouver_mots_correspondants(mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE)
     
     for i in range(len(mot_chiffre)):
         if mot_chiffre[i] == lettre_change:
@@ -309,26 +214,19 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire
 
 
 #pas encore fini 
-def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire, chemin_json):
-    # print(mot_chiffre)
+def mapping_with_list(keys_sure,traduction,mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE):
     L= []
     D=[]
     potentials = []
-    candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
-    candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json)
-    print("candidat", candidat)
-    print("candidat pattern", candidat_pattern)
-    
+    candidat = dict_search.trouver_mots_correspondants(mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE)
+
     for i in range(len(mot_chiffre)):
         for lettre in keys_sure:
-            # print(mot_chiffre[i],lettre)
             if mot_chiffre[i]==lettre:
                 L.append(i)
                 D.append(lettre)
             
     Ln=[i for i in range(len(mot_chiffre)) if i not in L]
-    # print(Ln)
-    # print(L,D)
 
     for c in candidat[0]:
         test=True
@@ -336,11 +234,9 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire, chem
         for i in L:
             if test and len(c)>=i :
                 if c[i] != traduction[D[j]]:
-                    # print(c,c[i],traduction[D[j]])
                     test=False
             j+=1
         if test:
-            # print(c, Ln)
             for j in Ln:
                 if c[j] in traduction.values():
                     test=False

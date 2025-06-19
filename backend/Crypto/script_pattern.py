@@ -4,10 +4,6 @@ from collections import Counter
 # Définir les voyelles
 VOYELLES = set("aeiouy")
 
-# Définir les préfixes et suffixes fréquents
-PREFIXES = ["re", "in", "dé", "pré", "trans", "inter", "sub"]
-SUFFIXES = ["tion", "ment", "able", "eux", "ette", "ique", "aire"]
-
 def pattern_isomorphique(mot):
     """Encode un mot sous forme isomorphique comme 12343"""
     mapping = {}
@@ -35,12 +31,6 @@ def lettres_doubles(mot):
 
 def lettres_freq(mot):
     return dict(Counter(mot))
-
-def detect_prefixe(mot):
-    return next((p for p in PREFIXES if mot.startswith(p)), None)
-
-def detect_suffixe(mot):
-    return next((s for s in SUFFIXES if mot.endswith(s)), None)
 
 def analyser_mot(mot):
     return {
