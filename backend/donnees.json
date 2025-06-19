@@ -1,0 +1,73 @@
+[
+  {
+    "mot_chiffre": "initial",
+    "mot_traduit": "initial",
+    "dictionnaire": {
+      ".": ".",
+      " ": " ",
+      ",": null
+    }
+  },
+  {
+    "mot_chiffre": "MBAMM",
+    "mot_traduit": null,
+    "dictionnaire": {
+      ".": ".",
+      " ": " ",
+      ",": null,
+      "M": "e"
+    }
+  },
+  {
+    "mot_chiffre": "OMBKJMBPF",
+    "mot_traduit": null,
+    "dictionnaire": {
+      ".": ".",
+      " ": " ",
+      ",": null,
+      "M": "e",
+      "B": "r"
+    }
+  },
+  {
+    "mot_chiffre": "SJWBBQ",
+    "mot_traduit": null,
+    "dictionnaire": {
+      ".": ".",
+      " ": " ",
+      ",": null,
+      "M": "e",
+      "B": "r",
+      "J": "o",
+      "W": "u"
+    }
+  },
+  {
+    "mot_chiffre": "VBSJ",
+    "mot_traduit": null,
+    "dictionnaire": {
+      ".": ".",
+      " ": " ",
+      ",": null,
+      "M": "e",
+      "B": "r",
+      "J": "o",
+      "W": "u",
+      "S": "i"
+    }
+  },
+  {
+    "mot_chiffre": "final",
+    "mot_traduit": "final",
+    "dictionnaire": {
+      ".": ".",
+      " ": " ",
+      ",": ",",
+      "M": "e",
+      "B": "r",
+      "J": "o",
+      "W": "u",
+      "S": "i"
+    }
+  }
+]

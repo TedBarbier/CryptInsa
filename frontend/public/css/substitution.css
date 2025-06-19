@@ -1,9 +1,9 @@
 /* CSS pour le chiffrement par substitution - Table horizontale */
 
 :root {
-    --primary-color: #667eea;
+    --primary-color: #89f8f0;
     --secondary-color: #764ba2;
-    --accent-color: #ffd700;
+    --accent-color: #ff9d00;
     --success-color: #00b894;
     --warning-color: #fdcb6e;
     --danger-color: #e74c3c;
@@ -45,9 +45,23 @@
     font-size: 2.5rem;
     margin: 0 0 1.2rem 0;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    font-weight: 300;
+    background: linear-gradient(120deg, rgb(121, 63, 246), rgb(112, 240, 187));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight:900;
 }
-
+.section-title::after {
+    content: "";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+    border-radius: 50px;
+    height: 5px;
+    margin: 10px auto 0;
+    background: linear-gradient(120deg, rgb(121, 63, 246), rgb(112, 240, 187));
+}
 /* === GRID PRINCIPAL 2 RANGÉES === */
 .main-grid {
     display: grid;
@@ -62,8 +76,10 @@
 
 /* === RANGÉE 1: TABLE DE SUBSTITUTION === */
 .substitution-section {
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius);
+    background: var(--light-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    border-radius: 50px;
     padding: var(--compact-padding);
     display: grid;
     flex-direction: column;
@@ -95,14 +111,39 @@
 
 .btn-generate {
     background: linear-gradient(135deg, #e17055, #fdcb6e);
-    animation: pulse-glow 2s infinite;
-    padding: 0.6rem 1.2rem;
-    font-size: 1rem;
+    animation: pulse-glow 3s infinite ease-in-out;
+    padding: 15px 30px;
+    font-size: 14px;
+    box-shadow: rgb(205, 97, 68) 0px 8px 0px 0px;
+    border: 0;
+    border-radius: 10px;
+    letter-spacing: 1.5px;
+    transition: all 0.3s ease;
+    transform: translateY(0px);
+}
+
+.btn-generate:hover {
+    transform: translateY(3px) !important;
+    box-shadow: rgb(205, 97, 68) 0px 5px 0px 0px, 0 0 20px rgba(253, 203, 110, 0.5) !important;
+    animation-play-state: paused;
+}
+
+.btn-generate:active {
+    transform: translateY(8px) !important;
+    transition: 200ms;
+    box-shadow: rgb(205, 97, 68) 0px 0px 0px 0px, 0 0 10px rgba(253, 203, 110, 0.3) !important;
+    animation-play-state: paused;
 }
 
 @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 15px rgba(253, 203, 110, 0.3); }
-    50% { box-shadow: 0 0 25px rgba(253, 203, 110, 0.6); }
+    0%, 100% { 
+        box-shadow: rgb(205, 97, 68) 0px 8px 0px 0px, 0 0 15px rgba(253, 203, 110, 0.3); 
+        transform: translateY(0px);
+    }
+    50% { 
+        box-shadow: rgb(205, 97, 68) 0px 8px 0px 0px, 0 0 25px rgba(253, 203, 110, 0.6); 
+        transform: translateY(0px);
+    }
 }
 
 .table-content {
@@ -244,8 +285,9 @@
 /* === RANGÉE 2: CHIFFREMENT === */
 .cipher-section {
     background: var(--light-bg);
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    border-radius: 50px;
     padding: var(--compact-padding);
     display: flex;
     flex-direction: column;
@@ -373,60 +415,116 @@
 
 /* === BOUTONS === */
 .btn {
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: var(--border-radius);
+    padding: 17px 40px;
+    border: 0;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.2s ease;
+    letter-spacing: 1.5px;
+    font-size: 15px;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     justify-content: center;
-    font-size: 1rem;
+    color: hsl(0, 0%, 100%);
 }
 
 .btn.compact {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    padding: 15px 30px;
+    font-size: 14px;
 }
 
-.btn-primary { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; }
-.btn-secondary { background: linear-gradient(135deg, #6c757d, #495057); color: white; }
-.btn-success { background: linear-gradient(135deg, var(--success-color), #00a085); color: white; }
-.btn-warning { background: linear-gradient(135deg, var(--warning-color), #e17055); color: white; }
-.btn-apply { background: linear-gradient(135deg, var(--success-color), #00cec9); color: white; }
-
+.btn-primary { 
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+    box-shadow: rgb(83, 149, 204) 0px 10px 0px 0px;
+}
+.btn-secondary { 
+    background: linear-gradient(135deg, #6c757d, #495057); 
+    box-shadow: rgb(55, 65, 70) 0px 10px 0px 0px;
+}
+.btn-success { 
+    background: linear-gradient(135deg, var(--success-color), #00a085); 
+    box-shadow: rgb(0, 138, 109) 0px 10px 0px 0px;
+}
+.btn-warning { 
+    background: linear-gradient(135deg, var(--warning-color), #e17055); 
+    box-shadow: rgb(205, 97, 68) 0px 10px 0px 0px;
+}
+.btn-apply { 
+    background: linear-gradient(135deg, var(--success-color), #00cec9); 
+    box-shadow: rgb(0, 152, 149) 0px 10px 0px 0px;
+}
+.btn-attack { 
+    background: linear-gradient(135deg, rgb(144, 5, 231), rgb(1, 4, 213)); 
+    box-shadow: rgb(46, 0, 74) 0px 10px 0px 0px;
+}
 .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(3px);
 }
+
+.btn-primary:hover { box-shadow: rgb(83, 149, 204) 0px 7px 0px 0px; }
+.btn-secondary:hover { box-shadow: rgb(55, 65, 70) 0px 7px 0px 0px; }
+.btn-success:hover { box-shadow: rgb(0, 138, 109) 0px 7px 0px 0px; }
+.btn-warning:hover { box-shadow: rgb(205, 97, 68) 0px 7px 0px 0px; }
+.btn-apply:hover { box-shadow: rgb(0, 152, 149) 0px 7px 0px 0px; }
+.btn-attack:hover { box-shadow: rgb(46, 0, 74) 0px 7px 0px 0px; }
+
+.btn:active {
+    transform: translateY(10px);
+    transition: 200ms;
+}
+
+.btn-primary:active { box-shadow: rgb(83, 149, 204) 0px 0px 0px 0px; }
+.btn-secondary:active { box-shadow: rgb(55, 65, 70) 0px 0px 0px 0px; }
+.btn-success:active { box-shadow: rgb(0, 138, 109) 0px 0px 0px 0px; }
+.btn-warning:active { box-shadow: rgb(205, 97, 68) 0px 0px 0px 0px; }
+.btn-apply:active { box-shadow: rgb(0, 152, 149) 0px 0px 0px 0px; }
+.btn-attack:active { box-shadow: rgb(46, 0, 74) 0px 0px 0px 0px; }
 
 .key-btn {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     color: white;
-    border: none;
-    padding: 0.6rem 1rem;
-    border-radius: var(--border-radius);
+    border: 0;
+    padding: 15px 30px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-weight: 500;
+    letter-spacing: 1.5px;
     display: flex;
     align-items: center;
     gap: 0.4rem;
     justify-content: center;
-    font-size: 0.95rem;
+    font-size: 14px;
+    box-shadow: rgb(83, 149, 204) 0px 8px 0px 0px;
 }
 
 .key-btn.compact {
-    padding: 0.5rem 0.8rem;
-    font-size: 0.9rem;
+    padding: 12px 25px;
+    font-size: 13px;
+    box-shadow: rgb(83, 149, 204) 0px 6px 0px 0px;
 }
 
 .key-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(3px);
     background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    box-shadow: rgb(83, 149, 204) 0px 5px 0px 0px;
+}
+
+.key-btn.compact:hover {
+    box-shadow: rgb(83, 149, 204) 0px 3px 0px 0px;
+}
+
+.key-btn:active {
+    transform: translateY(8px);
+    transition: 200ms;
+    box-shadow: rgb(83, 149, 204) 0px 0px 0px 0px;
+}
+
+.key-btn.compact:active {
+    transform: translateY(6px);
+    box-shadow: rgb(83, 149, 204) 0px 0px 0px 0px;
 }
 
 /* === RESPONSIVE === */
@@ -564,5 +662,310 @@
     
     .container {
         padding: 0 1rem;
+    }
+}
+
+/* === ANIMATION DE FEU POUR LE BOUTON ATTAQUE === */
+.attack-button-with-fire {
+    position: relative;
+    overflow: hidden;
+    padding: 17px 40px !important;
+    border-radius: 10px !important;
+    border: 0 !important;
+    background-color: rgb(144, 5, 231) !important;
+    letter-spacing: 1.5px;
+    font-size: 15px !important;
+    transition: all 0.3s ease;
+    box-shadow: rgb(46, 0, 74) 0px 10px 0px 0px;
+    color: hsl(0, 0%, 100%) !important;
+    cursor: pointer;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(83, 3, 133) !important;
+}
+
+.button-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+/* Animations keyframes */
+@keyframes scaleUpDown {
+    0%, 100% {
+        transform: scaleY(1) scaleX(1);
+    }
+    50%, 90% {
+        transform: scaleY(1.1);
+    }
+    75% {
+        transform: scaleY(0.95);
+    }
+    80% {
+        transform: scaleX(0.95);
+    }
+}
+
+@keyframes shakefire {
+    0%, 100% {
+        transform: skewX(0) scale(1);
+    }
+    50% {
+        transform: skewX(5deg) scale(0.9);
+    }
+}
+
+@keyframes particleUp {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        top: -100%;
+        transform: scale(0.5);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        background-color: #8e05e7;
+    }
+    50% {
+        background-color: #b347d9;
+    }
+}
+
+.fire {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 1;
+}
+
+.fire-1 {
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+}
+
+.fire-2 {
+    top: 50%;
+    right: 30%;
+    transform: translate(50%, -50%);
+}
+
+.fire-2 .fire-center {
+    animation-delay: 0.5s;
+}
+
+.fire-2 .fire-left {
+    animation-delay: 0.3s;
+}
+
+.fire-2 .fire-right {
+    animation-delay: 0.7s;
+}
+
+.fire-2 .particle-fire {
+    animation-delay: 0.4s;
+}
+
+.fire-center {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    animation: scaleUpDown 3s ease-out;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+.fire-center .main-fire {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(farthest-corner at 10px 0, #6a1b9a 0%, #8e05e7 95%);
+    transform: scaleX(0.8) rotate(45deg);
+    border-radius: 0 40% 60% 40%;
+    filter: drop-shadow(0 0 8px #8e05e7) brightness(1.2);
+}
+
+.fire-center .particle-fire {
+    position: absolute;
+    top: 60%;
+    left: 45%;
+    width: 6px;
+    height: 6px;
+    background-color: #b347d9;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 6px #8e05e7) brightness(1.5);
+    animation: particleUp 2s ease-out 0;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+.fire-right {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    animation: shakefire 2s ease-out 0;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+.fire-right .main-fire {
+    position: absolute;
+    top: 15%;
+    right: -25%;
+    width: 80%;
+    height: 80%;
+    background-color: #8e05e7;
+    transform: scaleX(0.8) rotate(45deg);
+    border-radius: 0 40% 60% 40%;
+    filter: drop-shadow(0 0 10px #6a1b9a);
+}
+
+.fire-right .particle-fire {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 15px;
+    height: 15px;
+    background-color: #8e05e7;
+    transform: scaleX(0.8) rotate(45deg);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 10px #6a1b9a);
+    animation: particleUp 2s ease-out 0;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+.fire-left {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    animation: shakefire 3s ease-out 0;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+.fire-left .main-fire {
+    position: absolute;
+    top: 15%;
+    left: -20%;
+    width: 80%;
+    height: 80%;
+    background-color: #8e05e7;
+    transform: scaleX(0.8) rotate(45deg);
+    border-radius: 0 40% 60% 40%;
+    filter: drop-shadow(0 0 10px #6a1b9a);
+}
+
+.fire-left .particle-fire {
+    position: absolute;
+    top: 10%;
+    left: 20%;
+    width: 10%;
+    height: 10%;
+    background-color: #8e05e7;
+    border-radius: 50%;
+    filter: drop-shadow(0 0 10px #6a1b9a);
+    animation: particleUp 3s infinite ease-out 0;
+    animation-fill-mode: both;
+}
+
+.fire-bottom .main-fire {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    width: 75%;
+    height: 75%;
+    background-color: #b347d9;
+    transform: scaleX(0.8) rotate(45deg);
+    border-radius: 0 40% 100% 40%;
+    filter: blur(10px);
+    animation: glow 2s ease-out 0;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+}
+
+/* Effet hover sur le bouton pour intensifier le feu */
+.attack-button-with-fire:hover {
+    box-shadow: rgb(46, 0, 74) 0px 7px 0px 0px;
+    transform: translateY(3px);
+}
+
+.attack-button-with-fire:hover .fire-1 {
+    transform: translate(-50%, calc(-50% - 3px)) scale(1.2);
+    opacity: 1;
+}
+
+.attack-button-with-fire:hover .fire-2 {
+    transform: translate(50%, calc(-50% - 3px)) scale(1.2);
+    opacity: 1;
+}
+
+.attack-button-with-fire:hover .fire .main-fire {
+    filter: drop-shadow(0 0 15px #6a1b9a) brightness(1.3);
+}
+
+.attack-button-with-fire:active {
+    background-color: rgb(144, 5, 231) !important;
+    box-shadow: rgb(100, 3, 160) 0px 0px 0px 0px;
+    transform: translateY(10px);
+    transition: 200ms;
+}
+
+.attack-button-with-fire:hover .button-content {
+    transform: scale(1.02);
+}
+
+/* Responsive pour l'animation de feu */
+@media (max-width: 768px) {
+    .attack-button-with-fire {
+        padding: 15px 30px !important;
+        font-size: 14px !important;
+        box-shadow: rgb(100, 3, 160) 0px 8px 0px 0px;
+    }
+    
+    .attack-button-with-fire:hover {
+        box-shadow: rgb(100, 3, 160) 0px 5px 0px 0px;
+        transform: translateY(3px);
+    }
+    
+    .attack-button-with-fire:active {
+        box-shadow: rgb(100, 3, 160) 0px 0px 0px 0px;
+        transform: translateY(8px);
+    }
+    
+    .fire {
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+    }
+    
+    .fire-1 {
+        left: 25%;
+    }
+    
+    .fire-2 {
+        right: 25%;
+    }
+    
+    .button-content {
+        font-size: 0.9rem;
     }
 }

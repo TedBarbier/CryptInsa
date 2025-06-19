@@ -264,10 +264,10 @@ function updateClearAlphabetRow() {
         if (currentMapping[letter]) {
             letterBox.textContent = currentMapping[letter].toUpperCase();
             letterBox.classList.add('clear');
-        } else {
+            } else {
             letterBox.textContent = '?';
             letterBox.classList.add('empty');
-        }
+            }
         
         letterBox.setAttribute('data-cipher', letter);
         container.appendChild(letterBox);
@@ -300,7 +300,7 @@ function applyDecryption() {
         const comparedText = compareTexts(decryptedText, originalPlainText);
         displayComparedText(comparedText);
     } else {
-        document.getElementById('decryptedText').value = decryptedText;
+    document.getElementById('decryptedText').value = decryptedText;
     }
     
     showNotification('Déchiffrement appliqué', 'success');
@@ -319,8 +319,8 @@ function decryptText(text, mapping) {
 }
 
 function updateLiveDecryption() {
-    applyDecryption();
-}
+        applyDecryption();
+    }
 
 // ===== COMPARAISON DE TEXTES ===== //
 function compareTexts(decryptedText, originalPlainText) {
@@ -519,8 +519,8 @@ function fallbackCopy(text) {
     textArea.select();
     
     try {
-        document.execCommand('copy');
-        showNotification('Texte copié dans le presse-papiers', 'success');
+    document.execCommand('copy');
+    showNotification('Texte copié dans le presse-papiers', 'success');
     } catch (err) {
         showNotification('Erreur lors de la copie', 'error');
     }

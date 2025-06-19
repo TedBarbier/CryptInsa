@@ -18,9 +18,10 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
+    gap: 2rem;
 }
 
 /* ===== BRANDING ===== */
@@ -28,6 +29,61 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.brand-logos {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    position: relative;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+/* ===== LOGO INSA CONTAINER ===== */
+.insa-logo-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 100px;
+    z-index: 10;
+}
+
+/* ===== LOGO INSA ===== */
+.insa-logo {
+    height: 50px;
+    width: 500%;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    filter: brightness(1.1) contrast(1.1);
+    box-shadow: 0 0 20px rgba(4, 76, 47, 0.3);
+    border: 3px solid rgba(9, 96, 55, 0.4);
+    background: rgb(146, 198, 185);
+    scale: 1.5;
+    object-fit: contain;
+    padding: 4px;
+}
+
+.insa-logo:hover {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 0 35px rgba(0, 255, 136, 0.6);
+    border-color: rgba(0, 255, 136, 0.8);
+}
+
+@keyframes logo-glow {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        border-color: rgba(0, 255, 136, 0.4);
+    }
+    50% { 
+        box-shadow: 0 0 35px rgba(0, 255, 136, 0.6);
+        border-color: rgba(0, 255, 136, 0.7);
+    }
 }
 
 .crypto-icon {
@@ -67,6 +123,7 @@
 /* ===== NAVIGATION ===== */
 .nav-menu {
     display: flex;
+    justify-content: right;
 }
 
 .nav-links {
@@ -129,6 +186,11 @@
     flex-direction: column;
     cursor: pointer;
     gap: 4px;
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
 }
 
 .toggle-line {
@@ -143,11 +205,12 @@
 .header-decoration {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 120px;
     height: 100%;
-    width: 200px;
+    width: 150px;
     overflow: hidden;
     pointer-events: none;
+    z-index: 1;
 }
 
 .binary-stream {
@@ -182,10 +245,15 @@
 @media (max-width: 768px) {
     .nav-container {
         padding: 1rem;
+        grid-template-columns: auto 1fr;
+        gap: 1rem;
     }
     
     .nav-toggle {
         display: flex;
+        position: static;
+        transform: none;
+        order: 3;
     }
     
     .nav-menu {
@@ -224,6 +292,30 @@
     }
     
     .brand-subtitle {
+        display: none;
+    }
+    
+    .insa-logo {
+        height: 45px;
+        width: 45px;
+    }
+    
+    .insa-logo-container {
+        order: 2;
+        justify-content: flex-end;
+        position: static;
+        transform: none;
+    }
+    
+    .brand-logos {
+        gap: 0.5rem;
+    }
+    
+    .nav-brand {
+        gap: 0.8rem;
+    }
+    
+    .header-decoration {
         display: none;
     }
     
