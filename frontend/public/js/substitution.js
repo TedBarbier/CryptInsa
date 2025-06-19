@@ -7,12 +7,12 @@ const EXAMPLE_TEXT =[ "Tant  qu il  existera par le fait des lois et des " +
 "par  la  faim,  l atrophie  de  l enfant  par  la  nuit,  ne " +
 "seront pas résolus tant que, dans de certaines " +
 "régions,  l asphyxie sociale sera possible en d autres " +
-"termes, et à un point de vue plus étendu encore, tant " +
+"termes, et a un point de vue plus étendu encore, tant " +
 "qu il y aura sur la terre ignorance et misère, des livres " +
 "de la nature de celui ci pourront ne pas être inutiles", 
 
 "M. l eveque, pour avoir converti son carrosse en " +
-"aumones,  n en faisait pas moins ses tournées.  C est " +
+"aumones,  n en faisait pas moins ses tournees.  C est " +
 "un  diocèse  fatigant  que  celui  de  Digne.  Il  a  fort  peu " +
 "de  plaines,  beaucoup  de  montagnes,  presque  pas  de routes,  on  l a  vu  tout  aa  l heure,  trente deux  cures,  quarante  et  un  vicariats  et  deux  cent  quatre vingt" +
 "cinq succursales. Visiter tout cela, c est une affaire. M. " +
@@ -29,19 +29,19 @@ const EXAMPLE_TEXT =[ "Tant  qu il  existera par le fait des lois et des " +
 "messieurs les bourgeois, je vois ce qui vous " +
 "scandalise,  vous  trouvez  que  c est  bien  de  l orgueil  a " +
 "un  pauvre  pretre  de  monter  une  monture  qui  a  ete " +
-"celle de Jesus-Christ. Je l ai fait par necessite, je vous " +
+"celle de Jesus Christ. Je l ai fait par necessite, je vous " +
 "assure, non par vanite.  Dans  ces  tournes  il  etait  " +
 "indulgent  et  doux,  et " +
 "pretchait moins qu il ne causait. Il n allait jamais " +
 "chercher bien loin ses raisonnements et ses modeles. " +
 "Aux habitants d un pays il cite l exemple du pays " +
 "voisin. Dans les cantons ou on etait dur pour les " +
-"necessiteux, il disait : Voyez les gens de Briancon. " +
+"necessiteux, il disait  Voyez les gens de Briancon. " +
 "Ils ont donne aux indigents, aux veuves et aux " +
 "orphelins le droit de faire faucher leurs prairies trois  " +
 "jours avant tous les autres. Ils leur rebattissent " +
 "gratuitement leurs maisons quand elles sont en " +
-"ruines. Aussi est-ce un pays beni de Dieu. Durant " +
+"ruines. Aussi est ce un pays beni de Dieu. Durant " +
 "tout un siecle de cent ans, il n y a pas eu un meurtrier.", 
 
 "Je suis un exemple de texte pour le chiffrement par substitution. " +
