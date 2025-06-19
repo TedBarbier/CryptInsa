@@ -286,7 +286,8 @@ function applyDecryption() {
 
     const currentDecryptedText = decryptText(cipherText, currentMapping);
     console.log(currentDecryptedText);
-    const previousDecryptedText = decryptText(cipherText, currentMapping);
+    const previousMapping = dataChiffre[currentIndexData - 1].dictionnaire;
+    const previousDecryptedText = decryptText(cipherText, previousMapping);
     console.log(previousDecryptedText);
     const comparedText = compareTexts(currentDecryptedText, previousDecryptedText);
     displayComparedText(comparedText);
