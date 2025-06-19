@@ -131,6 +131,8 @@ def save_to_json(mot_chiffre, mot_traduit, dictionnaire):
         json.dump(contenu, f, indent=2)
 
 def etape1(message):
+    with open(json_file, 'w') as f:
+        json.dump([], f)
     traduction = {}
     _, traduction = decrypt.decrypt_message(message)
     _, traduction_sur = decrypt.decrypt_message(message,10)
