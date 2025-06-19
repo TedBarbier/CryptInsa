@@ -1,4 +1,4 @@
-from collections import Counter, defaultdict
+from collections import defaultdict
 import unicodedata
 
 
@@ -50,48 +50,19 @@ def trouver_mots_correspondants(mot_chiffre):
 
     return mots_correspondants, len(mots_correspondants)
 
+from collections import defaultdict
 
-
-
-
-def trouver_dernier_char_non_espace(texte: str, espace: str):
-    """Retourne le dernier caractère non-espace du texte, sinon None."""
-    i = len(texte) - 1
-    while i >= 0:
-        if texte[i] != espace:
-            return texte[i]
-        i -= 1
-    return None
-
-def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.95):
-    """
-    Détecte les caractères représentant le point et la virgule dans un texte chiffré.
-    
-    Args:
-        texte_chiffre (str): Le texte chiffré.
-        caractere_espace (str): Le caractère qui représente l'espace.
-        score_seuil (float): Seuil de confiance pour identifier la ponctuation.
-
-    Returns:
-        dict: {'point': caractère ou None, 'virgule': caractère ou None}
-    """
+def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.9):
     if not texte_chiffre:
         return {'virgule': None, 'point': None}
 
-    # Étape 1 : Identifier un candidat pour le point
-    point_candidat = trouver_dernier_char_non_espace(texte_chiffre, caractere_espace)
-    resultat = {'virgule': None, 'point': point_candidat}
-
-    # Étape 2 : Chercher la virgule parmi les autres caractères
     profils = defaultdict(lambda: {'avant_espace': 0, 'autre_position': 0})
-    
+
     for i in range(len(texte_chiffre) - 1):
         char_actuel = texte_chiffre[i]
         char_suivant = texte_chiffre[i + 1]
 
         if char_actuel == caractere_espace:
-            continue
-        if char_actuel == point_candidat:
             continue
 
         if char_suivant == caractere_espace:
@@ -99,26 +70,28 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
         else:
             profils[char_actuel]['autre_position'] += 1
 
-    # Étape 3 : Calcul du score des candidats virgule
-    candidats_virgule = []
+    candidats = []
     for char, profil in profils.items():
         total = profil['avant_espace'] + profil['autre_position']
         if total == 0:
             continue
         score = profil['avant_espace'] / total
         if score >= score_seuil:
-            candidats_virgule.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
+            candidats.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
 
-    # Sélection du meilleur candidat virgule
-    candidats_virgule.sort(key=lambda x: (x['score'], x['freq']), reverse=True)
-    if candidats_virgule:
-        resultat['virgule'] = candidats_virgule[0]['char']
+    candidats.sort(key=lambda x: (x['score'], x['freq']), reverse=True)
 
-    # Si on n’a détecté aucune ponctuation
-    if not point_candidat and not candidats_virgule:
-        print("[INFO] Aucune ponctuation détectée.")
+    virgule, point = None, None
+    if len(candidats) >= 2:
+        # On suppose que la virgule est la plus fréquente
+        candidats.sort(key=lambda x: x['freq'], reverse=True)
+        virgule = candidats[0]['char']
+        point = candidats[1]['char']
+    elif len(candidats) == 1:
+        virgule = candidats[0]['char']
 
-    return resultat
+    return {'virgule': virgule, 'point': point}
+
      
 #pas encore fini 
 def mapping_with_list(keys_sure,traduction,mot_chiffre):
