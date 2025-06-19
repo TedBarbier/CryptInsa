@@ -1,29 +1,5 @@
 {
-    "chiffré": "ohafkliiuhaghvaiudqfvapdfrqvahvwaxqhavxevwlwxwlrqavlpsohbarxafkdtxhaohwwuhaghaoadoskdehwahvwauhpsodfhhasduaxqav,perohajhrphwultxhcafhav,perohasrxuudlwahqasulqflshahwuhaduelwudluhafhatxlafdudfwhulvhaohafkliiuhaghvaiudqfvapdfrqvahwavhvayduldqwhvafahvwaoaxwlolvdwlrqagaxqapr,hqapqhprwhfkqltxhajhrphwultxhasrxuadwwdfkhuadafkdtxhaohwwuhavrqav,perohca",
-    "dictionnaire": {
-        "o": "o",
-        "h": "e",
-        "a": " ",
-        "f": "l",
-        "k": "p",
-        "l": "i",
-        "i": "v",
-        "u": "i",
-        "g": ".",
-        "v": "s",
-        "d": "a",
-        "q": "l",
-        "p": "o",
-        "r": "o",
-        "w": "t",
-        "x": "u",
-        "e": "b",
-        "s": "c",
-        "b": ",",
-        "t": "v",
-        ",": ".",
-        "j": "j",
-        "c": ".",
-        "y": "y"
-    }
+    "texte": "",
+    "dictionnaire": {},
+    "is_finish": false
 }

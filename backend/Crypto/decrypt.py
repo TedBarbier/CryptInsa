@@ -1,10 +1,11 @@
-from collections import Counter
+from collections import Counter, defaultdict
 import frequences_lettres as freq
 import string
 import cesar
 import random
 import dict_search as dict_search
 import mapping
+import json
 # Fréquence des lettres en français (environ)
 freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
 
@@ -16,6 +17,34 @@ combinaison_frequentes = {k: v for k, v in combinaisons.items() if v > 0.8}
 N_ITERATIONS=50
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
+
+def charger_dictionnaire_pattern(chemin_fichier="dict_patterns.json"):
+    """
+    Charge le dictionnaire et le groupe par longueur de mot pour une recherche rapide.
+    Retourne un dictionnaire où les clés sont les longueurs et les valeurs sont des sets de mots.
+    Ex: {3: {'les', 'des'}, 4: {'pour', 'avec'}}
+    """
+    with open("mots.json", "r", encoding="utf-8") as f:
+        donnees = json.load(f)
+    index_isomorphique = defaultdict(set)
+    index_double = defaultdict(set)
+
+    for entree in donnees:
+        mot = entree["mot"]
+        isomorphique = entree["isomorphique"]
+        index_isomorphique[isomorphique].add(mot)
+        if entree["lettres_doubles"]:
+            for lettre in entree["lettres_doubles"]:
+                index_double[lettre].add(mot)
+
+    return index_isomorphique, index_double
+
+DICO_PATTERN, DICO_DOUBLE = charger_dictionnaire_pattern("dict_patterns.json")
+
+print(DICO_PATTERN["1221"])
+
+
+DICO_OPTIMISE = charger_dictionnaire_pattern("dict_patterns.json")
 
 def charger_dictionnaire_optimise(chemin_fichier="dict.txt"):
     """
@@ -41,6 +70,13 @@ def frequences_lettres(texte):
     total = sum(compteur.values())
     return {lettre: (count / total) * 100 for lettre, count in compteur.items()} if total > 0 else {}
 
+
+def decrypt_lettre_liste(frequence):
+    
+    proches = [(lettre, abs(freq - frequence)) for lettre, freq in freq_francais.items()]
+    proches.sort(key=lambda x: x[1])
+    return [lettre for lettre, _ in proches]
+
 def decrypt_lettre(frequence,seuil_frequence=None):
     min_diff=1000
     if seuil_frequence is not None and frequence < seuil_frequence:
@@ -50,8 +86,7 @@ def decrypt_lettre(frequence,seuil_frequence=None):
         if abs(frequence-f)<min_diff:
             min_diff=abs(frequence-f)
             decode=l
-    if seuil_frequence is not None and frequence < seuil_frequence:
-        return None
+    
     return decode
 
 def decrypt_lettre_combinaison(frequence_combi,combinaison):
@@ -143,31 +178,23 @@ def find_score_lettre(l, t, traductions, freqs_message, freqs_combi_message):
     score_final = 0.4 * p + 0.6 * score_combi
     return score_final
 
-def message_initiial_with_letter(message, traduction, letter): # letter en char
-    new_message = ""
-    trad_letter = [k for k, v in traduction.items() if v == letter]
-    trad_inverse =[ value for key, value in traduction.items() if key == letter]
-    if len(trad_letter) == 0:
-        return None
-    if len(trad_inverse) == 1:
-        for char in message:
-            if char in trad_letter:
-                new_message += letter
-            elif char == letter:
-                new_message += trad_inverse[0]
-            else:
-                new_message += char
-    else:
-        for char in message:
-            if char in trad_letter:
-                new_message += letter
-            else:
-                new_message += char
-    return new_message
+# def message_initiial_with_letter(message, traduction, letter): # letter en char
+#     new_message = ""
+#     trad_letter = [k for k, v in traduction.items() if v == letter]
+#     if len(trad_letter) == 0:
+#         return None
+#     for char in message:
+#         if char in trad_letter:
+#             new_message += letter
+#         elif char == letter:
+#             new_message += trad_letter[0]
+#         else:
+#             new_message += char
+#     return new_message
 
-def change_traduction_with_word(traduction,mot_initial, mot_final):
-    for i in range(min(len(mot_initial),len(mot_final))):
-        if mot_initial[i] in traduction.keys():
+def change_traduction_with_word(traduction, mot_initial, mot_final):
+    for i in range(min(len(mot_initial), len(mot_final))):
+        if mot_initial[i] in traduction:
             traduction[mot_initial[i]] = mot_final[i]
     return traduction
 
@@ -258,11 +285,28 @@ def check_mot(mot, dico_par_longueur):
                 if cpt < diff_min:
                     diff_min = cpt
                     meilleur_mot = mot_dico
-                    # Petite optimisation : si le mot est presque parfait, on peut s'arrêter
-                    if diff_min <= 1:
-                        return meilleur_mot
+                    # # Petite optimisation : si le mot est presque parfait, on peut s'arrêter
+                    # if diff_min <= 1:
+                    #     return meilleur_mot
                         
     return meilleur_mot
+
+def lettre_en_commun_new(mots):   #mots est une liste de mots
+    commun=[]
+    if len(mots)==1:
+        commun=[(mots[i],i) for i in range(len(mots))]
+    elif mots==[]:
+        return []
+    else:
+        for i in range(0,len(mots[0])):
+            lettre=mots[0][i]
+            for mot in mots:
+                if i>=len(mot) or mot[i]!=lettre:
+                    lettre=None
+                    break
+            if lettre is not None:
+                commun.append((lettre,i))
+    return commun
 
 def lettre_en_commun(mots):   #mots est une liste de mots
     commun=[]
@@ -345,6 +389,9 @@ def comparaison(m1,m2):
         if m1[i]==m2[i]:
             cpt+=1
             # print("lettre",m1[i],"position",i)
+        else:
+            #pour voir les erreurs
+            print(m1[i],m2[i],i)
     return cpt/len(m1)*100,cpt,len(m2)
 
 def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
@@ -410,7 +457,7 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 
 pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
-m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
+m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2=cesar.cesar_encrypt(m.lower(),3)
 
 # code,traductions=decrypt_message(m2)
@@ -424,3 +471,12 @@ m2=cesar.cesar_encrypt(m.lower(),3)
 # print(score_message(traductions,m2))
 # traductions["x"]="u"
 # print(score_message(traductions,m2))
+
+
+#test message_initial_with_letter
+# message="jqqjcsjcywtz jcijcwjhtsktwycvzjcifsxcqjxcqjyywjxcjhwnyjxcfcxtsckwjwjdcutwyjcinxufwzdcvzcjqqjclqnxxjcxtzxcxfclfwijcwtgjcjycvzncinxufwfnxxjsycraxyjwnjzxjrjsyecqtwxvzcjqqjcwjhtnycijxcwjutsxjxcfstsarjxdcjqqjcacwjutsidcxfsxcxf tnwcvzjcqjzwcfzyjzwcscjxycfzywjcvzjcxtscuqzxclwfsicwn fqecfqtwxcvzczscqnjscnsijkjhyngqjcxjcstzjcjsywjcjz.dcnwnxcfhhjuyjczsjcrnxxntscfzckwtsycjscyfsycvzjchtwwjxutsifsyjecifsxczscufaxctzcqjxcmzrfnsxcsjcxtsycvzjcqjxcuntsxcijcuznxxfshjxcin nsjxdcnwnxcjycwtrfscxjcktsycqfcuwtrjxxjcijchtsynszjwcfcxcjhwnwjecrfnxdchtskwtsyjxcfz.cmtwwjzwxcijcqfclzjwwjdcqjzwcf jsnwcxjwfcijcuqzxcjscuqzxcnshjwyfnsec"
+# _, traduction = decrypt_message(message)
+# letter=" "
+# res=message_initiial_with_letter(message,traduction,letter)
+# print(res)
+# print(message)
