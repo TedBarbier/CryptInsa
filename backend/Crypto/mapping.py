@@ -302,19 +302,19 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire
 def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
     # print(mot_chiffre)
     L= []
-    Ln=[]
     D=[]
     potentials = []
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
     
     for i in range(len(mot_chiffre)):
         for lettre in keys_sure:
+            # print(mot_chiffre[i],lettre)
             if mot_chiffre[i]==lettre:
                 L.append(i)
                 D.append(lettre)
-            # else:
-            #     Ln.append(i)
-
+            
+    Ln=[i for i in range(len(mot_chiffre)) if i not in L]
+    # print(Ln)
     # print(L,D)
 
     for c in candidat[0]:
@@ -323,10 +323,11 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
         for i in L:
             if test and len(c)>=i :
                 if c[i] != traduction[D[j]]:
-                    print(c,c[i],traduction[D[j]])
+                    # print(c,c[i],traduction[D[j]])
                     test=False
             j+=1
         if test:
+            # print(c, Ln)
             for j in Ln:
                 if c[j] in traduction.values():
                     test=False
@@ -337,6 +338,12 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
 # def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
 #     pass
 
+# test pour mapping_with_list
+# traduction={'o': 'l', 'h': 'e', 'a': ' ', 'f': 'c', 'k': 'h', 'l': 'i', 'i': 'f', 'u': 'r', 'g': None, 'v': 's', 'd': 'a', 'q': 'n', 'p': 'm', 'r': 'o', 'w': 't', 'x': 'u', 'e': 'b', 's': 'p', 'b': ',', 't': 'q', ',': 'y', 'j': 'g', 'c': '.', 'y': None}
+# keys_sur=['h', 'l', 'u', 'v', 'd', 'q', 'w'] 
+# mot= "yduldqwhv"
+# res=mapping_with_list(keys_sur,traduction,mot,"dict.txt")
+# print(res)
 
 
 # resultat = decrypt_message("po qsfgfsf fusf eft ivnbjot rvf fusf eft bojnbvy", "dict.txt")

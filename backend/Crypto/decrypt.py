@@ -149,27 +149,19 @@ def find_score_lettre(l, t, traductions, freqs_message, freqs_combi_message):
     score_final = 0.4 * p + 0.6 * score_combi
     return score_final
 
-def message_initiial_with_letter(message, traduction, letter): # letter en char
-    new_message = ""
-    trad_letter = [k for k, v in traduction.items() if v == letter]
-    trad_inverse =[ value for key, value in traduction.items() if key == letter]
-    if len(trad_letter) == 0:
-        return None
-    if len(trad_inverse) == 1:
-        for char in message:
-            if char in trad_letter:
-                new_message += letter
-            elif char == letter:
-                new_message += trad_inverse[0]
-            else:
-                new_message += char
-    else:
-        for char in message:
-            if char in trad_letter:
-                new_message += letter
-            else:
-                new_message += char
-    return new_message
+# def message_initiial_with_letter(message, traduction, letter): # letter en char
+#     new_message = ""
+#     trad_letter = [k for k, v in traduction.items() if v == letter]
+#     if len(trad_letter) == 0:
+#         return None
+#     for char in message:
+#         if char in trad_letter:
+#             new_message += letter
+#         elif char == letter:
+#             new_message += trad_letter[0]
+#         else:
+#             new_message += char
+#     return new_message
 
 def change_traduction_with_word(traduction, mot_initial, mot_final):
     for i in range(min(len(mot_initial), len(mot_final))):
@@ -368,6 +360,9 @@ def comparaison(m1,m2):
         if m1[i]==m2[i]:
             cpt+=1
             # print("lettre",m1[i],"position",i)
+        else:
+            #pour voir les erreurs
+            print(m1[i],m2[i],i)
     return cpt/len(m1)*100,cpt,len(m2)
 
 def initial_mapping(lettre_hypothétique, mot_chiffre, chemin_dictionnaire):
@@ -433,7 +428,7 @@ def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial
 
 pdf_path = "miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
-m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. Ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
+m="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole. "
 m2=cesar.cesar_encrypt(m.lower(),3)
 
 # code,traductions=decrypt_message(m2)
@@ -447,3 +442,12 @@ m2=cesar.cesar_encrypt(m.lower(),3)
 # print(score_message(traductions,m2))
 # traductions["x"]="u"
 # print(score_message(traductions,m2))
+
+
+#test message_initial_with_letter
+# message="jqqjcsjcywtz jcijcwjhtsktwycvzjcifsxcqjxcqjyywjxcjhwnyjxcfcxtsckwjwjdcutwyjcinxufwzdcvzcjqqjclqnxxjcxtzxcxfclfwijcwtgjcjycvzncinxufwfnxxjsycraxyjwnjzxjrjsyecqtwxvzcjqqjcwjhtnycijxcwjutsxjxcfstsarjxdcjqqjcacwjutsidcxfsxcxf tnwcvzjcqjzwcfzyjzwcscjxycfzywjcvzjcxtscuqzxclwfsicwn fqecfqtwxcvzczscqnjscnsijkjhyngqjcxjcstzjcjsywjcjz.dcnwnxcfhhjuyjczsjcrnxxntscfzckwtsycjscyfsycvzjchtwwjxutsifsyjecifsxczscufaxctzcqjxcmzrfnsxcsjcxtsycvzjcqjxcuntsxcijcuznxxfshjxcin nsjxdcnwnxcjycwtrfscxjcktsycqfcuwtrjxxjcijchtsynszjwcfcxcjhwnwjecrfnxdchtskwtsyjxcfz.cmtwwjzwxcijcqfclzjwwjdcqjzwcf jsnwcxjwfcijcuqzxcjscuqzxcnshjwyfnsec"
+# _, traduction = decrypt_message(message)
+# letter=" "
+# res=message_initiial_with_letter(message,traduction,letter)
+# print(res)
+# print(message)
