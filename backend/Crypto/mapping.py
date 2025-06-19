@@ -334,19 +334,3 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
             if test:
                 potentials.append(c)
     return potentials
-
-# def affiner_mapping_par_mots(mots_chiffres, chemin_dictionnaire, mapping_initial, encoding='utf-8'):
-#     pass
-
-# test pour mapping_with_list
-# traduction={'o': 'l', 'h': 'e', 'a': ' ', 'f': 'c', 'k': 'h', 'l': 'i', 'i': 'f', 'u': 'r', 'g': None, 'v': 's', 'd': 'a', 'q': 'n', 'p': 'm', 'r': 'o', 'w': 't', 'x': 'u', 'e': 'b', 's': 'p', 'b': ',', 't': 'q', ',': 'y', 'j': 'g', 'c': '.', 'y': None}
-# keys_sur=['h', 'l', 'u', 'v', 'd', 'q', 'w'] 
-# mot= "yduldqwhv"
-# res=mapping_with_list(keys_sur,traduction,mot,"dict.txt")
-# print(res)
-
-
-# resultat = decrypt_message("po qsfgfsf fusf eft ivnbjot rvf fusf eft bojnbvy", "dict.txt")
-# print(f"Message déchiffré : {resultat[0]}")
-# print(f"Mapping initial : {resultat[2]}")
-

@@ -65,10 +65,3 @@ def display(frequencies):
 
 pdf_path = "miserables.pdf"
 text = extract_text_from_pdf(pdf_path)
-# letter_freq= get_letter_frequencies(text)
-# combination_freq = get_combination_frequencies(text)
-# combi_e= get_combi_frequencies_for_a_letter(text, 'e', 0)
-# combi_= get_combi_frequencies_for_a_letter(text, 'e', 0)
-# display(combi_e)
-# display(letter_freq)
-# #display(combination_freq)
