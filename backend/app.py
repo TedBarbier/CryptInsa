@@ -2,13 +2,12 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS # type: ignore
 from collections import Counter
 import string
-from Crypto.cesar import *
-from Crypto.vigenere import *
+from cryptage.cesar import *
+from cryptage.vigenere import *
 import json
 import threading
 from flask import make_response
-import Crypto.main as main 
-import Crypto.dict_search as dict_search
+import cryptage.main as main 
 
 app = Flask(__name__)
 CORS(app)  # autorise les requêtes depuis le frontend
