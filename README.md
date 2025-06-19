@@ -79,12 +79,12 @@ Le script :
 - [x] Création d'une interface graphique simple pour tester
 - [x] Lancement par script automatisé
 - [x] Explication code cesar (BACKEND)
-- [ ] Explication code cesar (FRONTEND)
+- [x] Explication code cesar (FRONTEND)
 - [ ] Explication code vigenere (BACKEND)
 - [ ] Explication code vigenere (FRONTEND)
-- [ ] Explication substitution aléatoire (FRONTEND)
-- [ ] Démonstration attaque par fréquence (BACKEND)
-- [ ] Démonstration attaque par fréquence (FRONTEND)
+- [x] Explication substitution aléatoire (FRONTEND)
+- [x] Démonstration attaque par fréquence (BACKEND)
+- [x] Démonstration attaque par fréquence (FRONTEND)
 
 <!-- CONTACT -->
 ## Contact
@@ -103,7 +103,6 @@ Le script :
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 Ce projet a été réalisé dans un cadre pédagogique avec le soutien de notre encadrant Xavier Bultel. Nous remercions également les plateformes et ressources open-source suivantes qui ont facilité notre développement :
-* [GitHub Pages](https://pages.github.com/)
 * [Python](https://www.python.org/)
 * [Flask](https://flask.palletsprojects.com/)
 * [Wikipedia](https://fr.wikipedia.org/wiki/Analyse_de_fr%C3%A9quence) – pour les bases théoriques de la cryptanalyse
