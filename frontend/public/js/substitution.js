@@ -1,6 +1,6 @@
 // JavaScript pour le chiffrement par substitution - Table horizontale
 const EXAMPLE_TEXT =[ "Tant  qu il  existera par le fait des lois et des " +
-"mœurs une damnation sociale créant artificiellement en pleine civilisation des enfers et compliquant " +
+"moeurs une damnation sociale créant artificiellement en pleine civilisation des enfers et compliquant " +
 "d une fatalité humaine la destinée qui est divine tant " +
 "que  les  trois  problèmes  du  siècle,  la  dégradation  de  " +
 "l homme par le prolétariat, la déchéance de la femme " +
@@ -318,6 +318,16 @@ function applyMapping(mapping, description) {
 
 function updateEncryption() {
     const inputText = document.getElementById('inputText');
+    if (inputText) {
+    inputText.value = inputText.value
+        .replace(/œ/g, 'oe') // Remplacer œ par oe
+        .replace(/Œ/g, 'OE') // Remplacer Œ par OE
+        .normalize('NFD') // Decompose accented characters
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .toLowerCase()
+        .replace(/[^a-z.,]/g, ' ')
+        .replace(/\s+/g, ' ');
+        }
     const outputText = document.getElementById('outputText');
     const inputLength = document.getElementById('inputLength');
     const outputLength = document.getElementById('outputLength');

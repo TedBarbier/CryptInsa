@@ -8,6 +8,7 @@ import json
 import threading
 from flask import make_response
 import Crypto.main as main 
+import Crypto.dict_search as dict_search
 
 app = Flask(__name__)
 CORS(app)  # autorise les requêtes depuis le frontend
@@ -78,7 +79,7 @@ def call_substitution_attack():
 def route_update_attack():
     def read_donnees_json():
         try:
-            with open('Crypto/donnees.json', 'r', encoding='utf-8') as f:
+            with open('donnees.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
             return data
         except Exception as e:
@@ -90,7 +91,7 @@ def start_attack():
     global storedcipher
     data = request.get_json()
    
-    storedcipher = data.get('cipherText', '')
+    storedcipher = data.get('cipherText', '').lower().replace('\n', ' ')
     # Démarrer l'attaque dans un thread séparé
     thread = threading.Thread(target=call_substitution_attack)
     thread.daemon = True
