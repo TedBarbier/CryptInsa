@@ -81,6 +81,11 @@ async function startAttack(cipherText) { // Recuperer le texte chiffré et l'env
     });
 
     const data = await res.json();
+    if (data.error) {
+        console.error("Error in startAttack:", data.error);
+        throw new Error(data.error);
+    }
+    console.log("Attack started successfully:", data);
     return data;
 }
 window.updateAttack = updateAttack;

@@ -1,20 +1,18 @@
-import decrypt as decrypt
-import frequences_lettres as freq
-import cesar
-import random
+import Crypto.decrypt as decrypt
+import Crypto.frequences_lettres as freq
 import string
-import dict_search
-import mapping
+import Crypto.dict_search as dict_search
+import Crypto.mapping as mapping
 import json
 
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
 N_ITERATIONS = 2
 
-freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
-freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
+freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
+freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
 combinaisons_frequentes = {k: v for k, v in freq_combination.items() if v > 0.8}
-chemin_dictionnaire = "dict.txt"
+chemin_dictionnaire = "Crypto/dict.txt"
 
 
 import json

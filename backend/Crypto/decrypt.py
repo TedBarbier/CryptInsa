@@ -1,24 +1,21 @@
 from collections import Counter, defaultdict
-import frequences_lettres as freq
+import Crypto.frequences_lettres as freq
 import string
-import cesar
-import random
-import dict_search as dict_search
-import mapping
+import Crypto.cesar as cesar
 import json
 # Fréquence des lettres en français (environ)
-freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
+freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
 
-freq_combination_francais = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
+freq_combination_francais = freq.get_combination_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
 
-combinaisons= freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
+combinaisons= freq.get_combination_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
 combinaison_frequentes = {k: v for k, v in combinaisons.items() if v > 0.8}
 
 N_ITERATIONS=50
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
 
-def charger_dictionnaire_pattern(chemin_fichier="dict_patterns.json"):
+def charger_dictionnaire_pattern(chemin_fichier="Crypto/dict_patterns.json"):
     """
     Charge le dictionnaire et le groupe par longueur de mot pour une recherche rapide.
     Retourne un dictionnaire où les clés sont les longueurs et les valeurs sont des sets de mots.
@@ -39,11 +36,11 @@ def charger_dictionnaire_pattern(chemin_fichier="dict_patterns.json"):
 
     return index_isomorphique, index_double
 
-DICO_PATTERN, DICO_DOUBLE = charger_dictionnaire_pattern("dict_patterns.json")
+DICO_PATTERN, DICO_DOUBLE = charger_dictionnaire_pattern("Crypto/dict_patterns.json")
 
-DICO_OPTIMISE = charger_dictionnaire_pattern("dict_patterns.json")
+DICO_OPTIMISE = charger_dictionnaire_pattern("Crypto/dict_patterns.json")
 
-def charger_dictionnaire_optimise(chemin_fichier="dict.txt"):
+def charger_dictionnaire_optimise(chemin_fichier="Crypto/dict.txt"):
     """
     Charge le dictionnaire et le groupe par longueur de mot pour une recherche rapide.
     Retourne un dictionnaire où les clés sont les longueurs et les valeurs sont des sets de mots.
@@ -58,7 +55,7 @@ def charger_dictionnaire_optimise(chemin_fichier="dict.txt"):
             mots_par_longueur[longueur].add(mot)
     return mots_par_longueur
 
-DICO_OPTIMISE = charger_dictionnaire_optimise("dict.txt")
+DICO_OPTIMISE = charger_dictionnaire_optimise("Crypto/dict.txt")
 
 
 def frequences_lettres(texte):
@@ -222,5 +219,5 @@ def comparaison_clé(clé1, clé2):
             liste.append((k,clé1[k]))
     return count, liste
 
-pdf_path = "miserables.pdf"
+pdf_path = "Crypto/miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
