@@ -58,11 +58,9 @@ async function play() {
     
     // Mise à jour de l'interface
     const playButton = document.getElementById('play');
-    const stopButton = document.getElementById('stop');
     
     playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyse...';
     playButton.disabled = true;
-    stopButton.disabled = false;
     
     // Démarrer l'animation d'électricité
     startElectricityAnimation();
@@ -89,8 +87,8 @@ async function play() {
                 motChiffre = dataChiffre[currentIndexData].mot_chiffre;
                 motTraduit = dataChiffre[currentIndexData].mot_traduit;
                 currentMapping = dataChiffre[currentIndexData].dictionnaire;
-                document.getElementById('motChiffreText').value = motChiffre;
-                document.getElementById('motTraduitText').value = motTraduit;
+                // document.getElementById('motChiffreText').value = motChiffre;
+                // document.getElementById('motTraduitText').value = motTraduit;
                 updateMappingDisplay();
                 applyDecryption();
             } catch (error) {
@@ -109,14 +107,24 @@ async function play() {
 //==NEXT WORD==//
 function nextWord() {
     currentIndexData++;
-    if (currentIndexData >= dataChiffre.length) {
-        currentIndexData = 0;
+    if (currentIndexData === dataChiffre.length) {
+        showNotification('Comparaison avec le message clair', 'info');
     }
-    motChiffre = dataChiffre[currentIndexData].mot_chiffre;
-    motTraduit = dataChiffre[currentIndexData].mot_traduit;
-    currentMapping = dataChiffre[currentIndexData].dictionnaire;
-    document.getElementById('motChiffreText').value = motChiffre;
-    document.getElementById('motTraduitText').value = motTraduit;
+    if (currentIndexData > dataChiffre.length) {
+        currentIndexData--;
+        showNotification('Aucune analyse suivante disponible', 'info');
+        return;
+    }
+    if (currentIndexData > 0 && currentIndexData < dataChiffre.length-1) {
+        motChiffre = dataChiffre[currentIndexData].mot_chiffre;
+        motTraduit = dataChiffre[currentIndexData].mot_traduit;
+        currentMapping = dataChiffre[currentIndexData].dictionnaire;
+        document.getElementById('motChiffreText').value = motChiffre;
+        document.getElementById('motTraduitText').value = motTraduit;
+    } else {
+        document.getElementById('motChiffreText').value = '';
+        document.getElementById('motTraduitText').value = '';
+    }
     updateMappingDisplay();
     applyDecryption();
 }
@@ -125,13 +133,21 @@ function nextWord() {
 function previousWord() {
     currentIndexData--;
     if (currentIndexData < 0) {
-        currentIndexData = dataChiffre.length - 1;
+        currentIndexData ++;
+        showNotification('Aucun analyse précédente disponible', 'info');
+        return;
     }
     motChiffre = dataChiffre[currentIndexData].mot_chiffre;
     motTraduit = dataChiffre[currentIndexData].mot_traduit;
     currentMapping = dataChiffre[currentIndexData].dictionnaire;
-    document.getElementById('motChiffreText').value = motChiffre;
-    document.getElementById('motTraduitText').value = motTraduit;
+    if (currentIndexData > 0 && currentIndexData < dataChiffre.length-1) {
+        document.getElementById('motChiffreText').value = motChiffre;
+        document.getElementById('motTraduitText').value = motTraduit;
+    }
+    else {
+        document.getElementById('motChiffreText').value = '';
+        document.getElementById('motTraduitText').value = '';
+    }
     updateMappingDisplay();
     applyDecryption();
 }
@@ -286,10 +302,19 @@ function applyDecryption() {
 
     const currentDecryptedText = decryptText(cipherText, currentMapping);
     console.log(currentDecryptedText);
-    const previousMapping = dataChiffre[currentIndexData - 1].dictionnaire;
-    const previousDecryptedText = decryptText(cipherText, previousMapping);
-    console.log(previousDecryptedText);
-    const comparedText = compareTexts(currentDecryptedText, previousDecryptedText);
+    let comparedText = [];
+    if (currentIndexData > 0 && currentIndexData < dataChiffre.length) {
+        const previousMapping = dataChiffre[currentIndexData - 1].dictionnaire;
+        const previousDecryptedText = decryptText(cipherText, previousMapping);
+        console.log(previousDecryptedText);
+        comparedText = compareTexts(currentDecryptedText, previousDecryptedText);
+    } else if (currentIndexData === 0) 
+    {
+        comparedText = compareTexts(currentDecryptedText, cipherText);
+    }
+    else {
+        comparedText = compareTexts(currentDecryptedText, document.getElementById('originalPlainText').value);
+    }
     displayComparedText(comparedText);
     
     showNotification('Déchiffrement appliqué', 'success');

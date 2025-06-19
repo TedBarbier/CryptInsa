@@ -38,10 +38,7 @@
             <div class="mapping-section">
                 <div class="mapping-controls">
                     <button id="play" class="btn btn-primary">
-                        <i class="fas fa-play"></i> Play
-                    </button>
-                    <button id="stop" class="btn btn-success">
-                        <i class="fas fa-stop"></i> Arrêter
+                        <i class="fas fa-play"></i> Commencer
                     </button>
                 </div>
                 
@@ -82,20 +79,21 @@
                 </div>
                 <div class="words-section">
                     <div class="text-display-row">
-                        <div class="text-display-col">
-                            <button id="previousWord" class="btn btn-primary">
-                                <i class="fas fa-arrow-left"></i>
-                            </button>
-                        </div>
 
                         <div class="text-display-col">
                             <h4><i class="fas fa-lock"></i> Mot chiffré</h4>
                             <textarea id="motChiffreText" placeholder="Le mot chiffré apparaîtra ici..." rows="4" readonly></textarea>
                         </div>
-
+                        
                         <div class="text-display-col">
                             <h4><i class="fas fa-unlock"></i> Mot traduit</h4>
                             <textarea id="motTraduitText" placeholder="Le mot traduit apparaîtra ici..." rows="4" readonly></textarea>
+                        </div>
+
+                        <div class="text-display-col">
+                            <button id="previousWord" class="btn btn-primary">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
                         </div>
 
                         <div class="text-display-col">

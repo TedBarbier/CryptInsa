@@ -76,11 +76,17 @@ def change_traduction_with_letter(traduction, lettre_initiale, lettre_finale):
     return traduction
 
 
-def is_mot_sans_virgule(mot,virgule_chiffre):
-    return(mot[-1]!=virgule_chiffre)
+def is_mot_sans_virgule(mot, virgule_chiffre):
+    if not mot:
+        return True  # or False, depending on your intended logic for empty strings
+    return mot[-1] != virgule_chiffre
 
-def is_mot_sans_point(mot,point_chiffre):
-    return(mot[-1]!=point_chiffre)
+def is_mot_sans_point(mot, point_chiffre):
+    if not mot:
+        return True  # or False, depending on your intended logic for empty strings
+    if mot == ' ':
+        return mot[0] != point_chiffre
+    return mot[-1] != point_chiffre
 
 def decrypt_message(message,seuil_frequence=None):
     frequences=freq.get_letter_frequencies(message)
