@@ -52,7 +52,18 @@ def trouver_mots_correspondants(mot_chiffre):
 
 from collections import defaultdict
 
-def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.9):
+def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.95):
+    """
+    Détecte les caractères représentant le point et la virgule dans un texte chiffré.
+
+    Args:
+        texte_chiffre (str): Le texte chiffré.
+        caractere_espace (str): Le caractère qui représente l'espace.
+        score_seuil (float): Seuil de confiance pour identifier la ponctuation.
+
+    Returns:
+        dict: {'point': caractère ou None, 'virgule': caractère ou None}
+    """
     if not texte_chiffre:
         return {'virgule': None, 'point': None}
 
@@ -70,27 +81,25 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
         else:
             profils[char_actuel]['autre_position'] += 1
 
+    # Calcul des scores
     candidats = []
     for char, profil in profils.items():
         total = profil['avant_espace'] + profil['autre_position']
         if total == 0:
             continue
         score = profil['avant_espace'] / total
-        if score >= score_seuil:
-            candidats.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
+        candidats.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
 
-    candidats.sort(key=lambda x: (x['score'], x['freq']), reverse=True)
+    # Trier selon le score et la fréquence
+    candidats = sorted(candidats, key=lambda x: (x['score'], x['freq']), reverse=True)
 
-    virgule, point = None, None
-    if len(candidats) >= 2:
-        # On suppose que la virgule est la plus fréquente
-        candidats.sort(key=lambda x: x['freq'], reverse=True)
-        virgule = candidats[0]['char']
-        point = candidats[1]['char']
-    elif len(candidats) == 1:
-        virgule = candidats[0]['char']
+    point, virgule = None, None
+    if candidats:
+        point = candidats[0]['char']
+        if len(candidats) > 1 and candidats[1]['score'] >= score_seuil:
+            virgule = candidats[1]['char']
 
-    return {'virgule': virgule, 'point': point}
+    return {'point': point, 'virgule': virgule}
 
      
 #pas encore fini 
