@@ -189,15 +189,15 @@ function launchAttack() {
     elements.launchAttack.disabled = true;
     
     // Redirection vers la page d'analyse
-    setTimeout(() => {
+    setTimeout(async() => {
         // Sauvegarder dans localStorage
         localStorage.setItem('cipherText', cipherText);
         localStorage.setItem('attackData', JSON.stringify(attackData));
         
         // Redirection vers la page d'analyse de fréquences
-        window.location.href = 'substitution_annalyse';
         showNotification('Redirection vers l\'analyse de fréquences...', 'info');
-        
+        await window.startAttack(cipherText);
+        window.location.href = 'substitution_annalyse';        
         // Restaurer le bouton après la simulation
         setTimeout(() => {
             elements.launchAttack.innerHTML = `

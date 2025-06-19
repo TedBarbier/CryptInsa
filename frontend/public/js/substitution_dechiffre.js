@@ -56,7 +56,7 @@ async function play() {
     
     try {
         // Premier appel pour démarrer l'attaque
-        await window.updateAttack(cipherText);
+        await window.updateAttack();
         
         // Démarrer les mises à jour périodiques (toutes les 3 secondes)
         attackInterval = setInterval(async () => {
@@ -66,7 +66,7 @@ async function play() {
             }
             
             try {
-                const data = await window.updateAttack(cipherText);
+                const data = await window.updateAttack();
                 console.log('Attack data received:', data);
                 
                 if (data && data.dictionnaire) {
