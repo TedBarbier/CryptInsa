@@ -22,8 +22,8 @@ def analyser_mot(mot):
     }
 
 def main():
-    input_file = "Crypto/dict.txt"
-    output_file = "Crypto/dict_patterns.json"
+    input_file = "cryptage/dict.txt"
+    output_file = "cryptage/dict_patterns.json"
 
     with open(input_file, "r", encoding="utf-8") as f:
         mots = [line.strip().lower() for line in f if line.strip().isalpha()]
