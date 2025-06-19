@@ -1,8 +1,8 @@
 import Crypto.decrypt as decrypt
 import Crypto.frequences_lettres as freq
 import string
-import Crypto.dict_search as dict_search
-import Crypto.mapping as mapping
+import dict_search as dict_search
+import mapping as mapping
 import json
 
 
