@@ -1,9 +1,6 @@
 from collections import Counter, defaultdict
-import cryptage.frequences_lettres as freq
 import unicodedata
 
-
-freq_francais = freq.freq_francais_fct()
 
 def generer_pattern(mot):
     mapping = {}
@@ -19,35 +16,22 @@ def generer_pattern(mot):
 def charger_dictionnaire_complet(chemin_dict="cryptage/dict.txt"):
     """
     Construit les 3 dictionnaires :
-    - par longueur
     - par pattern isomorphique
-    - par lettres doublées
     """
-    DICO_LONGUEUR = defaultdict(set)
     DICO_PATTERN = defaultdict(set)
-    DICO_DOUBLE = defaultdict(set)
 
     with open(chemin_dict, "r", encoding="utf-8") as f:
         mots = f.read().split()
 
     for mot in mots:
         mot = mot.lower()
-        # DICO_LONGUEUR
-        DICO_LONGUEUR[len(mot)].add(mot)
 
         # DICO_PATTERN
         DICO_PATTERN[generer_pattern(mot)].add(mot)
 
-        # DICO_DOUBLE
-        lettres_vues = set()
-        for lettre in mot:
-            if mot.count(lettre) > 1 and lettre not in lettres_vues:
-                DICO_DOUBLE[lettre].add(mot)
-                lettres_vues.add(lettre)
+    return dict(DICO_PATTERN)
 
-    return dict(DICO_LONGUEUR), dict(DICO_PATTERN), dict(DICO_DOUBLE)
-
-DICO_LONGUEUR, DICO_PATTERN, DICO_DOUBLE = charger_dictionnaire_complet() 
+DICO_PATTERN = charger_dictionnaire_complet() 
 
 
 def enlever_accents(texte):
@@ -65,15 +49,7 @@ def trouver_mots_correspondants(mot_chiffre):
     return mots_correspondants, len(mots_correspondants)
 
 
-# Fréquence des lettres en français (environ)
-freq_francais = {
-    'e': 12.10, 'a': 7.10, 'i': 6.50, 's': 6.20, 'n': 6.10,
-    't': 5.90, 'r': 5.30, 'o': 5.10, 'l': 4.80, 'd': 3.50,
-    'c': 3.10, 'u': 2.90, 'm': 2.70, 'h': 2.10, 'g': 1.40,
-    'b': 1.10, 'f': 1.10, 'p': 1.00, 'v': 0.80, 'w': 0.20,
-    'y': 0.10, 'j': 0.10, 'k': 0.05, 'x': 0.04, 'q': 0.03, 'z': 0.01
-}
-frequences_francais = list(freq_francais.keys())
+
 
 
 def trouver_dernier_char_non_espace(texte: str, espace: str):

@@ -1,5 +1,4 @@
 import string
-from flask import jsonify
 import fitz
 
 alphabet = string.ascii_lowercase+' '+','+'.'

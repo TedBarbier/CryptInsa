@@ -1,15 +1,10 @@
-from collections import Counter, defaultdict
 import cryptage.frequences_lettres as freq
 import string
-import cryptage.cesar as cesar
-import json
+
 # Fréquence des lettres en français (environ)
 miserable = freq.extract_text_from_pdf("cryptage/miserables.pdf")
 
 freq_francais = freq.get_letter_frequencies(miserable)
-
-def freq_francais_fct():
-    return freq_francais
 
 freq_combination_francais = freq.get_combination_frequencies(miserable)
 
