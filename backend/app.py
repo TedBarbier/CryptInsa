@@ -66,10 +66,10 @@ def route_vigenere_decrypt():
     return jsonify(response)
 
 
-def call_substitution_attack(message):
+def call_substitution_attack():
     # Cette fonction est appelée dans un thread séparé pour l'attaque par substitution
     # Vous pouvez implémenter la logique de l'attaque ici
-    traduction,traduction_sur,message_split,ponctuation = main.etape1(message)
+    traduction,traduction_sur,message_split,ponctuation = main.etape1(storedcipher)
     main.etape2(traduction,traduction_sur,message_split,ponctuation)
 
 
