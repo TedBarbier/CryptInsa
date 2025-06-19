@@ -7,6 +7,7 @@ je le ferais quand le code fonctionne à 100%
 """
 from collections import Counter, defaultdict
 import string
+import json
 #from Crypto.dict_search import trouver_mots_correspondants
 import unicodedata
 
@@ -24,6 +25,20 @@ def trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-
                 pattern_mot = generer_pattern(mot_sans_accents)
                 if pattern_mot == pattern_recherche:
                     mots_correspondants.append(mot)
+    return mots_correspondants, len(mots_correspondants)
+
+def trouver_mots_correspondants_optimise(mot_chiffre, chemin_json, encoding='utf-8'):
+    mot_chiffre_sans_accents = enlever_accents(mot_chiffre)
+    pattern_recherche = generer_pattern(mot_chiffre_sans_accents)
+    longueur_recherche = len(mot_chiffre_sans_accents)
+    mots_correspondants = []
+
+    with open(chemin_json, 'r', encoding=encoding) as fichier:
+        data = json.load(fichier)
+        for entree in data:
+            if entree['longueur'] == longueur_recherche and entree['isomorphique'] == pattern_recherche:
+                mots_correspondants.append(entree['mot'])
+
     return mots_correspondants, len(mots_correspondants)
 
 def trouver_dernier_char_non_espace(texte: str, espace: str):
@@ -94,7 +109,7 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
 
 def generer_pattern(mot):
     mapping = {}
-    compteur = 0
+    compteur = 1
     pattern = []
     for lettre in mot:
         if lettre not in mapping:
@@ -233,10 +248,11 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
 
     return mot_final, message_original
         
-def d(mot, chemin_dictionnaire) :
+def d(mot, chemin_dictionnaire, chemin_json) :
     distance_min = len(mot)
     mot_sa = enlever_accents(mot)
     mot_correspondants = trouver_mots_correspondants(mot_sa, chemin_dictionnaire, encoding='utf-8')[0]
+    mot_correspondants_opit = trouver_mots_correspondants_optimise(mot_sa, chemin_json, encoding='utf-8')
     
     for mot_p in mot_correspondants:
         mot_p_sa = enlever_accents(mot_p)
@@ -271,11 +287,14 @@ def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
         
 
 
-def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire):
+def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire, chemin_json):
     L= []
     potentials = []
     mot_liste = list(mot_chiffre)
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-8')
+    candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json, encoding='utf-8')
+    print("candidat", candidat)
+    print("candidat pattern", candidat_pattern)
     
     for i in range(len(mot_chiffre)):
         if mot_chiffre[i] == lettre_change:
@@ -290,12 +309,15 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire
 
 
 #pas encore fini 
-def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
+def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire, chemin_json):
     # print(mot_chiffre)
     L= []
     D=[]
     potentials = []
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
+    candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json)
+    print("candidat", candidat)
+    print("candidat pattern", candidat_pattern)
     
     for i in range(len(mot_chiffre)):
         for lettre in keys_sure:
