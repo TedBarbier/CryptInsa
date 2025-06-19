@@ -71,17 +71,17 @@ body {
 }
 
 /* Vanta.js Background Container */
-#vanta-background {
+#vanta-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -10;
     pointer-events: none;
+    z-index: -10;
 }
 
-/* Background overlay for better readability */
+/* Overlay gradient for better content readability */
 body::before {
     content: '';
     position: fixed;
@@ -90,100 +90,28 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        /* Overlay for better content readability */
-        linear-gradient(135deg, rgba(10, 10, 21, 0.3) 0%, rgba(15, 15, 30, 0.4) 25%, rgba(26, 26, 46, 0.3) 50%, rgba(22, 33, 62, 0.4) 75%, rgba(10, 10, 21, 0.3) 100%),
-        /* Subtle accent gradients */
-        radial-gradient(ellipse at top left, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom right, rgba(77, 171, 247, 0.04) 0%, transparent 50%);
+        /* Subtle overlay for readability */
+        radial-gradient(ellipse at center, rgba(10, 10, 21, 0.3) 0%, rgba(10, 10, 21, 0.6) 100%),
+        /* Base dark tint */
+        rgba(10, 10, 21, 0.2);
     pointer-events: none;
     z-index: -5;
 }
 
-/* Subtle overlay patterns (reduced since Vanta.js provides main background) */
+/* Remove the old animated patterns as they'll be replaced by Vanta.js */
 body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        /* Subtle accent dots */
-        radial-gradient(circle at 20% 80%, rgba(0, 255, 136, 0.03) 0%, transparent 2px),
-        radial-gradient(circle at 80% 20%, rgba(77, 171, 247, 0.02) 0%, transparent 2px);
-    background-size: 200px 200px, 150px 150px;
-    animation: backgroundMove 60s ease-in-out infinite;
-    pointer-events: none;
-    z-index: -4;
+    display: none;
 }
 
-/* Dynamic floating elements */
-.bg-floating-elements {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    overflow: hidden;
+/* Vanta.js specific enhancements */
+#vanta-bg canvas {
+    filter: brightness(0.85) contrast(1.2) saturate(1.1);
+    transition: filter 0.5s ease;
 }
 
-.floating-element {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.1;
-    animation: float 20s infinite ease-in-out;
-}
-
-.floating-element:nth-child(1) {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-blue));
-    top: 20%;
-    left: 10%;
-    animation-delay: 0s;
-    animation-duration: 25s;
-}
-
-.floating-element:nth-child(2) {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(45deg, var(--accent-purple), var(--primary-color));
-    top: 60%;
-    right: 15%;
-    animation-delay: -8s;
-    animation-duration: 20s;
-}
-
-.floating-element:nth-child(3) {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(45deg, var(--accent-blue), var(--accent-purple));
-    top: 40%;
-    left: 70%;
-    animation-delay: -15s;
-    animation-duration: 30s;
-}
-
-.floating-element:nth-child(4) {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(45deg, var(--primary-color), var(--accent-orange));
-    top: 80%;
-    left: 30%;
-    animation-delay: -5s;
-    animation-duration: 18s;
-}
-
-.floating-element:nth-child(5) {
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(45deg, var(--accent-blue), var(--primary-color));
-    top: 10%;
-    right: 20%;
-    animation-delay: -12s;
-    animation-duration: 35s;
+/* Hover effect for Vanta canvas */
+body:hover #vanta-bg canvas {
+    filter: brightness(0.95) contrast(1.3) saturate(1.2);
 }
 
 /* ===== LAYOUT PRINCIPAL ===== */
@@ -396,42 +324,15 @@ code, .mono {
     50% { filter: drop-shadow(0 0 20px var(--primary-color)); }
 }
 
-/* Background Animations */
-@keyframes backgroundMove {
-    0%, 100% {
-        background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-        transform: rotate(0deg);
+/* Vanta.js interaction animations */
+@keyframes vantaRipple {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
     }
-    25% {
-        background-position: 100% 0%, 0% 100%, 50% 50%, 25% 75%;
-        transform: rotate(1deg);
-    }
-    50% {
-        background-position: 100% 100%, 50% 0%, 0% 100%, 75% 25%;
-        transform: rotate(0deg);
-    }
-    75% {
-        background-position: 0% 100%, 100% 50%, 25% 0%, 50% 100%;
-        transform: rotate(-1deg);
-    }
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px) translateX(0px) scale(1);
-        opacity: 0.1;
-    }
-    25% {
-        transform: translateY(-20px) translateX(10px) scale(1.1);
-        opacity: 0.15;
-    }
-    50% {
-        transform: translateY(-10px) translateX(-15px) scale(0.9);
-        opacity: 0.08;
-    }
-    75% {
-        transform: translateY(-30px) translateX(5px) scale(1.05);
-        opacity: 0.12;
+    100% {
+        transform: translate(-50%, -50%) scale(4);
+        opacity: 0;
     }
 }
 
@@ -520,42 +421,32 @@ code, .mono {
     background: linear-gradient(var(--primary-light), var(--primary-color));
 }
 
-/* ===== BACKGROUND RESPONSIVE & PERFORMANCE ===== */
+/* ===== VANTA.JS RESPONSIVE & PERFORMANCE ===== */
 @media (max-width: 768px) {
-    /* Simplify background on mobile for performance */
-    #vanta-background {
-        /* Reduce Vanta.js quality on mobile via JS */
-        opacity: 0.7;
+    /* Optimize Vanta.js on mobile */
+    #vanta-bg canvas {
+        filter: brightness(0.8) contrast(1.1);
     }
     
+    /* Stronger overlay on mobile for better readability */
     body::before {
         background: 
-            linear-gradient(135deg, rgba(10, 10, 21, 0.5) 0%, rgba(26, 26, 46, 0.6) 50%, rgba(10, 10, 21, 0.5) 100%),
-            radial-gradient(ellipse at top, rgba(0, 255, 136, 0.04) 0%, transparent 70%);
-    }
-    
-    body::after {
-        background-size: 120px 120px, 100px 100px;
-        animation-duration: 120s; /* Much slower animation on mobile */
-    }
-    
-    .floating-element {
-        animation-duration: 60s !important; /* Slower floating on mobile */
+            radial-gradient(ellipse at center, rgba(10, 10, 21, 0.4) 0%, rgba(10, 10, 21, 0.7) 100%),
+            rgba(10, 10, 21, 0.3);
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    /* Respect user's motion preferences */
-    body::after,
-    .floating-element {
-        animation: none !important;
+    /* Respect user's motion preferences - handled by Vanta.js config */
+    #vanta-bg {
+        opacity: 0.5;
     }
 }
 
 @media (max-width: 480px) {
-    /* Further simplification for very small screens */
-    .floating-element:nth-child(n+4) {
-        display: none; /* Hide some floating elements */
+    /* Further mobile optimization */
+    #vanta-bg canvas {
+        filter: brightness(0.75) contrast(1.05);
     }
 }
 
@@ -565,8 +456,8 @@ code, .mono {
         background: var(--bg-dark);
     }
     
-    body::after {
-        display: none;
+    #vanta-bg {
+        opacity: 0.3;
     }
 }
 

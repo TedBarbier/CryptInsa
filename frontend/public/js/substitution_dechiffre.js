@@ -31,30 +31,86 @@ function setupEventListeners() {
 }
 
 //==PLAY==//
+let attackInterval = null;
+
 async function play() {
     const cipherText = localStorage.getItem('cipherText');
-    while (!is_finished) {
-        //Begin Attack
-        console.log('Begin Attack');
-        document.getElementById('play').disabled = true;
-        document.getElementById('play').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    
+    if (!cipherText) {
+        showNotification('Aucun texte chiffré trouvé. Utilisez d\'abord la page d\'attaque.', 'error');
+        return;
+    }
+    
+    console.log('Begin Attack');
+    
+    // Mise à jour de l'interface
+    const playButton = document.getElementById('play');
+    const stopButton = document.getElementById('stop');
+    
+    playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyse...';
+    playButton.disabled = true;
+    stopButton.disabled = false;
+    
+    // Réinitialiser l'état
+    is_finished = false;
+    
+    try {
+        // Premier appel pour démarrer l'attaque
         await window.updateAttack(cipherText);
-        //After 5 seconds, fetch to server to get the mapping
-        setTimeout(async () => {
-            const data = await window.updateAttack(cipherText);
-            console.log('Attack data received:', data);
-            if (!data || !data.dictionnaire) {
-                console.error('No mapping data received from server');
+        
+        // Démarrer les mises à jour périodiques (toutes les 3 secondes)
+        attackInterval = setInterval(async () => {
+            if (is_finished) {
+                clearInterval(attackInterval);
+                return;
             }
-            currentMapping = data.dictionnaire;
-            is_finished = data.is_finished;
-            console.log(data.dictionnaire);
-        }, 10000);
-        console.log('play');
+            
+            try {
+                const data = await window.updateAttack(cipherText);
+                console.log('Attack data received:', data);
+                
+                if (data && data.dictionnaire) {
+                    currentMapping = data.dictionnaire;
+                    console.log('Mapping updated:', data.dictionnaire);
+                    
+                    // Mettre à jour l'affichage
+                    updateMappingDisplay();
+                    applyDecryption();
+                }
+            } catch (error) {
+                console.error('Erreur lors de la mise à jour:', error);
+                showNotification('Erreur lors de l\'analyse', 'error');
+            }
+        }, 3000); // Mise à jour toutes les 3 secondes
+        
+    } catch (error) {
+        console.error('Erreur lors du démarrage de l\'attaque:', error);
+        showNotification('Erreur lors du démarrage de l\'analyse', 'error');
+        stop();
     }
 }
 
 //==STOP==//
+function stop() {
+    is_finished = true;
+    
+    // Arrêter l'intervalle de mise à jour
+    if (attackInterval) {
+        clearInterval(attackInterval);
+        attackInterval = null;
+    }
+    
+    // Remettre l'interface en état normal
+    const playButton = document.getElementById('play');
+    const stopButton = document.getElementById('stop');
+    
+    playButton.disabled = false;
+    playButton.innerHTML = '<i class="fas fa-play"></i> Play';
+    stopButton.disabled = true;
+    
+    console.log('Attack stopped');
+}
+
 
 // ===== CHARGEMENT DES DONNÉES ===== //
 function loadCipherTextFromStorage() {
@@ -219,4 +275,68 @@ function copyResult() {
     textarea.select();
     document.execCommand('copy');
     showNotification('Texte copié dans le presse-papiers', 'success');
+}
+
+// Fonction pour afficher les notifications
+function showNotification(message, type = 'info') {
+    // Créer l'élément de notification
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    // Styles inline pour la notification
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? 'linear-gradient(135deg, #00ff88, #00cc6a)' : 
+                   type === 'error' ? 'linear-gradient(135deg, #ff6b6b, #ee5a52)' : 
+                   'linear-gradient(135deg, #4dabf7, #339af0)'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+        transform: translateX(100%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        max-width: 400px;
+        font-weight: 500;
+    `;
+    
+    // Ajouter au DOM
+    document.body.appendChild(notification);
+    
+    // Animation d'entrée
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+        notification.style.opacity = '1';
+    }, 100);
+    
+    // Suppression automatique après 5 secondes
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+    
+    // Permettre la fermeture au clic
+    notification.addEventListener('click', () => {
+        notification.style.transform = 'translateX(100%)';
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    });
 }

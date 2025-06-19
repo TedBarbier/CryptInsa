@@ -1,271 +1,325 @@
-// Background Effects Controller with Vanta.js Integration
-class BackgroundEffects {
+// Vanta.js NET Background Controller
+class VantaNetBackground {
     constructor() {
-        this.floatingElements = [];
-        this.mouseX = 0;
-        this.mouseY = 0;
         this.vantaEffect = null;
+        this.isInitialized = false;
+        this.config = {
+            // NET effect configuration
+            color: 0x00ff88,        // Primary green color
+            backgroundColor: 0x0a0a15, // Dark background
+            points: 20,             // Number of connection points
+            maxDistance: 25,        // Maximum distance for connections
+            spacing: 20,            // Spacing between points  
+            showDots: true,         // Show connection dots
+            mouseControls: true,    // Enable mouse interaction
+            touchControls: true,    // Enable touch interaction
+            gyroControls: false,    // Disable gyro controls
+            minHeight: 200.00,      // Minimum height
+            minWidth: 200.00,       // Minimum width
+            scale: 1.00,           // Scale factor
+            scaleMobile: 1.00,     // Mobile scale factor
+            // Advanced settings
+            speed: 0.5,            // Animation speed
+            opacity: 0.8,          // Overall opacity
+        };
         this.init();
     }
 
     init() {
-        this.loadVantaLibraries().then(() => {
-            this.initVantaBackground();
-            this.createFloatingElements();
-            this.setupMouseEffects();
-            this.setupScrollEffects();
-            this.startAnimationLoop();
+        // Wait for Vanta.js to load
+        this.waitForVanta().then(() => {
+            this.initializeVanta();
+            this.setupResponsiveHandling();
+            this.setupPerformanceOptimizations();
+            this.setupClickEffects();
+        }).catch(error => {
+            console.warn('Vanta.js failed to load, falling back to simple background');
+            this.fallbackBackground();
         });
     }
 
-    // Load Vanta.js and Three.js libraries
-    async loadVantaLibraries() {
+    waitForVanta() {
         return new Promise((resolve, reject) => {
-            // Check if libraries are already loaded
-            if (window.VANTA && window.THREE) {
-                resolve();
-                return;
-            }
-
-            // Load Three.js first
-            const threeScript = document.createElement('script');
-            threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js';
-            threeScript.onload = () => {
-                // Then load Vanta.js BIRDS
-                const vantaScript = document.createElement('script');
-                vantaScript.src = 'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js';
-                vantaScript.onload = () => resolve();
-                vantaScript.onerror = () => reject(new Error('Failed to load Vanta.js'));
-                document.head.appendChild(vantaScript);
+            let attempts = 0;
+            const maxAttempts = 50; // 5 seconds max wait
+            
+            const checkVanta = () => {
+                if (typeof VANTA !== 'undefined' && VANTA.NET) {
+                    resolve();
+                } else if (attempts < maxAttempts) {
+                    attempts++;
+                    setTimeout(checkVanta, 100);
+                } else {
+                    reject(new Error('Vanta.js not loaded'));
+                }
             };
-            threeScript.onerror = () => reject(new Error('Failed to load Three.js'));
-            document.head.appendChild(threeScript);
+            
+            checkVanta();
         });
     }
 
-    // Initialize Vanta BIRDS background
-    initVantaBackground() {
-        // Skip Vanta.js for users who prefer reduced motion
-        if (window.DISABLE_VANTA || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            console.log('Vanta.js disabled for reduced motion preferences');
+    initializeVanta() {
+        const target = document.getElementById('vanta-bg');
+        if (!target) {
+            console.error('Vanta background target element not found');
             return;
         }
 
-        // Create background container if it doesn't exist
-        let vantaContainer = document.getElementById('vanta-background');
-        if (!vantaContainer) {
-            vantaContainer = document.createElement('div');
-            vantaContainer.id = 'vanta-background';
-            document.body.insertBefore(vantaContainer, document.body.firstChild);
-        }
-
-        // Mobile detection for performance optimization
-        const isMobile = window.innerWidth <= 768;
-        
-        // Initialize Vanta BIRDS effect
-        this.vantaEffect = window.VANTA.BIRDS({
-            el: vantaContainer,
-            mouseControls: !isMobile,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: window.innerHeight,
-            minWidth: window.innerWidth,
-            scale: isMobile ? 0.8 : 1.0,
-            scaleMobile: 0.6,
-            // Custom colors matching your theme
-            backgroundColor: 0x0a0a15,
-            color1: 0x00ff88,      // Primary green
-            color2: 0x4dabf7,      // Accent blue
-            colorMode: 'lerp',
-            birdSize: isMobile ? 0.8 : 1.2,
-            wingSpan: isMobile ? 15 : 25,
-            speedLimit: isMobile ? 3 : 5,
-            separation: isMobile ? 15 : 25,
-            alignment: isMobile ? 15 : 25,
-            cohesion: isMobile ? 15 : 25,
-            quantity: isMobile ? 2 : 4,
-            backgroundAlpha: 0.8
+        // Initialize Vanta NET effect
+        this.vantaEffect = VANTA.NET({
+            el: target,
+            ...this.config
         });
 
-        // Handle window resize
+        this.isInitialized = true;
+        console.log('Vanta.js NET background initialized');
+
+        // Add custom styling after initialization
+        this.customizeVantaStyles();
+    }
+
+    customizeVantaStyles() {
+        // Add custom CSS classes for enhanced styling
+        const vantaCanvas = document.querySelector('#vanta-bg canvas');
+        if (vantaCanvas) {
+            vantaCanvas.style.filter = 'brightness(0.9) contrast(1.1)';
+            vantaCanvas.style.transition = 'filter 0.3s ease';
+        }
+    }
+
+    setupResponsiveHandling() {
+        let resizeTimeout;
+        
         window.addEventListener('resize', () => {
-            if (this.vantaEffect) {
-                this.vantaEffect.resize();
-            }
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (this.vantaEffect && this.vantaEffect.resize) {
+                    this.vantaEffect.resize();
+                }
+                
+                // Adjust configuration for mobile
+                if (window.innerWidth <= 768) {
+                    this.updateConfig({
+                        points: 8,
+                        maxDistance: 20,
+                        spacing: 15,
+                        speed: 0.3
+                    });
+                } else {
+                    this.updateConfig({
+                        points: 12,
+                        maxDistance: 25,
+                        spacing: 20,
+                        speed: 0.5
+                    });
+                }
+            }, 250);
         });
     }
 
-    createFloatingElements() {
-        // Create container for floating elements
-        const container = document.createElement('div');
-        container.className = 'bg-floating-elements';
-        document.body.appendChild(container);
+    setupPerformanceOptimizations() {
+        // Pause animation when tab is not visible
+        document.addEventListener('visibilitychange', () => {
+            if (this.vantaEffect) {
+                if (document.hidden) {
+                    this.pauseAnimation();
+                } else {
+                    this.resumeAnimation();
+                }
+            }
+        });
 
-        // Reduce floating elements since Vanta provides main animation
-        const elementCount = window.innerWidth <= 768 ? 3 : 5;
-        for (let i = 0; i < elementCount; i++) {
-            const element = document.createElement('div');
-            element.className = 'floating-element';
-            
-            // Random properties
-            const size = Math.random() * 80 + 40; // 40-120px
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            const duration = Math.random() * 20 + 15; // 15-35s
-            const delay = Math.random() * 10;
+        // Reduce animation on battery-powered devices
+        if ('getBattery' in navigator) {
+            navigator.getBattery().then(battery => {
+                if (!battery.charging && battery.level < 0.2) {
+                    this.updateConfig({ speed: 0.2 });
+                }
+            });
+        }
 
-            element.style.cssText = `
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}%;
-                top: ${y}%;
-                animation-duration: ${duration}s;
-                animation-delay: -${delay}s;
-            `;
-
-            container.appendChild(element);
-            this.floatingElements.push({
-                element,
-                originalX: x,
-                originalY: y,
-                size
+        // Respect reduced motion preferences
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            this.updateConfig({ 
+                speed: 0.1,
+                mouseControls: false,
+                touchControls: false
             });
         }
     }
 
-    setupMouseEffects() {
-        document.addEventListener('mousemove', (e) => {
-            this.mouseX = e.clientX / window.innerWidth;
-            this.mouseY = e.clientY / window.innerHeight;
-            
-            // Create subtle parallax effect on floating elements
-            this.floatingElements.forEach((item, index) => {
-                const factor = (index + 1) * 0.02;
-                const offsetX = (this.mouseX - 0.5) * factor * 50;
-                const offsetY = (this.mouseY - 0.5) * factor * 50;
-                
-                item.element.style.transform = `
-                    translate(${offsetX}px, ${offsetY}px) 
-                    scale(${1 + factor * 0.5})
-                `;
-            });
-        });
-    }
-
-    setupScrollEffects() {
-        let ticking = false;
-        
-        document.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
-                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-                    const scrollPercent = scrollY / maxScroll;
-                    
-                    // Adjust background opacity based on scroll
-                    const beforeElement = document.querySelector('body::before');
-                    if (beforeElement) {
-                        document.body.style.setProperty('--scroll-opacity', 
-                            Math.max(0.3, 1 - scrollPercent * 0.5));
-                    }
-                    
-                    ticking = false;
-                });
-                ticking = true;
+    setupClickEffects() {
+        document.addEventListener('click', (e) => {
+            // Don't add effects on buttons or interactive elements
+            if (e.target.tagName !== 'BUTTON' && !e.target.closest('.btn')) {
+                this.createClickRipple(e.clientX, e.clientY);
             }
         });
     }
 
-    startAnimationLoop() {
-        const animate = () => {
-            // Add subtle breathing effect to background
-            const time = Date.now() * 0.001;
-            const breathe = Math.sin(time * 0.5) * 0.02 + 1;
-            
-            document.documentElement.style.setProperty('--breathe-scale', breathe);
-            
-            requestAnimationFrame(animate);
-        };
-        
-        animate();
-    }
-
-    // Method to add particle effect on click
-    createClickEffect(x, y) {
-        const particles = [];
+    createClickRipple(x, y) {
+        // Create multiple particles that shoot out in different directions
         const particleCount = 8;
+        const particles = [];
         
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
+            const angle = (i / particleCount) * Math.PI * 2;
+            const distance = 100 + Math.random() * 50;
+            const size = 4 + Math.random() * 6;
+            
             particle.style.cssText = `
                 position: fixed;
                 left: ${x}px;
                 top: ${y}px;
-                width: 4px;
-                height: 4px;
-                background: var(--primary-color);
+                width: ${size}px;
+                height: ${size}px;
+                background: #00ff88;
                 border-radius: 50%;
                 pointer-events: none;
                 z-index: 1000;
-                opacity: 1;
                 transform: translate(-50%, -50%);
+                opacity: 1;
+                box-shadow: 0 0 10px #00ff88;
             `;
             
             document.body.appendChild(particle);
+            particles.push(particle);
             
-            // Animate particle
-            const angle = (i / particleCount) * Math.PI * 2;
-            const velocity = Math.random() * 50 + 50;
-            const lifetime = 1000;
+            // Calculate end position
+            const endX = x + Math.cos(angle) * distance;
+            const endY = y + Math.sin(angle) * distance;
             
+            // Animate particle shooting out
             particle.animate([
                 {
-                    transform: `translate(-50%, -50%) translate(0, 0)`,
-                    opacity: 1
+                    transform: 'translate(-50%, -50%) scale(1)',
+                    opacity: 1,
+                    left: x + 'px',
+                    top: y + 'px'
                 },
                 {
-                    transform: `translate(-50%, -50%) translate(${Math.cos(angle) * velocity}px, ${Math.sin(angle) * velocity}px)`,
-                    opacity: 0
+                    transform: 'translate(-50%, -50%) scale(0)',
+                    opacity: 0,
+                    left: endX + 'px',
+                    top: endY + 'px'
                 }
             ], {
-                duration: lifetime,
+                duration: 800 + Math.random() * 400,
                 easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             }).onfinish = () => {
                 particle.remove();
             };
         }
+        
+        // Add central explosion effect
+        const explosion = document.createElement('div');
+        explosion.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 10px;
+            height: 10px;
+            border: 2px solid #00ff88;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1001;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+            box-shadow: 0 0 20px #00ff88;
+        `;
+        
+        document.body.appendChild(explosion);
+        
+        explosion.animate([
+            {
+                transform: 'translate(-50%, -50%) scale(0)',
+                opacity: 1
+            },
+            {
+                transform: 'translate(-50%, -50%) scale(3)',
+                opacity: 0
+            }
+        ], {
+            duration: 500,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        }).onfinish = () => {
+            explosion.remove();
+        };
+    }
+
+    updateConfig(newConfig) {
+        if (this.vantaEffect && this.vantaEffect.setOptions) {
+            this.vantaEffect.setOptions({
+                ...this.config,
+                ...newConfig
+            });
+            this.config = { ...this.config, ...newConfig };
+        }
+    }
+
+    pauseAnimation() {
+        if (this.vantaEffect && this.vantaEffect.renderer) {
+            this.vantaEffect.renderer.setAnimationLoop(null);
+        }
+    }
+
+    resumeAnimation() {
+        if (this.vantaEffect && this.vantaEffect.renderer) {
+            this.vantaEffect.renderer.setAnimationLoop(() => {
+                this.vantaEffect.render();
+            });
+        }
+    }
+
+    // Fallback for when Vanta.js fails to load
+    fallbackBackground() {
+        const target = document.getElementById('vanta-bg');
+        if (target) {
+            target.style.cssText = `
+                background: linear-gradient(135deg, #0a0a15 0%, #1a1a2e 50%, #0a0a15 100%);
+                opacity: 0.8;
+            `;
+        }
+    }
+
+    // Method to change theme colors dynamically
+    changeTheme(color) {
+        const colorMap = {
+            green: 0x00ff88,
+            blue: 0x4dabf7,
+            purple: 0x9775fa,
+            orange: 0xffa502,
+            red: 0xff4757
+        };
+        
+        const newColor = colorMap[color] || colorMap.green;
+        this.updateConfig({ color: newColor });
+    }
+
+    // Cleanup method
+    destroy() {
+        if (this.vantaEffect) {
+            this.vantaEffect.destroy();
+            this.vantaEffect = null;
+            this.isInitialized = false;
+        }
     }
 }
 
-// Initialize background effects when DOM is loaded
+// Initialize Vanta NET background when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    const bgEffects = new BackgroundEffects();
-    
-    // Add click effects
-    document.addEventListener('click', (e) => {
-        if (e.target.tagName !== 'BUTTON' && !e.target.closest('.btn')) {
-            bgEffects.createClickEffect(e.clientX, e.clientY);
-        }
-    });
-
-    // Page visibility API to pause/resume Vanta when tab is hidden
-    document.addEventListener('visibilitychange', () => {
-        if (bgEffects.vantaEffect) {
-            if (document.hidden) {
-                // Pause or reduce animation when tab is hidden
-                bgEffects.vantaEffect.setOptions({ quantity: 1 });
-            } else {
-                // Resume normal animation when tab is visible
-                const isMobile = window.innerWidth <= 768;
-                bgEffects.vantaEffect.setOptions({ quantity: isMobile ? 2 : 4 });
-            }
-        }
-    });
+    window.vantaNetBg = new VantaNetBackground();
 });
 
-// Performance optimization for reduced motion
-if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.style.setProperty('--animation-duration', '0s');
-    // Disable Vanta.js for users who prefer reduced motion
-    window.DISABLE_VANTA = true;
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+    if (window.vantaNetBg) {
+        window.vantaNetBg.destroy();
+    }
+});
+
+// Export for external use
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = VantaNetBackground;
 } 
