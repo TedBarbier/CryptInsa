@@ -86,6 +86,18 @@ def decrypt_lettre(frequence,seuil_frequence=None):
     
     return decode
 
+def decrypt_lettre_inverse(message,frequence):
+    frequence_lettres=freq.get_letter_frequencies(message)
+    min_diff=1000
+
+    for l,f in frequence_lettres.items():
+        if abs(frequence-f)<min_diff:
+            min_diff=abs(frequence-f)
+            decode=l
+    
+    return decode
+
+
 
 def create_key(message):
     message=cesar.cesar_encrypt(message.lower(),3)

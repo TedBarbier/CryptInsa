@@ -108,22 +108,26 @@ def main0(message):
     return traduction
 
 def etape1(message):
+    print("start 1")
     traduction = {}
     _, traduction = decrypt.decrypt_message(message)
     _,traduction_sur = decrypt.decrypt_message(message,10)
-    espace_chiffre=[k for k,v in traduction.items() if v==" "][0]
-    message_split=message.split(espace_chiffre)
+    espace_chiffre=decrypt.decrypt_lettre_inverse(message, 20)
+    message_split=message.split(espace_chiffre[0])
     espace=message[len(message_split[0])]
     ponctuation=mapping.detecter_ponctuation(message,espace)
     traduction[espace]=" "
-    traduction[ponctuation['point']]="."
-    traduction[ponctuation['virgule']]=","
     traduction_sur[espace]=" "
-    traduction_sur[ponctuation['point']]="."
-    traduction_sur[ponctuation['virgule']]=","
+    if ponctuation['point'] is not None:
+        traduction[ponctuation['point']]="."
+        traduction_sur[ponctuation['point']]="."
+    if ponctuation['virgule'] is not None:
+        traduction[ponctuation['virgule']]=","
+        traduction_sur[ponctuation['virgule']]=","
     return traduction, traduction_sur, message_split, ponctuation
 
 def etape2(traduction,traduction_sur,message_split,ponctuation):
+    print("start 2")
     for j in range(2):
         for i in range(len(message_split)):
             mot= message_split[i%len(message_split)]
@@ -132,6 +136,7 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
             for char in keys_sur:
                 if char in mot:
                     lettre=char
+            print(message_split)
             if keys_sur != []:
                 if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
                     mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire)
@@ -143,6 +148,7 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
                     # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot[:-1],chemin_dictionnaire)
                     # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
+            
             elif decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
                 mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot, chemin_dictionnaire)
             else:
@@ -158,6 +164,11 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
                         traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
     return traduction
 
+def main_test(message):
+    traduction,traduction_sur,message_split,ponctuation = etape1(message)
+    trad_finale=etape2(traduction,traduction_sur,message_split,ponctuation)
+    return trad_finale
+
 # m_1="le chiffre des francs macons est une substitution simple, ou chaque lettre de l alphabet est remplacee par un symbole geometrique. ce symbole pourrait en principe etre arbitraire ce qui caracterise le chiffre des francs macons et ses variantes c est l utilisation d un moyen mnemotechnique geometrique pour attacher a chaque lettre son symbole."
 # m_autre="elle ne trouve de reconfort que dans les lettres ecrites a son frere, porte disparu, qu elle glisse sous sa garde robe et qui disparaissent mysterieusement. lorsqu elle recoit des reponses anonymes, elle y repond, sans savoir que leur auteur n est autre que son plus grand rival. alors qu un lien indefectible se noue entre eux, iris accepte une mission au front en tant que correspondante. dans un pays ou les humains ne sont que les pions de puissances divines, iris et roman se font la promesse de continuer a s ecrire. mais, confrontes aux horreurs de la guerre, leur avenir sera de plus en plus incertain."
 
@@ -170,3 +181,17 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
 # code=decrypt.message_from_key(m2,traductions)
 # print("score:", decrypt.comparaison(m_autre,code))
 # print(code)
+
+m=[
+    "le chiffrement ou cryptage est un procede de cryptographie grace auquel on souhaite rendre la comprehension d un document impossible a toute personne qui n a pas la cle de chiffrement. ce principe est generalement lie au principe d acces conditionnel.",
+    "la cryptographie est une des disciplines de la cryptologie s attachant a proteger des messages assurant confidentialite, authenticite et integrite en s aidant souvent de secrets ou cles. elle se distingue de la steganographie qui fait passer inapercu un message dans un autre message alors que la cryptographie rend un message supposement inintelligible a autre que qui de droit.",
+    "un ingenieur est un professionnel traitant de problemes complexes ingenierie, notamment en concevant des produits, des processus si necessaire avec des moyens novateurs, et dirigeant la realisation et la mise en oeuvre de l ensemble produits, systemes ou services. l ingenieur cree, concoit, innove dans plusieurs domaines tout en prenant en compte les facteurs sociaux, environnementaux et economiques propres au developpement durable. il lui faut pour cela, non seulement des connaissances techniques, mais aussi economiques, sociales, environnementales et humaines reposant sur une solide culture scientifique et generale.",
+    "le groupe est constitue de sept institut national des sciences appliquees. six ecoles d ingenieurs partenaires composent egalement le groupe. les membres du groupe sont des etablissements publics français de recherche et d enseignement superieur."
+]
+
+for message in m:
+    print("message", message)
+    m2=cesar.cesar_encrypt(message,3)
+    print("message cesar :",m2)
+    res=main_test(m2)
+    print(decrypt.message_from_key(m2,res))
