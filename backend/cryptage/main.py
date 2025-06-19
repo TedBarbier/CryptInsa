@@ -1,11 +1,10 @@
-import Crypto.decrypt as decrypt
-import Crypto.dict_search as dict_search
-import Crypto.mapping as mapping
+import cryptage.decrypt as decrypt
+import cryptage.mapping as mapping
 import json
 import os
 
-chemin_dictionnaire = "Crypto/dict.txt"
-json_file = "donnees.json"
+chemin_dictionnaire = "cryptage/dict.txt"
+json_file = "cryptage/donnees.json"
 
 def save_to_json(mot_chiffre, mot_traduit, dictionnaire):
     data = {
@@ -33,7 +32,9 @@ def etape1(message):
     _, traduction = decrypt.decrypt_message(message)
     _,traduction_sur = decrypt.decrypt_message(message,10)
     espace_chiffre=decrypt.decrypt_lettre_inverse(message, 20)
+    print("message",message)
     message_split=message.split(espace_chiffre[0])
+    print("message split",message_split)
     espace=message[len(message_split[0])]
     ponctuation=mapping.detecter_ponctuation(message,espace)
     traduction[espace]=" "
@@ -60,23 +61,18 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
             for char in keys_sur:
                 if char in mot:
                     lettre=char
-            print(message_split)
             if keys_sur != []:
                 if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
-                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire)
-                    # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot,chemin_dictionnaire)
-                    # print(j, i, mots_correspondants, mots_correspondants2)
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot)
                     taille=len(mots_correspondants)
                 else:
-                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire)
-                    # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot[:-1],chemin_dictionnaire)
-                    # print(j, i, mots_correspondants, mots_correspondants2)
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1])
                     taille=len(mots_correspondants)
             
             elif decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
-                mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot, chemin_dictionnaire)
+                mots_correspondants, taille = mapping.trouver_mots_correspondants(mot)
             else:
-                mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot[:-1], chemin_dictionnaire)
+                mots_correspondants, taille = mapping.trouver_mots_correspondants(mot[:-1])
             traduction_sur_ref = traduction_sur.copy()
             if taille == 1:
                 mot_traduit = mots_correspondants[0]

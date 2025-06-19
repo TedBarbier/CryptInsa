@@ -1,6 +1,68 @@
 from collections import Counter, defaultdict
-import Crypto.dict_search as dict_search
 import unicodedata
+
+def generer_pattern(mot):
+    mapping = {}
+    compteur = 1
+    pattern = []
+    for lettre in mot:
+        if lettre not in mapping:
+            mapping[lettre] = compteur
+            compteur += 1
+        pattern.append(str(mapping[lettre]))
+    return "".join(pattern)
+
+def charger_dictionnaire_complet(chemin_dict="cryptage/dict.txt"):
+    """
+    Construit les 3 dictionnaires :
+    - par longueur
+    - par pattern isomorphique
+    - par lettres doublées
+    """
+    DICO_LONGUEUR = defaultdict(set)
+    DICO_PATTERN = defaultdict(set)
+    DICO_DOUBLE = defaultdict(set)
+
+    with open(chemin_dict, "r", encoding="utf-8") as f:
+        mots = f.read().split()
+
+    for mot in mots:
+        mot = mot.lower()
+        # DICO_LONGUEUR
+        DICO_LONGUEUR[len(mot)].add(mot)
+
+        # DICO_PATTERN
+        DICO_PATTERN[generer_pattern(mot)].add(mot)
+
+        # DICO_DOUBLE
+        lettres_vues = set()
+        for lettre in mot:
+            if mot.count(lettre) > 1 and lettre not in lettres_vues:
+                DICO_DOUBLE[lettre].add(mot)
+                lettres_vues.add(lettre)
+
+    return dict(DICO_LONGUEUR), dict(DICO_PATTERN), dict(DICO_DOUBLE)
+
+DICO_LONGUEUR, DICO_PATTERN, DICO_DOUBLE = charger_dictionnaire_complet() 
+
+
+def enlever_accents(texte):
+    texte_normalise = unicodedata.normalize('NFD', texte)
+    texte_sans_accents = ''.join(c for c in texte_normalise if unicodedata.category(c) != 'Mn')
+    return texte_sans_accents
+
+
+
+
+def trouver_mots_correspondants(mot_chiffre):
+    mot_chiffre_sans_accents = enlever_accents(mot_chiffre)
+    pattern_recherche = generer_pattern(mot_chiffre_sans_accents)
+    longueur_recherche = len(mot_chiffre_sans_accents)
+    mots_correspondants = []
+    #print("test trouver mot correspondant: ", mot_chiffre_sans_accents, pattern_recherche, longueur_recherche)
+    mots_correspondants=(list(DICO_PATTERN.get(pattern_recherche, [])))
+
+    return mots_correspondants, len(mots_correspondants)
 
 
 # Fréquence des lettres en français (environ)
@@ -159,13 +221,13 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
 
     return mot_final, message_original
         
-def d(mot, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE) :
+def d(mot) :
     distance_min = len(mot)
-    mot_sa = dict_search.enlever_accents(mot)
-    mot_correspondants = dict_search.trouver_mots_correspondants(mot_sa, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE)[0]
+    mot_sa = enlever_accents(mot)
+    mot_correspondants = trouver_mots_correspondants(mot_sa)[0]
     
     for mot_p in mot_correspondants:
-        mot_p_sa = dict_search.enlever_accents(mot_p)
+        mot_p_sa = enlever_accents(mot_p)
         distance = sum(1 for a, b in zip(mot_sa, mot_p_sa) if a != b)
         distance_min = min(distance_min, distance)
     
@@ -174,11 +236,11 @@ def d(mot, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE) :
 def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
     mot_choisi = None
     distance_min = len(message_chiffre)
-    message_sa = dict_search.enlever_accents(message_chiffre)
+    message_sa = enlever_accents(message_chiffre)
     message_dechiffre = list(message_sa)
 
     for mot_p in imapping:
-        mot_p_sa = dict_search.enlever_accents(mot_p)
+        mot_p_sa = enlever_accents(mot_p)
         for j in range(len(mot_p_sa)) :
             for k in range(len(message_chiffre)) :
                 if mot_long[j] == message_chiffre[k] :
@@ -195,11 +257,11 @@ def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
         
 
 
-def initial_mapping(lettre_freq, lettre_change, mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE):
+def initial_mapping(lettre_freq, lettre_change, mot_chiffre):
     L= []
     potentials = []
     mot_liste = list(mot_chiffre)
-    candidat = dict_search.trouver_mots_correspondants(mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE)
+    candidat = trouver_mots_correspondants(mot_chiffre)
     
     for i in range(len(mot_chiffre)):
         if mot_chiffre[i] == lettre_change:
@@ -214,11 +276,11 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, DICO_PATTERN, DICO_
 
 
 #pas encore fini 
-def mapping_with_list(keys_sure,traduction,mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE):
+def mapping_with_list(keys_sure,traduction,mot_chiffre):
     L= []
     D=[]
     potentials = []
-    candidat = dict_search.trouver_mots_correspondants(mot_chiffre, DICO_PATTERN, DICO_LONGUEUR, DICO_DOUBLE)
+    candidat = trouver_mots_correspondants(mot_chiffre)
 
     for i in range(len(mot_chiffre)):
         for lettre in keys_sure:
