@@ -1,6 +1,32 @@
 {{!-- CSS spécifique pour l'analyse de fréquences --}}
 <link rel="stylesheet" href="/css/substitution_dechiffre.css">
 
+<!-- Overlay de particules de loading en arrière-plan -->
+<div class="loading-particles-overlay" id="loadingParticlesOverlay">
+    <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+</div>
+
 <div class="mapping-container">
     <section class="mapping-section">
         <h2 class="section-title">
@@ -19,7 +45,44 @@
                     </button>
                 </div>
                 
-                <div class="alphabet-mapping">
+                <div class="alphabet-mapping" id="alphabetMapping">
+                    <!-- Éléments d'animation électrique style voltage button -->
+                    <svg class="voltage-border" viewBox="0 0 400 200" preserveAspectRatio="none">
+                        <defs>
+                            <filter id="glow">
+                                <feGaussianBlur class="blur" result="coloredBlur" stdDeviation="2"></feGaussianBlur>
+                                <feTurbulence type="fractalNoise" baseFrequency="0.075" numOctaves="0.3" result="turbulence"></feTurbulence>
+                                <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="8" xChannelSelector="R" yChannelSelector="G" result="displace"></feDisplacementMap>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"></feMergeNode>
+                                    <feMergeNode in="coloredBlur"></feMergeNode>
+                                    <feMergeNode in="coloredBlur"></feMergeNode>
+                                    <feMergeNode in="displace"></feMergeNode>
+                                    <feMergeNode in="SourceGraphic"></feMergeNode>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <!-- Bordure électrique supérieure -->
+                        <path class="voltage line-1" d="M10,10 Q30,5 50,12 T90,8 Q130,15 170,9 T210,11 Q250,6 290,13 T330,7 Q350,14 370,10 T390,12" fill="transparent" stroke="#f6de8d"/>
+                        
+                        <!-- Bordure électrique droite -->
+                        <path class="voltage line-2" d="M390,15 Q395,35 392,55 T396,95 Q389,135 393,175 T390,190" fill="transparent" stroke="#6bfeff"/>
+                        
+                        <!-- Bordure électrique inférieure -->
+                        <path class="voltage line-3" d="M390,190 Q370,195 350,188 T310,192 Q270,185 230,191 T190,189 Q150,194 110,187 T70,193 Q50,186 30,190 T10,188" fill="transparent" stroke="#f6de8d"/>
+                        
+                        <!-- Bordure électrique gauche -->
+                        <path class="voltage line-4" d="M10,185 Q5,165 8,145 T4,105 Q11,65 7,25 T10,10" fill="transparent" stroke="#6bfeff"/>
+                    </svg>
+                    
+                    <!-- Points d'énergie volants -->
+                    <div class="energy-dots" id="energyDots">
+                        <div class="energy-dot energy-dot-1"></div>
+                        <div class="energy-dot energy-dot-2"></div>
+                        <div class="energy-dot energy-dot-3"></div>
+                        <div class="energy-dot energy-dot-4"></div>
+                    </div>
+                    
                     <div class="alphabet-row french-alphabet top" id="cipherAlphabet">
                         <!-- L'alphabet chiffré sera généré ici -->
                     </div>

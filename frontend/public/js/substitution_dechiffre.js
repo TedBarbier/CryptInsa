@@ -18,6 +18,12 @@ let currentMapping = {};
 let analyzedText = '';
 let is_finished = false;
 
+// Variables pour l'animation d'électricité
+let electricityActive = false;
+
+// Variables pour l'animation de particules de loading
+let loadingParticlesActive = false;
+
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
@@ -52,6 +58,12 @@ async function play() {
     playButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyse...';
     playButton.disabled = true;
     stopButton.disabled = false;
+    
+    // Démarrer l'animation d'électricité
+    startElectricityAnimation();
+    
+    // Démarrer l'animation de particules de loading
+    startLoadingParticles();
     
     // Réinitialiser l'état
     is_finished = false;
@@ -100,6 +112,12 @@ async function play() {
 //==STOP==//
 function stop() {
     is_finished = true;
+    
+    // Arrêter l'animation d'électricité
+    stopElectricityAnimation();
+    
+    // Arrêter l'animation de particules de loading
+    stopLoadingParticles();
     
     // Arrêter l'intervalle de mise à jour
     if (attackInterval) {
@@ -398,6 +416,62 @@ function applyMatch(cipherLetter, clearLetter) {
     currentMapping[cipherLetter] = clearLetter;
     updateMappingDisplay();
     updateLiveDecryption();
+}
+
+// ===== ANIMATION D'ÉLECTRICITÉ ===== //
+function startElectricityAnimation() {
+    electricityActive = true;
+    const alphabetMapping = document.getElementById('alphabetMapping');
+    const energyDots = document.getElementById('energyDots');
+    
+    if (alphabetMapping) {
+        alphabetMapping.classList.add('electricity-active');
+    }
+    
+    if (energyDots) {
+        energyDots.classList.add('active');
+    }
+    
+    console.log('Animation d\'électricité démarrée');
+}
+
+function stopElectricityAnimation() {
+    electricityActive = false;
+    const alphabetMapping = document.getElementById('alphabetMapping');
+    const energyDots = document.getElementById('energyDots');
+    
+    if (alphabetMapping) {
+        alphabetMapping.classList.remove('electricity-active');
+    }
+    
+    if (energyDots) {
+        energyDots.classList.remove('active');
+    }
+    
+    console.log('Animation d\'électricité arrêtée');
+}
+
+// ===== ANIMATION DE PARTICULES DE LOADING ===== //
+function startLoadingParticles() {
+    loadingParticlesActive = true;
+    const loadingOverlay = document.getElementById('loadingParticlesOverlay');
+    
+    if (loadingOverlay) {
+        loadingOverlay.classList.add('active');
+    }
+    
+    console.log('Animation de particules de loading démarrée');
+}
+
+function stopLoadingParticles() {
+    loadingParticlesActive = false;
+    const loadingOverlay = document.getElementById('loadingParticlesOverlay');
+    
+    if (loadingOverlay) {
+        loadingOverlay.classList.remove('active');
+    }
+    
+    console.log('Animation de particules de loading arrêtée');
 }
 
 function clearMapping() {

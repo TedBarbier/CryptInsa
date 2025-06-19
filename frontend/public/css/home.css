@@ -123,6 +123,8 @@
 .intro-section {
     padding: var(--spacing-xxl) 0;
     background: rgba(26, 26, 46, 0.3);
+    border-radius: 100px;
+    border: 1px solid var(--border-color);
 }
 
 .intro-content {
@@ -183,6 +185,8 @@
 /* ===== CTA SECTION ===== */
 .cta-section {
     background: var(--bg-gradient);
+    border-radius: 100px;
+    border: 1px solid var(--border-color);
     padding: var(--spacing-xxl) 0;
     text-align: center;
 }

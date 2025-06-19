@@ -1,26 +1,25 @@
 // JavaScript pour le chiffrement par substitution - Table horizontale
-const EXAMPLE_TEXT =[ "Tant  qu il  existera,  par  le  fait  des  lois  et  des " +
-"mœurs, une damnation sociale créant artificiellement, " +
-"en pleine civilisation, des enfers, et compliquant " +
-"d une fatalité humaine la destinée qui est divine ; tant " +
+const EXAMPLE_TEXT =[ "Tant  qu il  existera par le fait des lois et des " +
+"mœurs une damnation sociale créant artificiellement en pleine civilisation des enfers et compliquant " +
+"d une fatalité humaine la destinée qui est divine tant " +
 "que  les  trois  problèmes  du  siècle,  la  dégradation  de  " +
 "l homme par le prolétariat, la déchéance de la femme " +
 "par  la  faim,  l atrophie  de  l enfant  par  la  nuit,  ne " +
-"seront pas résolus ; tant que, dans de certaines " +
-"régions,  l asphyxie sociale sera possible ; en d autres " +
+"seront pas résolus tant que, dans de certaines " +
+"régions,  l asphyxie sociale sera possible en d autres " +
 "termes, et à un point de vue plus étendu encore, tant " +
 "qu il y aura sur la terre ignorance et misère, des livres " +
-"de la nature de celui ci pourront ne pas être inutiles. ", 
+"de la nature de celui ci pourront ne pas être inutiles", 
 
 "M. l eveque, pour avoir converti son carrosse en " +
 "aumones,  n en faisait pas moins ses tournées.  C est " +
 "un  diocèse  fatigant  que  celui  de  Digne.  Il  a  fort  peu " +
-"de  plaines,  beaucoup  de  montagnes,  presque  pas  de routes,  on  l a  vu  tout  à  l heure,  trente-deux  cures,  quarante  et  un  vicariats  et  deux  cent  quatre-vingt- " +
+"de  plaines,  beaucoup  de  montagnes,  presque  pas  de routes,  on  l a  vu  tout  aa  l heure,  trente deux  cures,  quarante  et  un  vicariats  et  deux  cent  quatre vingt" +
 "cinq succursales. Visiter tout cela, c est une affaire. M. " +
-"l eveque en venait à bout. Il allait à pied quand c est " +
+"l eveque en venait a bout. Il allait a pied quand c est " +
 "dans le voisinage, en carriole dans la plaine, en cacolet  dans  la  montagne.  Les  deux  vieilles  femmes " +
 "l accompagnaient. Quand le trajet  etait trop penible " +
-"pour elles, il allait seul. Un jour il arriva a Senez, qui est une ancienne ville " +
+"pour elles, il allait seul. Un jour il arriva a Senez qui est une ancienne ville " +
 "episcopale, monte sur un ane. Sa bourse, fort a sec " +
 "dans  ce  moment, ne lui avait pas permis d autre " +
 "equipage. Le  maire  de  la  ville  vint  le  recevoir  a  la " +
@@ -36,7 +35,7 @@ const EXAMPLE_TEXT =[ "Tant  qu il  existera,  par  le  fait  des  lois  et  des
 "pretchait moins qu il ne causait. Il n allait jamais " +
 "chercher bien loin ses raisonnements et ses modeles. " +
 "Aux habitants d un pays il cite l exemple du pays " +
-"voisin. Dans les cantons où on etait dur pour les " +
+"voisin. Dans les cantons ou on etait dur pour les " +
 "necessiteux, il disait : Voyez les gens de Briancon. " +
 "Ils ont donne aux indigents, aux veuves et aux " +
 "orphelins le droit de faire faucher leurs prairies trois  " +
