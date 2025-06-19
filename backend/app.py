@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS # type: ignore
 from collections import Counter
 import string
-import Crypto.frequences_lettres as freq
 from Crypto.cesar import *
 from Crypto.vigenere import *
 import json
@@ -79,21 +78,21 @@ def route_update_attack():
             return data
         except Exception as e:
             return {"error": str(e)}
-    data = request.get_json()
-    
-    global analyse_started
-    global storedcipher
-    storedcipher = data.get('cipherText', '').lower().replace('\n', ' ')
-    if not analyse_started:
-        analyse_started = True
-        # Démarrer l'analyse dans un thread séparé
-        thread = threading.Thread(target=call_substitution_attack)
-        thread.daemon = True  # Permet de fermer le thread lorsque l'application se ferme
-        thread.start()
-         
-        return jsonify({"message": "Analyse started"})
     data = read_donnees_json()
     return jsonify(data)
-
+@app.route('/start_attack', methods=['POST'])
+def start_attack():
+    global analyse_started, storedcipher
+    data = request.get_json()
+    if not analyse_started:
+        analyse_started = True
+        storedcipher = data.get('cipher', '')
+        # Démarrer l'attaque dans un thread séparé
+        thread = threading.Thread(target=call_substitution_attack)
+        thread.daemon = True
+        thread.start()
+        return jsonify({"status": "Attack started"})
+    else:
+        return jsonify({"status": "Attack already in progress"}), 400
 if __name__ == '__main__':
     app.run(debug=True)
