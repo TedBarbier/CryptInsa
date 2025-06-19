@@ -77,7 +77,7 @@ def call_substitution_attack():
 def route_update_attack():
     def read_donnees_json():
         try:
-            with open('donnees.json', 'r', encoding='utf-8') as f:
+            with open('cryptage/donnees.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
             return data
         except Exception as e:

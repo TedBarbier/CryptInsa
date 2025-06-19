@@ -451,8 +451,12 @@ function setupActionButtons() {
             const inputText = document.getElementById('inputText');
             localStorage.setItem('plaintext', inputText.value);
             localStorage.setItem('ciphertext', outputText.value);
+            if (inputText.value.length > 0) {
             //Rediriger vers la page de déchiffrement
             window.location.href = '/substitution_attaque';
+            }else{
+                alert('Veuillez entrer un texte à déchiffrer');
+            }
         });
     }
 }

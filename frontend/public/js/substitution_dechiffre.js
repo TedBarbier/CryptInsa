@@ -17,6 +17,11 @@ let cipherFrequencies = {};
 let currentMapping = {};
 let analyzedText = '';
 let is_finished = false;
+let motChiffre = '';
+let motTraduit = '';
+let dataChiffre = [];
+let currentDecryptedText = '';
+let currentIndexData = 0;
 
 // Variables pour l'animation d'électricité
 let electricityActive = false;
@@ -27,7 +32,6 @@ let loadingParticlesActive = false;
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
-    loadMappingFromStorage();
     loadCipherTextFromStorage();
     loadOriginalTexts();
 });
@@ -35,7 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function setupEventListeners() {
     document.getElementById('copyResult').addEventListener('click', copyResult);
     document.getElementById('play').addEventListener('click', play);
-    document.getElementById('stop').addEventListener('click', stop);
+    document.getElementById('nextWord').addEventListener('click', nextWord);
+    document.getElementById('previousWord').addEventListener('click', previousWord);
 }
 
 //==PLAY==//
@@ -73,34 +78,25 @@ async function play() {
         await window.updateAttack();
         
         // Démarrer les mises à jour périodiques (toutes les 3 secondes)
-        attackInterval = setInterval(async () => {
             if (is_finished) {
                 clearInterval(attackInterval);
                 return;
             }
             
             try {
-                const data = await window.updateAttack();
-                console.log('Attack data received:', data);
-                
-                if (data && data.dictionnaire) {
-                    currentMapping = data.dictionnaire;
-                    console.log('Mapping updated:', data.dictionnaire);
-                    
-
-                    
-                    // Mettre à jour l'affichage
-                    updateMappingDisplay();
-                    applyDecryption();
-                    
-                    // Sauvegarder le mapping
-                    localStorage.setItem('mapping', JSON.stringify(currentMapping));
-                }
+                dataChiffre = await window.updateAttack();
+                console.log('Attack data received:', dataChiffre);
+                motChiffre = dataChiffre[currentIndexData].mot_chiffre;
+                motTraduit = dataChiffre[currentIndexData].mot_traduit;
+                currentMapping = dataChiffre[currentIndexData].dictionnaire;
+                document.getElementById('motChiffreText').value = motChiffre;
+                document.getElementById('motTraduitText').value = motTraduit;
+                updateMappingDisplay();
+                applyDecryption();
             } catch (error) {
                 console.error('Erreur lors de la mise à jour:', error);
                 showNotification('Erreur lors de l\'analyse', 'error');
             }
-        }, 3000); // Mise à jour toutes les 3 secondes
         
     } catch (error) {
         console.error('Erreur lors du démarrage de l\'attaque:', error);
@@ -109,31 +105,48 @@ async function play() {
     }
 }
 
-//==STOP==//
-function stop() {
-    is_finished = true;
-    
-    // Arrêter l'animation d'électricité
-    stopElectricityAnimation();
-    
-    // Arrêter l'animation de particules de loading
-    stopLoadingParticles();
-    
-    // Arrêter l'intervalle de mise à jour
-    if (attackInterval) {
-        clearInterval(attackInterval);
-        attackInterval = null;
+
+//==NEXT WORD==//
+function nextWord() {
+    currentIndexData++;
+    if (currentIndexData >= dataChiffre.length) {
+        currentIndexData = 0;
     }
-    
-    // Remettre l'interface en état normal
-    const playButton = document.getElementById('play');
-    const stopButton = document.getElementById('stop');
-    
-    playButton.disabled = false;
-    playButton.innerHTML = '<i class="fas fa-play"></i> Play';
-    stopButton.disabled = true;
-    
-    console.log('Attack stopped');
+    motChiffre = dataChiffre[currentIndexData].mot_chiffre;
+    motTraduit = dataChiffre[currentIndexData].mot_traduit;
+    currentMapping = dataChiffre[currentIndexData].dictionnaire;
+    document.getElementById('motChiffreText').value = motChiffre;
+    document.getElementById('motTraduitText').value = motTraduit;
+    updateMappingDisplay();
+    applyDecryption();
+}
+
+//==PREVIOUS WORD==//
+function previousWord() {
+    currentIndexData--;
+    if (currentIndexData < 0) {
+        currentIndexData = dataChiffre.length - 1;
+    }
+    motChiffre = dataChiffre[currentIndexData].mot_chiffre;
+    motTraduit = dataChiffre[currentIndexData].mot_traduit;
+    currentMapping = dataChiffre[currentIndexData].dictionnaire;
+    document.getElementById('motChiffreText').value = motChiffre;
+    document.getElementById('motTraduitText').value = motTraduit;
+    updateMappingDisplay();
+    applyDecryption();
+}
+//--Comparaison de 2 dictionnaires--//
+function compare() {
+    const previousMapping = dataChiffre[currentIndexData - 1].dictionnaire;
+    const currentMapping = dataChiffre[currentIndexData].dictionnaire;
+    const differenceMapping = {};
+    for (const key in previousMapping) {
+        if (previousMapping[key] !== currentMapping[key]) {
+            differenceMapping[key] = currentMapping[key];
+        }
+    }
+    console.log(differenceMapping);
+    return differenceMapping;
 }
 
 
@@ -217,61 +230,49 @@ function loadMappingFromStorage() {
 }
 
 function updateMappingDisplay() {
-    updateCompleteAlphabetDisplay();
-}
+    // Alphabet chiffré (ligne du haut)
+    const cipherContainer = document.getElementById('cipherAlphabet');
+    if (cipherContainer) {
+        cipherContainer.innerHTML = '';
+        ALPHABET_DISPLAY.forEach(letter => {
+            const letterBox = document.createElement('div');
+            letterBox.className = 'alphabet-letter cipher';
+            letterBox.textContent = letter.toUpperCase();
+            cipherContainer.appendChild(letterBox);
+        });
+    }
 
-// Fonction pour afficher l'alphabet complet avec le mapping
-function updateCompleteAlphabetDisplay() {
-    updateCipherAlphabetRow();
-    updateArrowsRow();
-    updateClearAlphabetRow();
-}
+    // Flèches
+    const arrowsContainer = document.getElementById('arrowsRow');
+    if (arrowsContainer) {
+        arrowsContainer.innerHTML = '';
+        ALPHABET_DISPLAY.forEach(() => {
+            const arrow = document.createElement('div');
+            arrow.className = 'arrow';
+            arrow.textContent = '↓';
+            arrowsContainer.appendChild(arrow);
+        });
+    }
 
-function updateCipherAlphabetRow() {
-    const container = document.getElementById('cipherAlphabet');
-    container.innerHTML = '';
-    
-    ALPHABET_DISPLAY.forEach(letter => {
-        const letterBox = document.createElement('div');
-        letterBox.className = 'alphabet-letter cipher';
-        letterBox.textContent = letter.toUpperCase();
-        letterBox.setAttribute('data-letter', letter);
-        container.appendChild(letterBox);
-    });
-}
-
-function updateArrowsRow() {
-    const container = document.getElementById('arrowsRow');
-    container.innerHTML = '';
-    
-    ALPHABET_DISPLAY.forEach(() => {
-        const arrow = document.createElement('div');
-        arrow.className = 'arrow';
-        arrow.textContent = '↓';
-        container.appendChild(arrow);
-    });
-}
-
-function updateClearAlphabetRow() {
-    const container = document.getElementById('clearAlphabet');
-    container.innerHTML = '';
-    
-    ALPHABET_DISPLAY.forEach(letter => {
-        const letterBox = document.createElement('div');
-        letterBox.className = 'alphabet-letter';
-        
-        // Vérifier s'il y a une correspondance dans le mapping
-        if (currentMapping[letter]) {
-            letterBox.textContent = currentMapping[letter].toUpperCase();
-            letterBox.classList.add('clear');
+    // Alphabet clair (ligne du bas)
+    const clearContainer = document.getElementById('clearAlphabet');
+    if (clearContainer) {
+        clearContainer.innerHTML = '';
+        ALPHABET_DISPLAY.forEach(letter => {
+            const letterBox = document.createElement('div');
+            letterBox.className = 'alphabet-letter';
+            
+            if (currentMapping[letter] ) {
+                letterBox.textContent = currentMapping[letter].toUpperCase();
+                letterBox.classList.add('clear');
             } else {
-            letterBox.textContent = '?';
-            letterBox.classList.add('empty');
+                letterBox.textContent = '?';
+                letterBox.classList.add('empty');
             }
-        
-        letterBox.setAttribute('data-cipher', letter);
-        container.appendChild(letterBox);
-    });
+            
+            clearContainer.appendChild(letterBox);
+        });
+    }
 }
 
 
@@ -280,28 +281,15 @@ function updateClearAlphabetRow() {
 
 // ===== DÉCHIFFREMENT ===== //
 function applyDecryption() {
-    const originalText = localStorage.getItem('cipherText') || '';
+    const cipherText = localStorage.getItem('cipherText') || '';
     
-    if (!originalText) {
-        showNotification('Aucun texte à déchiffrer', 'error');
-        return;
-    }
-    
-    if (Object.keys(currentMapping).length === 0) {
-        showNotification('Aucune correspondance définie', 'error');
-        return;
-    }
-    
-    const decryptedText = decryptText(originalText, currentMapping);
-    
-    // Comparer avec le texte en clair original si disponible
-    const originalPlainText = localStorage.getItem('plaintext');
-    if (originalPlainText) {
-        const comparedText = compareTexts(decryptedText, originalPlainText);
-        displayComparedText(comparedText);
-    } else {
-    document.getElementById('decryptedText').value = decryptedText;
-    }
+
+    const currentDecryptedText = decryptText(cipherText, currentMapping);
+    console.log(currentDecryptedText);
+    const previousDecryptedText = decryptText(cipherText, currentMapping);
+    console.log(previousDecryptedText);
+    const comparedText = compareTexts(currentDecryptedText, previousDecryptedText);
+    displayComparedText(comparedText);
     
     showNotification('Déchiffrement appliqué', 'success');
 }
@@ -418,37 +406,43 @@ function applyMatch(cipherLetter, clearLetter) {
     updateLiveDecryption();
 }
 
-// ===== ANIMATION D'ÉLECTRICITÉ ===== //
+// ===== ANIMATION D'ÉLECTRICITÉ (PARTICULES SEULEMENT) ===== //
 function startElectricityAnimation() {
     electricityActive = true;
-    const alphabetMapping = document.getElementById('alphabetMapping');
+    // Ne plus activer les bordures électriques de alphabetMapping
+    // const alphabetMapping = document.getElementById('alphabetMapping');
     const energyDots = document.getElementById('energyDots');
     
-    if (alphabetMapping) {
-        alphabetMapping.classList.add('electricity-active');
-    }
+    // Bordures électriques désactivées
+    // if (alphabetMapping) {
+    //     alphabetMapping.classList.add('electricity-active');
+    // }
     
+    // Garder seulement les particules d'énergie
     if (energyDots) {
         energyDots.classList.add('active');
     }
     
-    console.log('Animation d\'électricité démarrée');
+    console.log('Animation de particules d\'énergie démarrée (bordures désactivées)');
 }
 
 function stopElectricityAnimation() {
     electricityActive = false;
-    const alphabetMapping = document.getElementById('alphabetMapping');
+    // Ne plus désactiver les bordures électriques de alphabetMapping
+    // const alphabetMapping = document.getElementById('alphabetMapping');
     const energyDots = document.getElementById('energyDots');
     
-    if (alphabetMapping) {
-        alphabetMapping.classList.remove('electricity-active');
-    }
+    // Bordures électriques désactivées
+    // if (alphabetMapping) {
+    //     alphabetMapping.classList.remove('electricity-active');
+    // }
     
+    // Arrêter seulement les particules d'énergie
     if (energyDots) {
         energyDots.classList.remove('active');
     }
     
-    console.log('Animation d\'électricité arrêtée');
+    console.log('Animation de particules d\'énergie arrêtée');
 }
 
 // ===== ANIMATION DE PARTICULES DE LOADING ===== //

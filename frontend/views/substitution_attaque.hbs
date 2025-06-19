@@ -7,54 +7,53 @@
             <h2 class="section-title"><i class="fas fa-crosshairs"></i>  Attaque par Substitution</h2>
             <div class="main-grid">
                 {{!-- Colonne 1: Zone de saisie du texte chiffré --}}
-                    <div class="input-content">
-                        <div class="main-input-area">
-                            <div class="input-actions">
+                <div class="input-section">
+                    <div class="main-input-area">
+                        <div class="input-actions">
+                        </div>
+                        
+                        <div class="textarea-container">
+                            <label for="inputText" class="input-label">Texte Chiffré</label>
+                            <textarea id="inputText" rows="8" disabled></textarea>
+                        </div>
+                        
+                        <div class="input-stats">
+                            <div class="stats-item">
+                                <i class="fas fa-sort-numeric-up"></i>
+                                <span>Caractères: <strong id="inputLength">0</strong></span>
                             </div>
-                            
-                            <div class="textarea-container">
-                                <label for="inputText" class="input-label">Texte Chiffré</label>
-                                <textarea id="inputText" rows="8" disabled></textarea>
+                            <div class="stats-item">
+                                <i class="fas fa-font"></i>
+                                <span>Lettres: <strong id="letterCount">0</strong></span>
                             </div>
-                            
-                            <div class="input-stats">
-                                <div class="stats-item">
-                                    <i class="fas fa-sort-numeric-up"></i>
-                                    <span>Caractères: <strong id="inputLength">0</strong></span>
-                                </div>
-                                <div class="stats-item">
-                                    <i class="fas fa-font"></i>
-                                    <span>Lettres: <strong id="letterCount">0</strong></span>
-                                </div>
-                                <div class="stats-item">
-                                    <i class="fas fa-percentage"></i>
-                                    <span>Uniques: <strong id="uniqueLetters">0</strong></span>
+                            <div class="stats-item">
+                                <i class="fas fa-percentage"></i>
+                                <span>Uniques: <strong id="uniqueLetters">0</strong></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{!-- Colonne 2: Bouton d'attaque --}}
+                {{!-- Colonne 2: Message à trouver et bouton d'attaque --}}
                 <div class="attack-section">
                     <div class="main-input-area">
-                            
-                            <div class="textarea-container">
-                                <label for="outputText" class="input-label">Message à trouver</label>
-                                <textarea id="outputText" rows="8" disabled></textarea>
-                            </div>
-                            
+                        <div class="textarea-container">
+                            <label for="outputText" class="input-label">Message à trouver</label>
+                            <textarea id="outputText" rows="8" disabled></textarea>
                         </div>
+                    </div>
+                    
                     <div class="attack-launch">
                         <div class="attack-button-container">
                             <div class="voltage-button">
                                 <button id="launchAttack" class="btn-attack">
                                     <div class="attack-icon">
                                         <i class="fas fa-rocket"></i>
-                            </div>
+                                    </div>
                                     <div class="attack-text">
                                         <span class="attack-title">LANCER L'ATTAQUE</span>
                                         <span class="attack-subtitle">Analyse de Fréquences</span>
-                        </div>
+                                    </div>
                                 </button>
                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 234.6 61.3" preserveAspectRatio="none" xml:space="preserve">
                                     <defs>

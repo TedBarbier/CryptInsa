@@ -1,5 +1,18 @@
 /* ===== PAGE SUBSTITUTION ATTAQUE - STYLES SPÉCIFIQUES ===== */
-
+:root {
+    --primary-color: #00ff88;
+    --accent-blue: #00bfff;
+    --accent-purple: #8a2be2;
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-card: rgba(255, 255, 255, 0.05);
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-muted: #888888;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --border-radius: 8px;
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
 /* Container global */
 .substitution-container {
     max-width: 1400px;
@@ -37,14 +50,14 @@
 .main-grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     align-items: start;
 }
 
 /* ===== SECTION INPUT ===== */
 .input-section {
-    border-radius: var(--border-radius);
     padding: 2rem;
+    height: fit-content;
 }
 .input-label {
     display: block;
@@ -387,11 +400,11 @@
 
 /* ===== SECTION ATTAQUE ===== */
 .attack-section {
-
+    padding: 2rem;
     height: fit-content;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 2rem;
 }
 
 .attack-content {

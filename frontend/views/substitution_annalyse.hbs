@@ -1,6 +1,17 @@
 {{!-- CSS spécifique pour l'analyse de fréquences --}}
 <link rel="stylesheet" href="/css/substitution_annalyse.css">
 
+{{!-- 
+    STRUCTURE DES BOUTONS ANIMÉS:
+    Tous les boutons utilisent maintenant la structure suivante:
+    <button class="btn [btn-primary|btn-secondary|btn-success]">
+        <svg class="arr-2" viewBox="0 0 24 24">...</svg>
+        <span class="text">Contenu du bouton</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">...</svg>
+    </button>
+--}}
+
 <div class="frequency-analysis-container">
     <section class="analysis-section">
         <h2 class="section-title">
@@ -37,7 +48,16 @@
 
                 <div class="control-buttons">
                     <button id="refreshAnalysis" class="btn btn-primary">
-                        <i class="fas fa-sync-alt"></i> Actualiser
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                        <span class="text">
+                            <i class="fas fa-sync-alt"></i> Actualiser
+                        </span>
+                        <span class="circle"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -65,9 +85,20 @@
                         </div>
                     </div>
                 </div>
-                <button id="nextStep" class="btn btn-primary next-step-btn">
-                    <i class="fas fa-angle-right"></i> Etape suivante
-                </button>
+                <div class="next-step-btn">
+                    <button id="nextStep" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                        <span class="text">
+                            <i class="fas fa-angle-right"></i> Étape suivante
+                        </span>
+                        <span class="circle"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
