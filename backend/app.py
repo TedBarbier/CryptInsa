@@ -8,6 +8,7 @@ from Crypto.vigenere import *
 import json
 import threading
 from flask import make_response
+import Crypto.main as main 
 
 app = Flask(__name__)
 CORS(app)  # autorise les requêtes depuis le frontend
@@ -66,10 +67,13 @@ def route_vigenere_decrypt():
     return jsonify(response)
 
 
-def call_substitution_attack():
+def call_substitution_attack(message):
     # Cette fonction est appelée dans un thread séparé pour l'attaque par substitution
     # Vous pouvez implémenter la logique de l'attaque ici
-    pass
+    traduction,traduction_sur,message_split,ponctuation = main.etape1(message)
+    main.etape2(traduction,traduction_sur,message_split,ponctuation)
+
+
 @app.route('/update_attack', methods=['POST'])
 def route_update_attack():
     def read_donnees_json():
