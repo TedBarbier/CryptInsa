@@ -4,7 +4,7 @@ import cryptage.decrypt as decrypt
 
 
 
-storedclear="le titre academique d ingenieur ou l exercice de la profession sont reglementes dans certains pays, a des degres divers." 
+storedclear="" 
 storedcipher= cesar.cesar_encrypt(storedclear,3)
 traduction,traduction_sur,message_split,ponctuation = main.etape1(storedcipher)
 print("Message clair:", storedclear)

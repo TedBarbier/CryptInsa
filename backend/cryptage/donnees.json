@@ -1,5 +1,58 @@
-{
-    "texte": "",
-    "dictionnaire": {},
-    "is_finish": false
-}
+[
+  {
+    "mot_chiffre": "initial",
+    "mot_traduit": "initial",
+    "dictionnaire": {
+      "j": null,
+      "o": null,
+      "r": null,
+      "e": null,
+      "d": null,
+      "h": "e",
+      "p": null,
+      "q": null,
+      "w": "e",
+      "b": ",",
+      "a": " ",
+      "x": null,
+      "l": null,
+      "v": null,
+      "g": null,
+      "y": null,
+      "f": null,
+      "s": null,
+      "u": null,
+      ".": null,
+      "t": null,
+      "c": "."
+    }
+  },
+  {
+    "mot_chiffre": "final",
+    "mot_traduit": "final",
+    "dictionnaire": {
+      "j": ",",
+      "o": "o",
+      "r": "o",
+      "e": ",",
+      "d": "a",
+      "h": "e",
+      "p": "p",
+      "q": "i",
+      "w": "e",
+      "b": ",",
+      "a": " ",
+      "x": "a",
+      "l": "l",
+      "v": "n",
+      "g": "g",
+      "y": "g",
+      "f": ",",
+      "s": "o",
+      "u": "o",
+      ".": "g",
+      "t": "p",
+      "c": "."
+    }
+  }
+]
