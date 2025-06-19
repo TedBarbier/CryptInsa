@@ -46,7 +46,6 @@ def trouver_mots_correspondants(mot_chiffre):
     mots_correspondants = []
     
     mots_correspondants=(list(DICO_PATTERN.get(pattern_recherche, [])))
-    print(f"[DEBUG] Recherche du pattern '{pattern_recherche}' pour le mot '{mot_chiffre_sans_accents}' trouvé {len(mots_correspondants)} correspondances.")
 
     return mots_correspondants, len(mots_correspondants)
 

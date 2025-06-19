@@ -69,9 +69,8 @@ def route_vigenere_decrypt():
 def call_substitution_attack():
     # Cette fonction est appelée dans un thread séparé pour l'attaque par substitution
     # Vous pouvez implémenter la logique de l'attaque ici
-    global storedcipher
     traduction,traduction_sur,message_split,ponctuation = main.etape1(storedcipher)
-    main.etape2(traduction,traduction_sur,message_split,ponctuation)
+    main.etape2(storedcipher, traduction,traduction_sur,message_split,ponctuation)
 
 
 @app.route('/update_attack', methods=['POST'])
