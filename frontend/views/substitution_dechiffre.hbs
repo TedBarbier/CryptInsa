@@ -19,23 +19,34 @@
                     </button>
                 </div>
                 
-                <div class="substitution-table">
-                    <div class="table-row">
-                        <div class="row-label">Chiffré:</div>
-                        <div class="letters-container" id="cipherAlphabet"></div>
+                <div class="alphabet-mapping">
+                    <div class="alphabet-row french-alphabet top" id="cipherAlphabet">
+                        <!-- L'alphabet chiffré sera généré ici -->
                     </div>
-                    <div class="table-row">
-                        <div class="row-label">Mapping:</div>
-                        <div class="letters-container" id="mappingAlphabet"></div>
+                    <div class="arrows-row" id="arrowsRow">
+                        <!-- Les flèches seront générées ici -->
                     </div>
-                    <div class="table-row">
-                        <div class="row-label">Clair:</div>
-                        <div class="letters-container" id="clearAlphabet"></div>
+                    <div class="alphabet-row french-alphabet bottom" id="clearAlphabet">
+                        <!-- L'alphabet clair sera généré ici -->
+                    </div>
+                </div>
+                
+                {{!-- Section pour afficher les textes de comparaison --}}
+                <div class="comparison-section">
+                    <div class="text-display-row">
+                        <div class="text-display-col">
+                            <h4><i class="fas fa-lock"></i> Texte Chiffré Original:</h4>
+                            <textarea id="originalCipherText" placeholder="Le texte chiffré original apparaîtra ici..." rows="4" readonly></textarea>
+                        </div>
+                        <div class="text-display-col">
+                            <h4><i class="fas fa-unlock"></i> Texte en Clair Original:</h4>
+                            <textarea id="originalPlainText" placeholder="Le texte en clair original apparaîtra ici (si disponible)..." rows="4" readonly></textarea>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="result-section">
-                    <h4>Texte Déchiffré:</h4>
+                    <h4><i class="fas fa-magic"></i> Texte Déchiffré (Résultat):</h4>
                     <textarea id="decryptedText" placeholder="Le texte déchiffré apparaîtra ici..." rows="4" readonly></textarea>
                     <button id="copyResult" class="copy-btn">
                         <i class="fas fa-copy"></i> Copier

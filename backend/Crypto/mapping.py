@@ -7,6 +7,7 @@ je le ferais quand le code fonctionne à 100%
 """
 from collections import Counter, defaultdict
 import string
+import json
 #from Crypto.dict_search import trouver_mots_correspondants
 import unicodedata
 
@@ -26,84 +27,89 @@ def trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-
                     mots_correspondants.append(mot)
     return mots_correspondants, len(mots_correspondants)
 
+def trouver_mots_correspondants_optimise(mot_chiffre, chemin_json, encoding='utf-8'):
+    mot_chiffre_sans_accents = enlever_accents(mot_chiffre)
+    pattern_recherche = generer_pattern(mot_chiffre_sans_accents)
+    longueur_recherche = len(mot_chiffre_sans_accents)
+    mots_correspondants = []
 
-def trouver_dernier_char_non_espace(texte: str, caractere_espace: str):
-    """Utilitaire pour trouver le dernier caractère significatif du texte."""
-    for char in reversed(texte):
-        if char != caractere_espace:
-            return char
+    with open(chemin_json, 'r', encoding=encoding) as fichier:
+        data = json.load(fichier)
+        for entree in data:
+            if entree['longueur'] == longueur_recherche and entree['isomorphique'] == pattern_recherche:
+                mots_correspondants.append(entree['mot'])
+
+    return mots_correspondants, len(mots_correspondants)
+
+def trouver_dernier_char_non_espace(texte: str, espace: str):
+    """Retourne le dernier caractère non-espace du texte, sinon None."""
+    i = len(texte) - 1
+    while i >= 0:
+        if texte[i] != espace:
+            return texte[i]
+        i -= 1
     return None
 
 def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.95):
     """
-    Détecte la ponctuation en identifiant d'abord le point comme étant le
-    dernier caractère du texte, puis en cherchant la virgule.
-
+    Détecte les caractères représentant le point et la virgule dans un texte chiffré.
+    
     Args:
-        texte_chiffre: Le texte chiffré à analyser.
-        caractere_espace: Le caractère qui représente l'espace dans le chiffré.
-        score_seuil: Le score minimum pour qu'un caractère soit un candidat virgule.
+        texte_chiffre (str): Le texte chiffré.
+        caractere_espace (str): Le caractère qui représente l'espace.
+        score_seuil (float): Seuil de confiance pour identifier la ponctuation.
 
     Returns:
-        Un dictionnaire avec les caractères trouvés pour 'virgule' et 'point'.
+        dict: {'point': caractère ou None, 'virgule': caractère ou None}
     """
     if not texte_chiffre:
         return {'virgule': None, 'point': None}
 
-    # --- Étape 1 : Identifier le point de manière quasi certaine ---
-    char_point_candidat = trouver_dernier_char_non_espace(texte_chiffre, caractere_espace)
-    
-    resultat = {'virgule': None, 'point': char_point_candidat}
+    # Étape 1 : Identifier un candidat pour le point
+    point_candidat = trouver_dernier_char_non_espace(texte_chiffre, caractere_espace)
+    resultat = {'virgule': None, 'point': point_candidat}
 
-    if not char_point_candidat:
-        # Si le texte ne contient que des espaces ou est vide
-        return resultat
-
-    # --- Étape 2 : Chercher la virgule parmi les autres caractères ---
-    
-    # Profil de chaque caractère : {'avant_espace': count, 'autre_position': count}
+    # Étape 2 : Chercher la virgule parmi les autres caractères
     profils = defaultdict(lambda: {'avant_espace': 0, 'autre_position': 0})
     
-    # On construit le profil comme avant
     for i in range(len(texte_chiffre) - 1):
         char_actuel = texte_chiffre[i]
-        char_suivant = texte_chiffre[i+1]
-        
+        char_suivant = texte_chiffre[i + 1]
+
         if char_actuel == caractere_espace:
             continue
-        
-        # On ignore le caractère déjà identifié comme point
-        if char_actuel == char_point_candidat:
+        if char_actuel == point_candidat:
             continue
 
         if char_suivant == caractere_espace:
             profils[char_actuel]['avant_espace'] += 1
         else:
             profils[char_actuel]['autre_position'] += 1
-    
-    # --- Étape 3 : Calculer le score et trouver le meilleur candidat pour la virgule ---
+
+    # Étape 3 : Calcul du score des candidats virgule
     candidats_virgule = []
     for char, profil in profils.items():
-        total_apparitions = profil['avant_espace'] + profil['autre_position']
-        if total_apparitions == 0:
+        total = profil['avant_espace'] + profil['autre_position']
+        if total == 0:
             continue
-
-        score = profil['avant_espace'] / total_apparitions
-        
+        score = profil['avant_espace'] / total
         if score >= score_seuil:
             candidats_virgule.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
 
-    # Trier les candidats (le meilleur est en premier)
-    candidats_virgule.sort(key=lambda item: (item['score'], item['freq']), reverse=True)
-
+    # Sélection du meilleur candidat virgule
+    candidats_virgule.sort(key=lambda x: (x['score'], x['freq']), reverse=True)
     if candidats_virgule:
         resultat['virgule'] = candidats_virgule[0]['char']
+
+    # Si on n’a détecté aucune ponctuation
+    if not point_candidat and not candidats_virgule:
+        print("[INFO] Aucune ponctuation détectée.")
 
     return resultat
 
 def generer_pattern(mot):
     mapping = {}
-    compteur = 0
+    compteur = 1
     pattern = []
     for lettre in mot:
         if lettre not in mapping:
@@ -242,10 +248,11 @@ def decrypt_message(message_chiffre, chemin_dictionnaire):
 
     return mot_final, message_original
         
-def d(mot, chemin_dictionnaire) :
+def d(mot, chemin_dictionnaire, chemin_json) :
     distance_min = len(mot)
     mot_sa = enlever_accents(mot)
     mot_correspondants = trouver_mots_correspondants(mot_sa, chemin_dictionnaire, encoding='utf-8')[0]
+    mot_correspondants_opit = trouver_mots_correspondants_optimise(mot_sa, chemin_json, encoding='utf-8')
     
     for mot_p in mot_correspondants:
         mot_p_sa = enlever_accents(mot_p)
@@ -280,11 +287,14 @@ def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
         
 
 
-def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire):
+def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire, chemin_json):
     L= []
     potentials = []
     mot_liste = list(mot_chiffre)
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire, encoding='utf-8')
+    candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json, encoding='utf-8')
+    print("candidat", candidat)
+    print("candidat pattern", candidat_pattern)
     
     for i in range(len(mot_chiffre)):
         if mot_chiffre[i] == lettre_change:
@@ -299,12 +309,15 @@ def initial_mapping(lettre_freq, lettre_change, mot_chiffre, chemin_dictionnaire
 
 
 #pas encore fini 
-def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire):
+def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire, chemin_json):
     # print(mot_chiffre)
     L= []
     D=[]
     potentials = []
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
+    candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json)
+    print("candidat", candidat)
+    print("candidat pattern", candidat_pattern)
     
     for i in range(len(mot_chiffre)):
         for lettre in keys_sure:

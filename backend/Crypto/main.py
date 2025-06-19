@@ -1,20 +1,18 @@
-import decrypt as decrypt
-import frequences_lettres as freq
-import cesar
-import random
+import Crypto.decrypt as decrypt
+import Crypto.frequences_lettres as freq
 import string
-import dict_search
-import mapping
+import Crypto.dict_search as dict_search
+import Crypto.mapping as mapping
 import json
 
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
 N_ITERATIONS = 2
 
-freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
-freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("miserables.pdf"))
+freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
+freq_combination = freq.get_combination_frequencies(freq.extract_text_from_pdf("Crypto/miserables.pdf"))
 combinaisons_frequentes = {k: v for k, v in freq_combination.items() if v > 0.8}
-chemin_dictionnaire = "dict.txt"
+chemin_dictionnaire = "Crypto/dict.txt"
 
 
 import json
@@ -107,7 +105,32 @@ def main0(message):
     #             t=1
     return traduction
 
+import json
+import os
+
+json_file = "donnees.json"
+
+def save_to_json(mot_chiffre, mot_traduit, dictionnaire):
+    data = {
+        "mot_chiffre": mot_chiffre,
+        "mot_traduit": mot_traduit,
+        "dictionnaire": dictionnaire.copy()
+    }
+    # Créer le fichier s'il n'existe pas
+    if not os.path.exists(json_file):
+        with open(json_file, 'w') as f:
+            json.dump([], f)
+
+    # Ajouter au fichier
+    with open(json_file, 'r+') as f:
+        contenu = json.load(f)
+        contenu.append(data)
+        f.seek(0)
+        json.dump(contenu, f, indent=2)
+
 def etape1(message):
+    with open(json_file, 'w') as f:
+        json.dump([], f)
     print("start 1")
     traduction = {}
     _, traduction = decrypt.decrypt_message(message)
@@ -124,15 +147,19 @@ def etape1(message):
     if ponctuation['virgule'] is not None:
         traduction[ponctuation['virgule']]=","
         traduction_sur[ponctuation['virgule']]=","
+
+    #Étape 1 : Enregistrement initial
+    save_to_json(mot_chiffre="initial", mot_traduit="initial", dictionnaire=traduction_sur)
+
     return traduction, traduction_sur, message_split, ponctuation
 
 def etape2(traduction,traduction_sur,message_split,ponctuation):
     print("start 2")
     for j in range(2):
         for i in range(len(message_split)):
-            mot= message_split[i%len(message_split)]
-            keys_sur=[k for k,v in traduction_sur.items() if v is not None and k in mot]
-            lettre= None
+            mot = message_split[i % len(message_split)]
+            keys_sur = [k for k,v in traduction_sur.items() if v is not None and k in mot]
+            lettre = None
             for char in keys_sur:
                 if char in mot:
                     lettre=char
@@ -152,16 +179,25 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
             elif decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
                 mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot, chemin_dictionnaire)
             else:
-                mots_correspondants,taille =dict_search.trouver_mots_correspondants(mot[:-1],chemin_dictionnaire)
+                mots_correspondants, taille = dict_search.trouver_mots_correspondants(mot[:-1], chemin_dictionnaire)
+            traduction_sur_ref = traduction_sur.copy()
             if taille == 1:
-                traduction = decrypt.change_traduction_with_word(traduction, mot, mots_correspondants[0])
-                traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mots_correspondants[0])
+                mot_traduit = mots_correspondants[0]
+                traduction = decrypt.change_traduction_with_word(traduction, mot, mot_traduit)
+                traduction_sur = decrypt.change_traduction_with_word(traduction_sur, mot, mot_traduit)
+                if traduction_sur_ref != traduction_sur:
+                    # Sauvegarde pour un mot trouvé
+                    save_to_json(mot_chiffre=mot, mot_traduit=mot_traduit, dictionnaire=traduction_sur)
             elif taille > 1:
                 lettre_en_commun = decrypt.lettre_en_commun(mots_correspondants)
-                if lettre_en_commun != []:
+                if lettre_en_commun:
                     for lettre in lettre_en_commun:
                         traduction = decrypt.change_traduction_with_letter(traduction, mot[lettre[1]], lettre[0])
                         traduction_sur = decrypt.change_traduction_with_letter(traduction_sur, mot[lettre[1]], lettre[0])
+                    if traduction_sur_ref != traduction_sur:
+                        # Sauvegarde même s’il n’y a pas de mot unique
+                        save_to_json(mot_chiffre=mot, mot_traduit=None, dictionnaire=traduction_sur)
+    save_to_json("final", "final", traduction)
     return traduction
 
 def main_test(message):

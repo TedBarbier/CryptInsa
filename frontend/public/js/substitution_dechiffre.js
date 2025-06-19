@@ -8,8 +8,9 @@ const FRENCH_FREQUENCIES = {
     'z': 0.07, '_':6.00
 };
 
-// Alphabet français
-const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz_,.';
+// Alphabet français complet
+const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz,.';
+const ALPHABET_DISPLAY = FRENCH_ALPHABET.split('');
 
 // Variables globales
 let cipherFrequencies = {};
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     loadMappingFromStorage();
     loadCipherTextFromStorage();
+    loadOriginalTexts();
 });
 
 function setupEventListeners() {
@@ -73,9 +75,14 @@ async function play() {
                     currentMapping = data.dictionnaire;
                     console.log('Mapping updated:', data.dictionnaire);
                     
+
+                    
                     // Mettre à jour l'affichage
                     updateMappingDisplay();
                     applyDecryption();
+                    
+                    // Sauvegarder le mapping
+                    localStorage.setItem('mapping', JSON.stringify(currentMapping));
                 }
             } catch (error) {
                 console.error('Erreur lors de la mise à jour:', error);
@@ -148,6 +155,40 @@ function loadCipherTextFromStorage() {
     return true;
 }
 
+// Nouvelle fonction pour charger les textes originaux
+function loadOriginalTexts() {
+    // Charger le texte chiffré original
+    let cipherText = localStorage.getItem('cipherText');
+    
+    // Essayer aussi de récupérer depuis attackData
+    const attackData = localStorage.getItem('attackData');
+    if (attackData) {
+        try {
+            const data = JSON.parse(attackData);
+            if (data.cipherText && !cipherText) {
+                cipherText = data.cipherText;
+            }
+            if (data.plainText && !document.getElementById('originalPlainText').value) {
+                document.getElementById('originalPlainText').value = data.plainText;
+            }
+        } catch (e) {
+            console.log('Erreur lors du parsing des données d\'attaque:', e);
+        }
+    }
+    
+    if (cipherText) {
+        document.getElementById('originalCipherText').value = cipherText;
+        // Mettre à jour l'affichage du mapping (s'il y en a un)
+        updateMappingDisplay();
+    }
+    
+    // Charger le texte en clair original (si disponible)
+    const plainText = localStorage.getItem('plaintext');
+    if (plainText) {
+        document.getElementById('originalPlainText').value = plainText;
+    }
+}
+
 // ===== MAPPING ===== //
 function loadMappingFromStorage() {
     const mapping = localStorage.getItem('mapping');
@@ -158,69 +199,72 @@ function loadMappingFromStorage() {
 }
 
 function updateMappingDisplay() {
-    updateCipherAlphabet();
-    updateClearAlphabet();
+    updateCompleteAlphabetDisplay();
 }
 
-function updateCipherAlphabet() {
+// Fonction pour afficher l'alphabet complet avec le mapping
+function updateCompleteAlphabetDisplay() {
+    updateCipherAlphabetRow();
+    updateArrowsRow();
+    updateClearAlphabetRow();
+}
+
+function updateCipherAlphabetRow() {
     const container = document.getElementById('cipherAlphabet');
     container.innerHTML = '';
     
-    const presentLetters = Object.keys(cipherFrequencies)
-        .filter(letter => cipherFrequencies[letter] > 0)
-        .sort();
-    
-    presentLetters.forEach(letter => {
-        const box = document.createElement('div');
-        box.className = 'letter-box cipher-letter';
-        box.textContent = letter.toUpperCase();
-        container.appendChild(box);
+    ALPHABET_DISPLAY.forEach(letter => {
+        const letterBox = document.createElement('div');
+        letterBox.className = 'alphabet-letter cipher';
+        letterBox.textContent = letter.toUpperCase();
+        letterBox.setAttribute('data-letter', letter);
+        container.appendChild(letterBox);
     });
 }
 
-function updateClearAlphabet() {
+function updateArrowsRow() {
+    const container = document.getElementById('arrowsRow');
+    container.innerHTML = '';
+    
+    ALPHABET_DISPLAY.forEach(() => {
+        const arrow = document.createElement('div');
+        arrow.className = 'arrow';
+        arrow.textContent = '↓';
+        container.appendChild(arrow);
+    });
+}
+
+function updateClearAlphabetRow() {
     const container = document.getElementById('clearAlphabet');
     container.innerHTML = '';
     
-    const presentLetters = Object.keys(cipherFrequencies)
-        .filter(letter => cipherFrequencies[letter] > 0)
-        .sort();
-    
-    presentLetters.forEach(letter => {
-        const box = document.createElement('div');
-        box.className = 'letter-box clear-letter';
+    ALPHABET_DISPLAY.forEach(letter => {
+        const letterBox = document.createElement('div');
+        letterBox.className = 'alphabet-letter';
         
-        const input = document.createElement('input');
-        input.className = 'substitution-input';
-        input.type = 'text';
-        input.maxLength = 1;
-        input.value = currentMapping[letter] ? currentMapping[letter].toUpperCase() : '';
-        input.setAttribute('data-cipher', letter);
+        // Vérifier s'il y a une correspondance dans le mapping
+        if (currentMapping[letter]) {
+            letterBox.textContent = currentMapping[letter].toUpperCase();
+            letterBox.classList.add('clear');
+        } else {
+            letterBox.textContent = '?';
+            letterBox.classList.add('empty');
+        }
         
-        input.addEventListener('input', function() {
-            const value = this.value.toLowerCase();
-            if (value && /[a-z ]/.test(value)) {
-                currentMapping[letter] = value;
-                updateLiveDecryption();
-            } else {
-                delete currentMapping[letter];
-                this.value = '';
-            }
-        });
-        
-        box.appendChild(input);
-        container.appendChild(box);
+        letterBox.setAttribute('data-cipher', letter);
+        container.appendChild(letterBox);
     });
 }
 
-function updateMappingDisplay() {
-    updateCipherAlphabet();
-    updateClearAlphabet();
-}
+
+
+
 
 // ===== DÉCHIFFREMENT ===== //
 function applyDecryption() {
-    if (!analyzedText) {
+    const originalText = localStorage.getItem('cipherText') || '';
+    
+    if (!originalText) {
         showNotification('Aucun texte à déchiffrer', 'error');
         return;
     }
@@ -230,10 +274,16 @@ function applyDecryption() {
         return;
     }
     
-    const originalText = localStorage.getItem('cipherText') || '';
     const decryptedText = decryptText(originalText, currentMapping);
     
-    document.getElementById('decryptedText').value = decryptedText;
+    // Comparer avec le texte en clair original si disponible
+    const originalPlainText = localStorage.getItem('plaintext');
+    if (originalPlainText) {
+        const comparedText = compareTexts(decryptedText, originalPlainText);
+        displayComparedText(comparedText);
+    } else {
+        document.getElementById('decryptedText').value = decryptedText;
+    }
     
     showNotification('Déchiffrement appliqué', 'success');
 }
@@ -251,9 +301,96 @@ function decryptText(text, mapping) {
 }
 
 function updateLiveDecryption() {
-    if (analyzedText) {
-        applyDecryption();
+    applyDecryption();
+}
+
+// ===== COMPARAISON DE TEXTES ===== //
+function compareTexts(decryptedText, originalPlainText) {
+    const decrypted = decryptedText.toLowerCase();
+    const original = originalPlainText.toLowerCase();
+    const maxLength = Math.max(decrypted.length, original.length);
+    
+    let comparedChars = [];
+    
+    for (let i = 0; i < maxLength; i++) {
+        const decryptedChar = decrypted[i] || '';
+        const originalChar = original[i] || '';
+        
+        comparedChars.push({
+            char: decryptedText[i] || '', // Garder la casse originale
+            isCorrect: decryptedChar === originalChar,
+            isMissing: i >= decrypted.length,
+            isExtra: i >= original.length
+        });
     }
+    
+    return comparedChars;
+}
+
+function displayComparedText(comparedChars) {
+    const textarea = document.getElementById('decryptedText');
+    const container = textarea.parentNode;
+    
+    // Créer un div pour afficher le texte avec coloration
+    let coloredDiv = document.getElementById('coloredDecryptedText');
+    if (!coloredDiv) {
+        coloredDiv = document.createElement('div');
+        coloredDiv.id = 'coloredDecryptedText';
+        coloredDiv.className = 'colored-text-display';
+        
+        // Insérer après le textarea et le cacher
+        container.insertBefore(coloredDiv, textarea.nextSibling);
+        textarea.style.display = 'none';
+    }
+    
+    // Construire le HTML avec les caractères colorés
+    let html = '';
+    comparedChars.forEach(charData => {
+        const char = charData.char;
+        
+        if (charData.isCorrect) {
+            // Caractère correct - vert
+            html += `<span class="char-correct">${char === ' ' ? '&nbsp;' : char}</span>`;
+        } else if (charData.isMissing) {
+            // Caractère manquant - rouge avec glow
+            html += `<span class="char-missing">_</span>`;
+        } else if (charData.isExtra) {
+            // Caractère en trop - orange avec glow
+            html += `<span class="char-extra">${char === ' ' ? '&nbsp;' : char}</span>`;
+        } else {
+            // Caractère incorrect - rouge avec glow
+            html += `<span class="char-incorrect">${char === ' ' ? '&nbsp;' : char}</span>`;
+        }
+    });
+    
+    coloredDiv.innerHTML = html;
+    
+    // Calculer les statistiques
+    const correct = comparedChars.filter(c => c.isCorrect).length;
+    const total = comparedChars.length;
+    const accuracy = total > 0 ? ((correct / total) * 100).toFixed(1) : 0;
+    
+    // Afficher les statistiques
+    let statsDiv = document.getElementById('comparisonStats');
+    if (!statsDiv) {
+        statsDiv = document.createElement('div');
+        statsDiv.id = 'comparisonStats';
+        statsDiv.className = 'comparison-stats';
+        container.appendChild(statsDiv);
+    }
+    
+    statsDiv.innerHTML = `
+        <div class="stats-content">
+            <span class="stat-item">
+                <i class="fas fa-check-circle"></i>
+                Précision: <strong>${accuracy}%</strong>
+            </span>
+            <span class="stat-item">
+                <i class="fas fa-chart-bar"></i>
+                ${correct}/${total} caractères corrects
+            </span>
+        </div>
+    `;
 }
 
 // ===== UTILITAIRES ===== //
@@ -272,9 +409,49 @@ function clearMapping() {
 
 function copyResult() {
     const textarea = document.getElementById('decryptedText');
-    textarea.select();
-    document.execCommand('copy');
-    showNotification('Texte copié dans le presse-papiers', 'success');
+    const coloredDiv = document.getElementById('coloredDecryptedText');
+    
+    let textToCopy = '';
+    
+    if (coloredDiv && coloredDiv.style.display !== 'none') {
+        // Si on affiche le texte coloré, copier le texte brut
+        textToCopy = coloredDiv.textContent || coloredDiv.innerText;
+    } else {
+        // Sinon copier depuis le textarea
+        textToCopy = textarea.value;
+    }
+    
+    // Utiliser l'API moderne clipboard si disponible
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showNotification('Texte copié dans le presse-papiers', 'success');
+        }).catch(() => {
+            // Fallback vers l'ancienne méthode
+            fallbackCopy(textToCopy);
+        });
+    } else {
+        fallbackCopy(textToCopy);
+    }
+}
+
+function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showNotification('Texte copié dans le presse-papiers', 'success');
+    } catch (err) {
+        showNotification('Erreur lors de la copie', 'error');
+    }
+    
+    document.body.removeChild(textArea);
 }
 
 // Fonction pour afficher les notifications

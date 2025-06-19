@@ -1,7 +1,7 @@
 import json
 
 # Charger le fichier généré
-with open("dict_patterns.json", "r", encoding="utf-8") as f:
+with open("Crypto/dict_patterns.json", "r", encoding="utf-8") as f:
     mots_analytiques = json.load(f)
 
 # Pattern cible

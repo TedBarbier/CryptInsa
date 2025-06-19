@@ -45,7 +45,9 @@ app.get('/substitution_annalyse', (req, res) => {
 app.get('/substitution_dechiffre', (req, res) => {
     res.render('substitution_dechiffre', { title: 'Déchiffrement par substitution' });
 });
-
+app.get('/help', (req, res) => {
+    res.render('help', { title: 'Aide' });
+});
 //Start the server: Use commande "node app.js" to start the server. "npm run dev" to start the server with debug mode.
 const server = app.listen(port, () => {
     console.log(`App listening at http://127.0.0.1:${port}`);
