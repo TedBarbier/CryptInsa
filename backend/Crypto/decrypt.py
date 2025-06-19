@@ -167,6 +167,8 @@ def is_mot_sans_virgule(mot,virgule_chiffre):
     return(mot[-1]!=virgule_chiffre)
 
 def is_mot_sans_point(mot,point_chiffre):
+    if mot==' ':
+        return mot[0]!=point_chiffre
     return(mot[-1]!=point_chiffre)
 
 def decrypt_message(message,seuil_frequence=None):

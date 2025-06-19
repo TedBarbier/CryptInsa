@@ -1,9 +1,10 @@
 import Crypto.decrypt as decrypt
 import Crypto.frequences_lettres as freq
 import string
-import dict_search as dict_search
-import mapping as mapping
+import Crypto.dict_search as dict_search
+import Crypto.mapping as mapping
 import json
+import Crypto.cesar as cesar
 
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
@@ -70,12 +71,12 @@ def main0(message):
                     lettre=char
             if keys_sur != []:
                 if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
-                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire)
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire,"dict_patterns.json")
                     # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot,chemin_dictionnaire)
                     # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
                 else:
-                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire)
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire,"dict_patterns.json")
                     # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot[:-1],chemin_dictionnaire)
                     # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
@@ -163,15 +164,15 @@ def etape2(traduction,traduction_sur,message_split,ponctuation):
             for char in keys_sur:
                 if char in mot:
                     lettre=char
-            print(message_split)
+            print(message_split, mot)
             if keys_sur != []:
                 if decrypt.is_mot_sans_point(mot,ponctuation['point']) and decrypt.is_mot_sans_virgule(mot,ponctuation['virgule']):
-                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire)
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot,chemin_dictionnaire,"Crypto/dict_patterns.json")
                     # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot,chemin_dictionnaire)
                     # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
                 else:
-                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire)
+                    mots_correspondants=mapping.mapping_with_list(keys_sur,traduction_sur,mot[:-1],chemin_dictionnaire,"Crypto/dict_patterns.json")
                     # mots_correspondants2=mapping.initial_mapping(traduction[lettre],lettre,mot[:-1],chemin_dictionnaire)
                     # print(j, i, mots_correspondants, mots_correspondants2)
                     taille=len(mots_correspondants)
@@ -218,16 +219,16 @@ def main_test(message):
 # print("score:", decrypt.comparaison(m_autre,code))
 # print(code)
 
-m=[
-    "le chiffrement ou cryptage est un procede de cryptographie grace auquel on souhaite rendre la comprehension d un document impossible a toute personne qui n a pas la cle de chiffrement. ce principe est generalement lie au principe d acces conditionnel.",
-    "la cryptographie est une des disciplines de la cryptologie s attachant a proteger des messages assurant confidentialite, authenticite et integrite en s aidant souvent de secrets ou cles. elle se distingue de la steganographie qui fait passer inapercu un message dans un autre message alors que la cryptographie rend un message supposement inintelligible a autre que qui de droit.",
-    "un ingenieur est un professionnel traitant de problemes complexes ingenierie, notamment en concevant des produits, des processus si necessaire avec des moyens novateurs, et dirigeant la realisation et la mise en oeuvre de l ensemble produits, systemes ou services. l ingenieur cree, concoit, innove dans plusieurs domaines tout en prenant en compte les facteurs sociaux, environnementaux et economiques propres au developpement durable. il lui faut pour cela, non seulement des connaissances techniques, mais aussi economiques, sociales, environnementales et humaines reposant sur une solide culture scientifique et generale.",
-    "le groupe est constitue de sept institut national des sciences appliquees. six ecoles d ingenieurs partenaires composent egalement le groupe. les membres du groupe sont des etablissements publics français de recherche et d enseignement superieur."
-]
+# m=[
+#     "le chiffrement ou cryptage est un procede de cryptographie grace auquel on souhaite rendre la comprehension d un document impossible a toute personne qui n a pas la cle de chiffrement. ce principe est generalement lie au principe d acces conditionnel.",
+#     "la cryptographie est une des disciplines de la cryptologie s attachant a proteger des messages assurant confidentialite, authenticite et integrite en s aidant souvent de secrets ou cles. elle se distingue de la steganographie qui fait passer inapercu un message dans un autre message alors que la cryptographie rend un message supposement inintelligible a autre que qui de droit.",
+#     # "un ingenieur est un professionnel traitant de problemes complexes d ingenierie, notamment en concevant des produits, des processus si necessaire avec des moyens novateurs, et dirigeant la realisation et la mise en oeuvre de l ensemble produits, systemes ou services. l ingenieur cree, concoit, innove dans plusieurs domaines tout en prenant en compte les facteurs sociaux, environnementaux et economiques propres au developpement durable. il lui faut pour cela, non seulement des connaissances techniques, mais aussi economiques, sociales, environnementales et humaines reposant sur une solide culture scientifique et generale.",
+#     # "le groupe est constitue de sept institut national des sciences appliquees. six ecoles d ingenieurs partenaires composent egalement le groupe. les membres du groupe sont des etablissements publics francais de recherche et d enseignement superieur."
+# ]
 
-for message in m:
-    print("message", message)
-    m2=cesar.cesar_encrypt(message,3)
-    print("message cesar :",m2)
-    res=main_test(m2)
-    print(decrypt.message_from_key(m2,res))
+# for message in m:
+#     print("message", message)
+#     m2=cesar.cesar_encrypt(message,3)
+#     print("message cesar :",m2)
+#     res=main_test(m2)
+#     print(decrypt.message_from_key(m2,res))

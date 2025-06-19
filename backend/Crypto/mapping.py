@@ -316,8 +316,7 @@ def mapping_with_list(keys_sure,traduction,mot_chiffre,chemin_dictionnaire, chem
     potentials = []
     candidat = trouver_mots_correspondants(mot_chiffre, chemin_dictionnaire)
     candidat_pattern = trouver_mots_correspondants_optimise(mot_chiffre, chemin_json)
-    print("candidat", candidat)
-    print("candidat pattern", candidat_pattern)
+
     
     for i in range(len(mot_chiffre)):
         for lettre in keys_sure:
