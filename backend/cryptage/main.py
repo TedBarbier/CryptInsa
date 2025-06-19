@@ -31,14 +31,13 @@ def etape1(message):
     traduction = {}
     _, traduction = decrypt.decrypt_message(message)
     _,traduction_sur = decrypt.decrypt_message(message,10)
-    espace_chiffre=decrypt.decrypt_lettre_inverse(message, 20)
-    print("message",message)
-    message_split=message.split(espace_chiffre[0])
-    print("message split",message_split)
-    espace=message[len(message_split[0])]
-    ponctuation=mapping.detecter_ponctuation(message,espace)
-    traduction[espace]=" "
-    traduction_sur[espace]=" "
+    espace,e=decrypt.make_traduction_sur(message)
+    # traduction_sur[espace[0]]=' '
+    # traduction[espace[0]]=' '
+    # traduction_sur[e[0]]='e'
+    # traduction[e[0]]='e'
+    message_split=message.split(espace[0])
+    ponctuation=mapping.detecter_ponctuation(message,espace[0])
     if ponctuation['point'] is not None:
         traduction[ponctuation['point']]="."
         traduction_sur[ponctuation['point']]="."
@@ -51,9 +50,24 @@ def etape1(message):
 
     return traduction, traduction_sur, message_split, ponctuation
 
-def etape2(traduction,traduction_sur,message_split,ponctuation):
+def etape2(message,traduction,traduction_sur,message_split,ponctuation):
     print("start 2")
+    traduction_test=traduction_sur.copy()
     for j in range(2):
+        print(j)
+        if j==1:
+            print(traduction_sur) 
+            print(j)
+            if traduction_test==traduction_sur:
+                espace,e=decrypt.make_traduction_sur(message)
+                traduction_sur[espace[0]]=' '
+                traduction_sur[e[0]]='e'
+                j=0
+                espace_key=[k for k,v in traduction_sur.items() if v==' ']
+                e_key=[k for k,v in traduction_sur.items() if v=='e']
+                traduction_sur[espace_key[0]]='e'
+                traduction_sur[e_key[0]]=' '
+                message_split=message.split(e_key[0])
         for i in range(len(message_split)):
             mot = message_split[i % len(message_split)]
             keys_sur = [k for k,v in traduction_sur.items() if v is not None and k in mot]

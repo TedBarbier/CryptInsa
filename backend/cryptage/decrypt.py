@@ -27,6 +27,23 @@ def decrypt_lettre(frequence,seuil_frequence=None):
     
     return decode
 
+
+def make_traduction_sur(message):
+    max=(0,0)
+    max2=(0,0)
+    frequence_lettres=freq.get_letter_frequencies(message)
+
+    for l,f in frequence_lettres.items():
+        if f>max[1]:
+            max2=max
+            max=(l,f)
+        elif f>max2[1]:
+            max2=(l,f)
+    return max,max2
+
+
+
+
 def decrypt_lettre_inverse(message,frequence):
     frequence_lettres=freq.get_letter_frequencies(message)
     min_diff=1000
