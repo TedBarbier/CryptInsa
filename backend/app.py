@@ -87,17 +87,15 @@ def route_update_attack():
     return jsonify(data)
 @app.route('/start_attack', methods=['POST'])
 def start_attack():
-    global analyse_started, storedcipher
+    global storedcipher
     data = request.get_json()
-    if not analyse_started:
-        analyse_started = True
-        storedcipher = data.get('cipher', '')
-        # Démarrer l'attaque dans un thread séparé
-        thread = threading.Thread(target=call_substitution_attack)
-        thread.daemon = True
-        thread.start()
-        return jsonify({"status": "Attack started"})
-    else:
-        return jsonify({"status": "Attack already in progress"}), 400
+   
+    storedcipher = data.get('cipherText', '')
+    # Démarrer l'attaque dans un thread séparé
+    thread = threading.Thread(target=call_substitution_attack)
+    thread.daemon = True
+    thread.start()
+    return jsonify({"message": storedcipher})
+
 if __name__ == '__main__':
     app.run(debug=True)
