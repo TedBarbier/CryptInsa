@@ -43,25 +43,5 @@ def get_combination_frequencies(text):
         combination_frequencies[comb] = combination_frequencies[comb] * 100 / total_combinations
     return combination_frequencies
 
-def get_combi_frequencies_for_a_letter(text, letter,position):   #avec e, position =0 : e+lettre si =1 lettre+e
-    size_text = len(text)
-    combinations = [letter + c for c in alphabet] if position == 0 else [c + letter for c in alphabet]
-    combination_frequencies = {comb: 0 for comb in combinations}
-    total_combinations = 0
-    for i in range(len(text) - 1):
-        comb = text[i:i+2]
-        if comb in combination_frequencies:
-            combination_frequencies[comb] += 1
-            total_combinations += 1
-    for comb in combination_frequencies:
-        if total_combinations > 0:
-            combination_frequencies[comb] = combination_frequencies[comb] * 100 / total_combinations
-    return combination_frequencies
-
-
-def display(frequencies):
-    for letter, freq in frequencies.items():
-        print(f"{letter}: {freq:.4f}")
-
 pdf_path = "cryptage/miserables.pdf"
 text = extract_text_from_pdf(pdf_path)

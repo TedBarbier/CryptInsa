@@ -4,30 +4,21 @@ import string
 import cryptage.cesar as cesar
 import json
 # Fréquence des lettres en français (environ)
-freq_francais = freq.get_letter_frequencies(freq.extract_text_from_pdf("cryptage/miserables.pdf"))
+miserable = freq.extract_text_from_pdf("cryptage/miserables.pdf")
 
-freq_combination_francais = freq.get_combination_frequencies(freq.extract_text_from_pdf("cryptage/miserables.pdf"))
+freq_francais = freq.get_letter_frequencies(miserable)
 
-combinaisons= freq.get_combination_frequencies(freq.extract_text_from_pdf("cryptage/miserables.pdf"))
+def freq_francais_fct():
+    return freq_francais
+
+freq_combination_francais = freq.get_combination_frequencies(miserable)
+
+combinaisons= freq.get_combination_frequencies(miserable)
 combinaison_frequentes = {k: v for k, v in combinaisons.items() if v > 0.8}
 
 N_ITERATIONS=50
 
 alphabet = string.ascii_lowercase + ' ' + ',' + '.'
-
-
-def frequences_lettres(texte):
-    texte = ''.join(filter(lambda c: c in string.ascii_letters, texte.lower()))
-    compteur = Counter(texte)
-    total = sum(compteur.values())
-    return {lettre: (count / total) * 100 for lettre, count in compteur.items()} if total > 0 else {}
-
-
-def decrypt_lettre_liste(frequence):
-    
-    proches = [(lettre, abs(freq - frequence)) for lettre, freq in freq_francais.items()]
-    proches.sort(key=lambda x: x[1])
-    return [lettre for lettre, _ in proches]
 
 def decrypt_lettre(frequence,seuil_frequence=None):
     min_diff=1000
@@ -51,22 +42,6 @@ def decrypt_lettre_inverse(message,frequence):
             decode=l
     
     return decode
-
-def create_key(message):
-    message=cesar.cesar_encrypt(message.lower(),3)
-    frequences=freq.get_letter_frequencies(message)
-    code=["0"]*len(message)
-    code=["0"]*len(message)
-    for i in range(0,len(message)):
-        l=message[i]
-        if l in frequences.keys():
-            c=decrypt_lettre(frequences[l])
-            code[i]=c
-    key={}
-    for i in range(0,len(message)):
-        if code[i]!="0":
-            key[message[i]]=code[i]
-    return key
 
 def message_from_key(message, traduction): #message apres cesar
     new_message = ""
@@ -126,23 +101,10 @@ def comparaison(m1,m2):
     for i in range(0,min(len(m1),len(m2))):
         if m1[i]==m2[i]:
             cpt+=1
-            # print("lettre",m1[i],"position",i)
         else:
             #pour voir les erreurs
             print(m1[i],m2[i],i)
     return cpt/len(m1)*100,cpt,len(m2)
-
-
-def crée_clé(message, chiffre):
-    """
-    Crée une clé de substitution à partir d'un message clair et de son texte chiffré.
-    La clé est un dictionnaire : lettre_chiffre -> lettre_claire
-    """
-    clé = {}
-    for m, c in zip(message, chiffre):
-        if m in alphabet and c in alphabet:
-            clé[c] = m
-    return clé
 
 def comparaison_clé(clé1, clé2):
     """

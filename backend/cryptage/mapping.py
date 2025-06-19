@@ -1,5 +1,9 @@
 from collections import Counter, defaultdict
+import cryptage.frequences_lettres as freq
 import unicodedata
+
+
+freq_francais = freq.freq_francais_fct()
 
 def generer_pattern(mot):
     mapping = {}
@@ -51,15 +55,11 @@ def enlever_accents(texte):
     texte_sans_accents = ''.join(c for c in texte_normalise if unicodedata.category(c) != 'Mn')
     return texte_sans_accents
 
-
-
-
 def trouver_mots_correspondants(mot_chiffre):
     mot_chiffre_sans_accents = enlever_accents(mot_chiffre)
     pattern_recherche = generer_pattern(mot_chiffre_sans_accents)
     longueur_recherche = len(mot_chiffre_sans_accents)
     mots_correspondants = []
-    #print("test trouver mot correspondant: ", mot_chiffre_sans_accents, pattern_recherche, longueur_recherche)
     mots_correspondants=(list(DICO_PATTERN.get(pattern_recherche, [])))
 
     return mots_correspondants, len(mots_correspondants)
@@ -141,140 +141,7 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
         print("[INFO] Aucune ponctuation détectée.")
 
     return resultat
-
-def decrypt_message(message_chiffre, chemin_dictionnaire):
-    maximum = 0
-    c1 = 0
-    max_mot = ""
-    
-
-    for c in message_chiffre:
-        if not c.isalpha() and c != ' ':
-            raise ValueError("Le message chiffré ne doit contenir que des lettres et des espaces.")
-    lettres_chiffrees = [c.lower() for c in message_chiffre if c.isalpha()]
-    
-    mots_tries = sorted(
-        set(message_chiffre.split()),
-        key=lambda mot: (-len(mot), mot)
-    )
-    freq_chiffree = Counter(lettres_chiffrees)
-    
-    total = len(lettres_chiffrees)
-    
-    freq_chiffree_pourcent = {
-        lettre: (count / total) * 100 for lettre, count in freq_chiffree.items()
-    }
-    
-    sorted_chiffre = sorted(freq_chiffree_pourcent.items(), key=lambda x: -x[1])
-    print("Fréquences des lettres chiffrées :", sorted_chiffre)
-
-    lettre_fréquente = sorted_chiffre[0][0] if sorted_chiffre else None
-
-    n = 0
-    print(mots_tries)
-    
-    
-    i = 0
-    imapping = []
-    new_mot = list(mots_tries[n])
-
-    while len(imapping) == 0 and i < len(frequences_francais):
-        candidate_lettre = frequences_francais[i]
-        temp_mot = new_mot[:]
-        
-        while lettre_fréquente not in new_mot and n < len(mots_tries):
-            n = n + 1
-            new_mot = list(mots_tries[n])
-            print(new_mot) 
-        
-        temp_mot = new_mot[:]
-        
-        for j in range(len(temp_mot)):
-            if temp_mot[j] == lettre_fréquente:
-                temp_mot[j] = candidate_lettre
-                c1 = j 
-        
-        imapping = initial_mapping(frequences_francais[i], mots_tries[n][c1], mots_tries[n], chemin_dictionnaire)
-        i += 1
-    print(temp_mot)
-
-    i=i-1
-    print(f"Mots correspondants pour {frequences_francais[i]} dans le mot le plus long :", imapping)
-    mot_final = ''.join(temp_mot)
-    print(f"Mapping initial pour {frequences_francais[i]} dans le mot le plus long :", mot_final)
-
-    message_dechiffre = list(message_chiffre)
-    mapping_mot = d_general(mot_final, imapping, message_chiffre, chemin_dictionnaire)[1]
-
-    for j in range(len(mot_final)) :
-        for k in range(len(message_chiffre)) :
-            if mot_final[j] == message_chiffre[k] :
-                message_dechiffre[k] = mapping_mot[j]
-            elif  message_dechiffre[k] == lettre_fréquente:
-                message_dechiffre[k] = frequences_francais[i]
-    
-    
-
-    message_original = ''.join(message_dechiffre)
-    print(message_original)
-
-
-    return mot_final, message_original
-        
-def d(mot) :
-    distance_min = len(mot)
-    mot_sa = enlever_accents(mot)
-    mot_correspondants = trouver_mots_correspondants(mot_sa)[0]
-    
-    for mot_p in mot_correspondants:
-        mot_p_sa = enlever_accents(mot_p)
-        distance = sum(1 for a, b in zip(mot_sa, mot_p_sa) if a != b)
-        distance_min = min(distance_min, distance)
-    
-    return distance_min
-
-def d_general(mot_long, imapping, message_chiffre, chemin_dictionnaire):
-    mot_choisi = None
-    distance_min = len(message_chiffre)
-    message_sa = enlever_accents(message_chiffre)
-    message_dechiffre = list(message_sa)
-
-    for mot_p in imapping:
-        mot_p_sa = enlever_accents(mot_p)
-        for j in range(len(mot_p_sa)) :
-            for k in range(len(message_chiffre)) :
-                if mot_long[j] == message_chiffre[k] :
-                    message_dechiffre[k] = mot_p_sa[j]
-        message_dechiffre_str = ''.join(message_dechiffre)
-        distance = sum(d(mot, chemin_dictionnaire) for mot in message_dechiffre_str.split())
-        
-        if distance < distance_min:
-            distance_min = distance
-            mot_choisi = mot_p
-                
-
-    return distance_min, mot_choisi
-        
-
-
-def initial_mapping(lettre_freq, lettre_change, mot_chiffre):
-    L= []
-    potentials = []
-    mot_liste = list(mot_chiffre)
-    candidat = trouver_mots_correspondants(mot_chiffre)
-    
-    for i in range(len(mot_chiffre)):
-        if mot_chiffre[i] == lettre_change:
-            L.append(i)
-    
-    for c in candidat[0]:
-        for i in L:
-            if len(c) >= i:
-                if c[i] == lettre_freq and c not in potentials:
-                    potentials.append(c)
-    return potentials
-
-
+     
 #pas encore fini 
 def mapping_with_list(keys_sure,traduction,mot_chiffre):
     L= []
