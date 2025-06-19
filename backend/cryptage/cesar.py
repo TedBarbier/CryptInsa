@@ -28,9 +28,6 @@ def cesar_cipher(data):
         'steps': steps
     }
 
-
-
-
 alphabet=string.ascii_lowercase+' '+','+'.'
 
 def cesar_encrypt(message,decalage):

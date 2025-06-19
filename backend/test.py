@@ -4,7 +4,7 @@ import cryptage.decrypt as decrypt
 
 
 
-storedclear="elle ne trouve de reconfort que dans les lettres ecrites a son frere, porte disparu, qu elle glisse sous sa garde robe et qui disparaissent mysterieusement. lorsqu elle recoit des reponses anonymes, elle y repond, sans savoir que leur auteur n est autre que son plus grand rival. alors qu un lien indefectible se noue entre eux, iris accepte une mission au front en tant que correspondante. dans un pays ou les humains ne sont que les pions de puissances divines, iris et roman se font la promesse de continuer a s ecrire. mais, confrontes aux horreurs de la guerre, leur avenir sera de plus en plus incertain." 
+storedclear="le titre academique d ingenieur ou l exercice de la profession sont reglementes dans certains pays, a des degres divers." 
 storedcipher= cesar.cesar_encrypt(storedclear,3)
 traduction,traduction_sur,message_split,ponctuation = main.etape1(storedcipher)
 print("Message clair:", storedclear)

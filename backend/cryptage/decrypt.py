@@ -52,8 +52,6 @@ def decrypt_lettre_inverse(message,frequence):
     
     return decode
 
-
-
 def create_key(message):
     message=cesar.cesar_encrypt(message.lower(),3)
     frequences=freq.get_letter_frequencies(message)
@@ -79,36 +77,6 @@ def message_from_key(message, traduction): #message apres cesar
             new_message += char
     return new_message
 
-# def find_score_lettre(l, t, traductions, freqs_message, freqs_combi_message):
-#     """
-#     Calcule le score d'une lettre en utilisant les fréquences pré-calculées.
-#     """
-#     score_combi = 0
-#     cpt = 0
-    
-#     # On filtre les combinaisons pertinentes une seule fois
-#     combinaisons_pertinentes = {k: v for k, v in freqs_combi_message.items() if v > 0.003} # Seuil ajusté
-    
-#     for combi in combinaisons_pertinentes:
-#         if l in combi and combi[0] in traductions and combi[1] in traductions:
-#             c1 = traductions[combi[0]]
-#             c2 = traductions[combi[1]]
-#             trad_combi = c1 + c2
-#             if trad_combi in freq_combination_francais:
-#                 score_combi += freq_combination_francais[trad_combi]
-#                 cpt += 1
-
-#     if cpt > 0:
-#         score_combi = (score_combi / cpt) / 4 # Normalisation
-    
-#     # Score basé sur la fréquence de la lettre
-#     # On évite la division par zéro si la fréquence est nulle.
-#     freq_ref = freq_francais.get(t, 0)
-#     p = 1 - (abs(freqs_message.get(l, 0) - freq_ref) / 19) # 19 est une constante magique, peut-être à revoir
-    
-#     # Pondération des deux scores
-#     score_final = 0.4 * p + 0.6 * score_combi
-#     return score_final
 
 def change_traduction_with_word(traduction, mot_initial, mot_final):
     for i in range(min(len(mot_initial), len(mot_final))):
