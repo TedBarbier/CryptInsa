@@ -1,6 +1,8 @@
-async function analyze() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
+const BASE_URL = "https://cryptinsa-t3ze.onrender.com:5000/"; // Change this to your backend URL if needed
+
+async function analyze() {
     const message = document.getElementById("cipherText").value;
-    const res = await fetch("http://localhost:5000/analyze", {
+    const res = await fetch(`${BASE_URL}/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
@@ -9,13 +11,10 @@ async function analyze() { // Recuperer le texte chiffré et l'envoyer à l'API 
     const data = await res.json();
     return data;
 }
-
-// Export the function to make it available for other modules
 window.analyze = analyze;
 
-async function cesar(message, shift) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-
-    const res = await fetch("http://localhost:5000/cesar", {
+async function cesar(message, shift) {
+    const res = await fetch(`${BASE_URL}/cesar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, shift })
@@ -26,8 +25,8 @@ async function cesar(message, shift) { // Recuperer le texte chiffré et l'envoy
 }
 window.cesar = cesar;
 
-async function cesarDecrypt(message, shift) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/cesar/decrypt", {
+async function cesarDecrypt(message, shift) {
+    const res = await fetch(`${BASE_URL}/cesar/decrypt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, shift })
@@ -38,8 +37,8 @@ async function cesarDecrypt(message, shift) { // Recuperer le texte chiffré et 
 }
 window.cesarDecrypt = cesarDecrypt;
 
-async function vigenere(message, key) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/vigenere", {
+async function vigenere(message, key) {
+    const res = await fetch(`${BASE_URL}/vigenere`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, key })
@@ -50,8 +49,8 @@ async function vigenere(message, key) { // Recuperer le texte chiffré et l'envo
 }
 window.vigenere = vigenere;
 
-async function vigenereDecrypt(message, key) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/vigenere/decrypt", {
+async function vigenereDecrypt(message, key) {
+    const res = await fetch(`${BASE_URL}/vigenere/decrypt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, key })
@@ -62,9 +61,8 @@ async function vigenereDecrypt(message, key) { // Recuperer le texte chiffré et
 }
 window.vigenereDecrypt = vigenereDecrypt;
 
-
-async function updateAttack() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/update_attack", {
+async function updateAttack() {
+    const res = await fetch(`${BASE_URL}/update_attack`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "update" })
@@ -73,8 +71,9 @@ async function updateAttack() { // Recuperer le texte chiffré et l'envoyer à l
     const data = await res.json();
     return data;
 }
-async function startAttack(cipherText) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/start_attack", {
+
+async function startAttack(cipherText) {
+    const res = await fetch(`${BASE_URL}/start_attack`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cipherText })
