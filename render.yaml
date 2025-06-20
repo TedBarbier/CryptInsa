@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cryptinsa
+    env: docker
+    dockerfilePath: ./Dockerfile.dockerfile
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FLASK_ENV
+        value: production 
