@@ -137,5 +137,41 @@ def comparaison_clé(clé1, clé2):
             liste.append((k,clé1[k]))
     return count, liste
 
+
+
+def check_mot(mot, dico_par_longueur):
+    """
+    Trouve le mot le plus proche dans le dictionnaire optimisé.
+    La recherche est limitée aux mots de longueur similaire.
+    """
+    longueur_mot = len(mot)
+    if longueur_mot == 0:
+        return None
+
+    # Définir la plage de recherche (ex: mots de longueur -1, même longueur, et +1)
+    longueurs_a_chercher = range(max(1, longueur_mot - 1), longueur_mot + 2)
+    
+    meilleur_mot = None
+    diff_min = len(mot) # La différence maximale est la longueur du mot lui-même
+
+    for l in longueurs_a_chercher:
+        if l in dico_par_longueur:
+            # On cherche dans un sous-ensemble beaucoup plus petit du dictionnaire
+            for mot_dico in dico_par_longueur[l]:
+                cpt = abs(longueur_mot - len(mot_dico))
+                for i in range(min(longueur_mot, len(mot_dico))):
+                    if mot[i] != mot_dico[i]:
+                        cpt += 1
+                
+                if cpt < diff_min:
+                    diff_min = cpt
+                    meilleur_mot = mot_dico
+                    # # Petite optimisation : si le mot est presque parfait, on peut s'arrêter
+                    # if diff_min <= 1:
+                    #     return meilleur_mot
+                        
+    return meilleur_mot
+
+
 pdf_path = "cryptage/miserables.pdf"
 text = freq.extract_text_from_pdf(pdf_path)
