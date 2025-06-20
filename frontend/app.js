@@ -2,6 +2,7 @@ const express = require('express');
 const { engine } = require('express-handlebars');
 const morgan = require('morgan');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const fetch = require('node-fetch');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -32,6 +33,25 @@ app.set('views', './views');
 
 // Serve static files
 app.use(express.static('public'));
+
+// Route de test pour vérifier la connexion avec Flask
+app.get('/test-backend', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:5000/health');
+        const data = await response.json();
+        res.json({
+            status: 'success',
+            backend: data,
+            message: 'Backend Flask is accessible'
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Backend Flask is not accessible',
+            error: error.message
+        });
+    }
+});
 
 app.get('/', (req, res) => {
     res.render('home', { title: 'CryptoAnalyzer - Analyse de Fréquence' });

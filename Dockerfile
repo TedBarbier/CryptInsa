@@ -41,9 +41,10 @@ RUN mkdir -p /var/log/supervisor
 # Port exposé (Render utilise ce port)
 EXPOSE $PORT
 
-# Script de démarrage pour gérer le port dynamique de Render
+# Scripts de démarrage pour gérer le port dynamique de Render
 COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+COPY start-sequential.sh /app/start-sequential.sh
+RUN chmod +x /app/start.sh /app/start-sequential.sh
 
-# Commande de démarrage
-CMD ["/app/start.sh"] 
+# Commande de démarrage (utilise le script séquentiel plus fiable)
+CMD ["/app/start-sequential.sh"] 

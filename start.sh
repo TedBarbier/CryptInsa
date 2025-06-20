@@ -37,6 +37,21 @@ echo "   - PORT: $PORT"
 echo "   - FLASK_ENV: $FLASK_ENV"
 echo "   - NODE_ENV: $NODE_ENV"
 
+# Fonction pour attendre que Flask soit prêt
+wait_for_flask() {
+    echo "⏳ Attente du démarrage de Flask..."
+    for i in {1..60}; do
+        if curl -s http://localhost:5000/health > /dev/null 2>&1; then
+            echo "✅ Flask est prêt!"
+            return 0
+        fi
+        echo "   Tentative $i/60..."
+        sleep 2
+    done
+    echo "❌ Timeout: Flask n'a pas démarré dans les 2 minutes"
+    return 1
+}
+
 # Démarrer supervisord
 echo "🚀 Lancement des services avec supervisord..."
 exec supervisord -c /etc/supervisor/conf.d/supervisord.conf 
