@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="/css/common/main.css">
         <link rel="stylesheet" href="/css/common/header.css">
         <link rel="stylesheet" href="/css/common/footer.css">
+        
     </head>
 
     <body>
@@ -40,5 +41,10 @@
         <script src="/js/common/background.js"></script>
         <script src="/js/common/header.js"></script>
         <script src="/js/common/footer.js"></script>
+        
+        <!-- Page-specific JavaScript -->
+        {{#if pageJS}}
+            <script src="/js/{{pageJS}}.js"></script>
+        {{/if}}
     </body>
 </html>

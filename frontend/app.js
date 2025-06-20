@@ -46,7 +46,11 @@ app.get('/substitution_dechiffre', (req, res) => {
     res.render('substitution_dechiffre', { title: 'Déchiffrement par substitution' });
 });
 app.get('/help', (req, res) => {
-    res.render('help', { title: 'Aide' });
+    res.render('help', { 
+        title: 'Aide - CryptInsa',
+        pageCSS: 'help',
+        pageJS: 'help'
+    });
 });
 //Start the server: Use commande "node app.js" to start the server. "npm run dev" to start the server with debug mode.
 const server = app.listen(port, () => {
