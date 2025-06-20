@@ -21,6 +21,10 @@ RUN pip install --upgrade pip && \
 WORKDIR /app/frontend
 RUN npm install
 
+# Copy all project files
+WORKDIR /app
+COPY . .
+
 # Expose port (Render will provide PORT environment variable)
 EXPOSE $PORT
 
