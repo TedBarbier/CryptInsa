@@ -1,0 +1,109 @@
+{{!-- CSS spécifique pour l'analyse de fréquences --}}
+<link rel="stylesheet" href="/css/substitution_annalyse.css">
+
+{{!-- 
+    STRUCTURE DES BOUTONS ANIMÉS:
+    Tous les boutons utilisent maintenant la structure suivante:
+    <button class="btn [btn-primary|btn-secondary|btn-success]">
+        <svg class="arr-2" viewBox="0 0 24 24">...</svg>
+        <span class="text">Contenu du bouton</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">...</svg>
+    </button>
+--}}
+
+<div class="frequency-analysis-container">
+    <section class="analysis-section">
+        <h2 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Analyse de Fréquences
+        </h2>
+
+        {{!-- PREMIÈRE LIGNE: Fréquences Chiffrées + Comparaison Française --}}
+        <div class="row-1">
+            {{!-- Colonne 1: Fréquences du texte chiffré --}}
+            <div class="cipher-frequency-column">
+                <h3><i class="fas fa-lock"></i> Fréquences du Texte Chiffré</h3>
+                <div class="chart-container">
+                    <div id="cipherChart" class="custom-chart cipher-chart">
+                        <div class="chart-title">🔒 FRÉQUENCES CHIFFRÉES</div>
+                        <div class="chart-bars" id="cipherBars">
+                            <div class="empty-state">
+                                <div class="empty-icon">🔒</div>
+                                <div class="empty-message">Aucun texte chiffré analysé</div>
+                            </div>
+                        </div>
+                        <div class="chart-legend" id="cipherLegend"></div>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <span>Lettres: <strong id="cipherLetterCount">0</strong></span>
+                    <span>Uniques: <strong id="cipherUniqueCount">0</strong></span>
+                </div>
+                
+                <div class="cipher-preview" id="cipherPreview">
+                    <span class="placeholder-text">En attente du texte chiffré...</span>
+                </div>
+
+                <div class="control-buttons">
+                    <button id="refreshAnalysis" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                        <span class="text">
+                        <i class="fas fa-sync-alt"></i> Actualiser
+                        </span>
+                        <span class="circle"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            {{!-- Colonne 2: Comparaison avec le français --}}
+            <div class="french-comparison-column">
+                <h3><i class="fas fa-balance-scale"></i> Comparaison Française</h3>
+                
+                <div class="chart-container">
+                    <div id="frenchChart" class="custom-chart french-chart">
+                        <div class="chart-title">FRÉQUENCES FRANÇAISES</div>
+                        <div class="chart-bars" id="frenchBars">
+                            <!-- French frequency bars will be generated here -->
+                        </div>
+                        <div class="chart-legend" id="frenchLegend"></div>
+                    </div>
+                </div>
+                
+                <div class="suggested-matches">
+                    <h4>Correspondances Suggérées</h4>
+                    <div class="matches-container" id="suggestedMatches">
+                        <div class="match-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Analysez un texte pour voir les correspondances</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="next-step-btn">
+                    <button id="nextStep" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                        <span class="text">
+                            <i class="fas fa-angle-right"></i> Étape suivante
+                        </span>
+                        <span class="circle"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
+                            <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
+                        </svg>
+                </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+{{!-- JavaScript --}}
+<script src="/js/flask.js"></script>
+<script src="/js/substitution_annalyse.js"></script>

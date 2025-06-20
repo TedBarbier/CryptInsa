@@ -21,6 +21,7 @@ __pycache__/
 *.sqlite3
 *.db
 
+
 # Dossier de configuration IDEs courants
 .vscode/
 .idea/
@@ -45,3 +46,6 @@ instance/
 # fichiers secrets (à ne pas commiter)
 .env
 .env.local
+
+
+.Identifier
