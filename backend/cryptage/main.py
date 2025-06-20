@@ -30,12 +30,12 @@ def etape1(message):
     print("start 1")
     traduction = {}
     _, traduction = decrypt.decrypt_message(message)
-    _,traduction_sur = decrypt.decrypt_message(message,10)
+    _,traduction_sur = decrypt.decrypt_message(message,30) # traduction vide
     espace,e=decrypt.make_traduction_sur(message)
-    # traduction_sur[espace[0]]=' '
-    # traduction[espace[0]]=' '
-    # traduction_sur[e[0]]='e'
-    # traduction[e[0]]='e'
+    traduction_sur[espace[0]]=' '
+    traduction[espace[0]]=' '
+    traduction_sur[e[0]]='e'
+    traduction[e[0]]='e'
     message_split=message.split(espace[0])
     ponctuation=mapping.detecter_ponctuation(message,espace[0])
     if ponctuation['point'] is not None:
@@ -53,9 +53,10 @@ def etape1(message):
 def etape2(message,traduction,traduction_sur,message_split,ponctuation):
     print("start 2")
     traduction_test=traduction_sur.copy()
-    for j in range(2):
+    for j in range(10):
         if j==1:
             if traduction_test==traduction_sur:
+                print("teeeest")
                 espace,e=decrypt.make_traduction_sur(message)
                 traduction_sur[espace[0]]=' '
                 traduction_sur[e[0]]='e'
@@ -65,6 +66,16 @@ def etape2(message,traduction,traduction_sur,message_split,ponctuation):
                 traduction_sur[espace_key[0]]='e'
                 traduction_sur[e_key[0]]=' '
                 message_split=message.split(e_key[0])
+                ponc=[ k for k,v in traduction_sur.items() if v=='.' or v==',']
+                for p in ponc:
+                    traduction_sur[p]=None
+                ponctuation=mapping.detecter_ponctuation(message,e_key[0])
+                if ponctuation['point'] is not None:
+                    traduction[ponctuation['point']]="."
+                    traduction_sur[ponctuation['point']]="."
+                if ponctuation['virgule'] is not None:
+                    traduction[ponctuation['virgule']]=","
+                    traduction_sur[ponctuation['virgule']]=","
         for i in range(len(message_split)):
             mot = message_split[i % len(message_split)]
             keys_sur = [k for k,v in traduction_sur.items() if v is not None and k in mot]
@@ -103,6 +114,7 @@ def etape2(message,traduction,traduction_sur,message_split,ponctuation):
                         save_to_json(mot_chiffre=mot, mot_traduit=None, dictionnaire=traduction_sur)
     message_clair=decrypt.message_from_key(message,traduction)
     liste_mots=message_clair.split(" ")
+    print("traduction sur 2", traduction_sur)
     for i in range(0,len(liste_mots)):
         nouveau_mot=decrypt.check_mot(liste_mots[i],mapping.DICO_LONGUEUR)
         if nouveau_mot is not None:
