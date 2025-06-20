@@ -54,10 +54,7 @@ def etape2(message,traduction,traduction_sur,message_split,ponctuation):
     print("start 2")
     traduction_test=traduction_sur.copy()
     for j in range(2):
-        print(j)
         if j==1:
-            print(traduction_sur) 
-            print(j)
             if traduction_test==traduction_sur:
                 espace,e=decrypt.make_traduction_sur(message)
                 traduction_sur[espace[0]]=' '

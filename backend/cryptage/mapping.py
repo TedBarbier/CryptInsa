@@ -72,9 +72,13 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
 
     profils = defaultdict(lambda: {'avant_espace': 0, 'autre_position': 0})
 
-    for i in range(len(texte_chiffre) - 1):
-        char_actuel = texte_chiffre[i]
-        char_suivant = texte_chiffre[i + 1]
+    for i in range(len(texte_chiffre)):
+        if i!= len(texte_chiffre)-1:
+            char_actuel = texte_chiffre[i]
+            char_suivant = texte_chiffre[i + 1]
+        else:
+            char_actuel = texte_chiffre[i]
+            char_suivant = caractere_espace
 
         if char_actuel == caractere_espace:
             continue
@@ -87,10 +91,12 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
     # Calcul des scores
     candidats = []
     for char, profil in profils.items():
-        total = profil['avant_espace'] + profil['autre_position']
-        if total == 0:
-            continue
-        score = profil['avant_espace'] / total
+        score = profil['avant_espace']
+        if profil['autre_position']>0:
+            score=0
+            profil['avant_espace']=0
+        if profil['avant_espace']==0:
+            score=0
         candidats.append({'char': char, 'freq': profil['avant_espace'], 'score': score})
 
     # Trier selon le score et la fréquence
@@ -101,6 +107,9 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
         point = candidats[0]['char']
         if len(candidats) > 1 and candidats[1]['score'] >= score_seuil:
             virgule = candidats[1]['char']
+
+    if texte_chiffre[-1] == virgule:
+        point, virgule = virgule, point
 
     return {'point': point, 'virgule': virgule}
 
