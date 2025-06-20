@@ -1,4 +1,4 @@
-const BASE_URL = "https://cryptinsa-t3ze.onrender.com:5000"; // Change this to your backend URL if needed
+const BASE_URL = "https://cryptinsa-t3ze.onrender.com:5000/"; // Change this to your backend URL if needed
 
 async function analyze() {
     const message = document.getElementById("cipherText").value;
