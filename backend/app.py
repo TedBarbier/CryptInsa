@@ -97,6 +97,7 @@ def start_attack():
     return jsonify({"message": storedcipher})
 
 if __name__ == '__main__':
-    # Le backend utilise toujours le port 5000 en interne
-    # Le frontend (sur le PORT de Render) proxie vers ce port
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    import os
+    # En production, debug=False et host=0.0.0.0 pour être accessible depuis l'extérieur
+    debug_mode = os.environ.get('FLASK_ENV', 'production') == 'development'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)

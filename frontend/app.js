@@ -1,11 +1,9 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const morgan = require('morgan');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 const port = process.env.PORT || 8000;
-const backendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 
 //Set up morgan
 app.use(morgan('combined'));
@@ -19,28 +17,6 @@ app.set('views', './views');
 
 // Serve static files
 app.use(express.static('public'));
-
-// Proxy API requests to backend
-app.use('/analyze', createProxyMiddleware({
-    target: backendUrl,
-    changeOrigin: true
-}));
-app.use('/cesar', createProxyMiddleware({
-    target: backendUrl,
-    changeOrigin: true
-}));
-app.use('/vigenere', createProxyMiddleware({
-    target: backendUrl,
-    changeOrigin: true
-}));
-app.use('/start_attack', createProxyMiddleware({
-    target: backendUrl,
-    changeOrigin: true
-}));
-app.use('/update_attack', createProxyMiddleware({
-    target: backendUrl,
-    changeOrigin: true
-}));
 
 app.get('/', (req, res) => {
     res.render('home', { title: 'CryptoAnalyzer - Analyse de Fréquence' });
@@ -73,6 +49,6 @@ app.get('/help', (req, res) => {
     res.render('help', { title: 'Aide' });
 });
 //Start the server: Use commande "node app.js" to start the server. "npm run dev" to start the server with debug mode.
-const server = app.listen(port, '0.0.0.0', () => {
-    console.log(`App listening at http://0.0.0.0:${port}`);
+const server = app.listen(port, () => {
+    console.log(`App listening at http://127.0.0.1:${port}`);
   });

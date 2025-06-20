@@ -1,38 +1,32 @@
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y nodejs npm && \
     rm -rf /var/lib/apt/lists/*
 
-# Set workdir
+# Set workdir and copy all project files
 WORKDIR /app
+COPY . /app
 
-# Copy requirements first for better layer caching
-COPY backend/requirements.txt ./backend/
-COPY frontend/package*.json ./frontend/
-
-# Install Python dependencies
-RUN pip install --upgrade pip && \
-    pip install -r backend/requirements.txt && \
-    pip install supervisor
+# Create and activate virtualenv, install Python dependencies
+RUN python3 -m venv venv && \
+    . venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install -r backend/requirements.txt
 
 # Install frontend dependencies
 WORKDIR /app/frontend
 RUN npm install
 
-# Copy all project files
+# Expose frontend and backend ports
+EXPOSE 8000 5000
+
+# Install supervisor
 WORKDIR /app
-COPY . .
+RUN pip install --no-cache-dir supervisor
 
-# Expose port (Render will provide PORT environment variable)
-EXPOSE $PORT
-
-# Create necessary directories and set permissions
-RUN mkdir -p /var/log/supervisor
-
-# Copy supervisor config
+# Supervisor config
 COPY supervisord.conf /etc/supervisord.conf
 
-# Start command
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
