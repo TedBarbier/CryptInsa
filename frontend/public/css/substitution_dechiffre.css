@@ -810,6 +810,199 @@
     }
 }
 
+/* ===== SECTION DES MOTS ===== */
+.words-section {
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.35) 100%);
+    border-radius: 24px;
+    padding: 2.5rem;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 12px 30px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 255, 136, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.words-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(0, 255, 136, 0.03) 50%, 
+        transparent 70%);
+    pointer-events: none;
+}
+
+.words-section .text-display-row {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.words-section .text-display-col {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.12) 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(0, 255, 136, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 8px 20px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.words-section .text-display-col::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(0, 255, 136, 0.1), 
+        transparent);
+    transition: left 0.6s ease;
+}
+
+.words-section .text-display-col:hover::before {
+    left: 100%;
+}
+
+.words-section .text-display-col:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.2),
+        0 6px 12px rgba(0, 255, 136, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    border-color: rgba(0, 255, 136, 0.25);
+}
+
+/* Boutons de navigation des mots */
+.words-section .btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    min-width: 60px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 8px 20px rgba(0, 255, 136, 0.25),
+        0 4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+}
+
+.words-section .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+}
+
+.words-section .btn:hover::before {
+    width: 100px;
+    height: 100px;
+}
+
+.words-section .btn:hover {
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 
+        0 20px 40px rgba(0, 255, 136, 0.35),
+        0 8px 16px rgba(0, 0, 0, 0.2),
+        inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.words-section .btn:active {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.words-section .btn i {
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+}
+
+/* Textareas dans la section des mots */
+.words-section textarea {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%);
+    border: 2px solid rgba(0, 255, 136, 0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: #ffffff;
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 120px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        inset 0 4px 8px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.words-section textarea:focus {
+    outline: none;
+    border-color: #00ff88;
+    background: linear-gradient(145deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%);
+    box-shadow: 
+        0 0 0 3px rgba(0, 255, 136, 0.15),
+        inset 0 4px 12px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 255, 136, 0.1);
+    transform: scale(1.02);
+}
+
+.words-section textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+.words-section h4 {
+    background: linear-gradient(135deg, #00ff88 0%, #00d4aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.words-section h4 i {
+    font-size: 1.3rem;
+    color: #00ff88;
+    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.4));
+}
+
 /* ===== SECTION COMPARAISON ===== */
 .comparison-section {
     background: linear-gradient(145deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.25) 100%);
@@ -1243,6 +1436,37 @@
         width: 28px;
         font-size: 0.9rem;
     }
+    
+    /* Responsive pour la section des mots */
+    .words-section {
+        padding: 1.5rem;
+    }
+    
+    .words-section .text-display-row {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .words-section .btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        margin: 0 auto;
+    }
+    
+    .words-section .text-display-col {
+        padding: 1.5rem;
+    }
+    
+    .words-section textarea {
+        font-size: 1rem;
+        min-height: 100px;
+        padding: 1.2rem;
+    }
+    
+    .words-section h4 {
+        font-size: 1.2rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1264,6 +1488,39 @@
     .arrows-row .arrow {
         width: 24px;
         font-size: 0.8rem;
+    }
+    
+    /* Responsive mobile pour la section des mots */
+    .words-section {
+        padding: 1rem;
+        border-radius: 16px;
+    }
+    
+    .words-section .text-display-row {
+        gap: 1rem;
+    }
+    
+    .words-section .btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .words-section .text-display-col {
+        padding: 1.2rem;
+        border-radius: 16px;
+    }
+    
+    .words-section textarea {
+        font-size: 0.9rem;
+        min-height: 80px;
+        padding: 1rem;
+        border-radius: 12px;
+    }
+    
+    .words-section h4 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
     }
 }
 
