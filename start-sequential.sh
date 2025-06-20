@@ -24,17 +24,42 @@ FLASK_PID=$!
 
 # Attendre que Flask soit prêt
 echo "⏳ Attente du démarrage de Flask..."
-for i in {1..30}; do
-    if curl -s http://localhost:5000/health > /dev/null 2>&1; then
-        echo "✅ Flask est prêt!"
-        break
+sleep 5  # Attendre un peu que Flask démarre vraiment
+
+for i in {1..20}; do
+    # Test avec curl et gestion d'erreur plus robuste
+    if command -v curl >/dev/null 2>&1; then
+        if curl -f -s --connect-timeout 3 --max-time 5 http://localhost:5000/health > /dev/null 2>&1; then
+            echo "✅ Flask est prêt! (curl test réussi)"
+            break
+        fi
+    else
+        # Fallback si curl n'est pas disponible - utiliser Python
+        if python3 -c "
+import urllib.request
+import json
+try:
+    response = urllib.request.urlopen('http://localhost:5000/health', timeout=3)
+    data = json.loads(response.read())
+    print('✅ Flask est prêt! (python test réussi)')
+    exit(0)
+except:
+    exit(1)
+" 2>/dev/null; then
+            break
+        fi
     fi
-    if [ $i -eq 30 ]; then
-        echo "❌ Timeout: Flask n'a pas démarré"
+    
+    if [ $i -eq 20 ]; then
+        echo "❌ Timeout: Flask n'a pas démarré après 20 tentatives"
+        echo "🔍 Debug: Vérification du processus Flask..."
+        ps aux | grep python || echo "Aucun processus Python trouvé"
+        echo "🔍 Debug: Test de connectivité réseau..."
+        nc -z localhost 5000 2>/dev/null && echo "Port 5000 ouvert" || echo "Port 5000 fermé"
         exit 1
     fi
-    echo "   Tentative $i/30..."
-    sleep 2
+    echo "   Tentative $i/20..."
+    sleep 3
 done
 
 echo "🌐 Lancement du frontend Express..."

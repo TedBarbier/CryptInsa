@@ -11,6 +11,8 @@ RUN apt-get update && \
     nodejs \
     npm \
     supervisor \
+    curl \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # Créer le répertoire de travail
@@ -44,7 +46,8 @@ EXPOSE $PORT
 # Scripts de démarrage pour gérer le port dynamique de Render
 COPY start.sh /app/start.sh
 COPY start-sequential.sh /app/start-sequential.sh
-RUN chmod +x /app/start.sh /app/start-sequential.sh
+COPY start-simple.sh /app/start-simple.sh
+RUN chmod +x /app/start.sh /app/start-sequential.sh /app/start-simple.sh
 
-# Commande de démarrage (utilise le script séquentiel plus fiable)
-CMD ["/app/start-sequential.sh"] 
+# Commande de démarrage (utilise le script simple avec délai)
+CMD ["/app/start-simple.sh"] 

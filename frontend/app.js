@@ -17,12 +17,24 @@ app.use('/api', createProxyMiddleware({
     pathRewrite: {
         '^/api': '', // Remove /api prefix when forwarding to Flask
     },
+    timeout: 30000, // 30 secondes timeout
+    proxyTimeout: 30000,
+    retry: true,
     onError: (err, req, res) => {
-        console.error('Proxy error:', err.message);
-        res.status(500).json({ error: 'Backend service unavailable' });
+        console.error(`[${new Date().toISOString()}] Proxy error for ${req.url}:`, err.message);
+        if (!res.headersSent) {
+            res.status(503).json({ 
+                error: 'Backend service temporarily unavailable', 
+                message: 'Flask backend is starting up, please try again in a few seconds',
+                timestamp: new Date().toISOString()
+            });
+        }
     },
     onProxyReq: (proxyReq, req, res) => {
-        console.log(`Proxying: ${req.method} ${req.url} -> http://localhost:5000${req.url.replace('/api', '')}`);
+        console.log(`[${new Date().toISOString()}] Proxying: ${req.method} ${req.url} -> http://localhost:5000${req.url.replace('/api', '')}`);
+    },
+    onProxyRes: (proxyRes, req, res) => {
+        console.log(`[${new Date().toISOString()}] Proxy response: ${proxyRes.statusCode} for ${req.url}`);
     }
 }));
 
