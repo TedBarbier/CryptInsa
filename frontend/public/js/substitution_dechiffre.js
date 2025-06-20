@@ -76,7 +76,6 @@ async function play() {
         await window.updateAttack();
         
         // Démarrer les mises à jour périodiques (toutes les 3 secondes)
-        attackInterval = setInterval(async () => {
             if (is_finished) {
                 clearInterval(attackInterval);
                 return;
@@ -96,7 +95,6 @@ async function play() {
                 console.error('Erreur lors de la mise à jour:', error);
                 showNotification('Erreur lors de l\'analyse', 'error');
             }
-        }, 5000);
     } catch (error) {
         console.error('Erreur lors du démarrage de l\'attaque:', error);
         showNotification('Erreur lors du démarrage de l\'analyse', 'error');
