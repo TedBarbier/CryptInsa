@@ -248,8 +248,7 @@ function initParallaxEffects() {
 function initCounterAnimations() {
     const counters = [
         { element: createCounterElement('6', 'Membres d\'équipe'), target: 6 },
-        { element: createCounterElement('3', 'Outils crypto'), target: 3 },
-        { element: createCounterElement('100', 'Utilisateurs satisfaits'), target: 100 },
+        { element: createCounterElement('3', 'Outils crypto'), target: 2 },
         { element: createCounterElement('24/7', 'Support disponible'), target: 247, suffix: '/7', displayTarget: 24 }
     ];
     
