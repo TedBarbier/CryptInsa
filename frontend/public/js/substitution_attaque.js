@@ -27,12 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // === INITIALISATION DES ÉLÉMENTS DOM ===
 function initializeElements() {
     elements.inputText = document.getElementById('inputText');
-    elements.outputText = document.getElementById('outputText');
     elements.inputLength = document.getElementById('inputLength');
     elements.letterCount = document.getElementById('letterCount');
     elements.uniqueLetters = document.getElementById('uniqueLetters');
     elements.launchAttack = document.getElementById('launchAttack');
-    outputText.value = localStorage.getItem('plaintext');
     inputText.value = localStorage.getItem('ciphertext');
 }
 
