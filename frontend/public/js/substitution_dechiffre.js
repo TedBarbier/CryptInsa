@@ -9,7 +9,7 @@ const FRENCH_FREQUENCIES = {
 };
 
 // Alphabet français complet
-const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz,.';
+const FRENCH_ALPHABET = 'abcdefghijklmnopqrstuvwxyz ,.';
 const ALPHABET_DISPLAY = FRENCH_ALPHABET.split('');
 
 // Variables globales
