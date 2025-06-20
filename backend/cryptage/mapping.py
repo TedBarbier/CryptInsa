@@ -13,25 +13,29 @@ def generer_pattern(mot):
         pattern.append(str(mapping[lettre]))
     return "".join(pattern)
 
+from collections import defaultdict
+
 def charger_dictionnaire_complet(chemin_dict="cryptage/dict.txt"):
     """
-    Construit les 3 dictionnaires :
-    - par pattern isomorphique
+    Construit deux dictionnaires :
+    - DICO_PATTERN : mapping pattern isomorphique → ensemble de mots
+    - DICO_LONGUEUR : mapping longueur → ensemble de mots
     """
     DICO_PATTERN = defaultdict(set)
+    DICO_LONGUEUR = defaultdict(set)
 
     with open(chemin_dict, "r", encoding="utf-8") as f:
         mots = f.read().split()
 
     for mot in mots:
         mot = mot.lower()
-
-        # DICO_PATTERN
         DICO_PATTERN[generer_pattern(mot)].add(mot)
+        DICO_LONGUEUR[len(mot)].add(mot)
 
-    return dict(DICO_PATTERN)
+    return dict(DICO_PATTERN), dict(DICO_LONGUEUR)
 
-DICO_PATTERN = charger_dictionnaire_complet() 
+
+DICO_PATTERN, DICO_LONGUEUR = charger_dictionnaire_complet() 
 
 
 def enlever_accents(texte):
