@@ -1,4 +1,7 @@
 from collections import defaultdict
+from difflib import get_close_matches
+import copy
+import cryptage.decrypt as decrypt
 import unicodedata
 
 
@@ -12,8 +15,6 @@ def generer_pattern(mot):
             compteur += 1
         pattern.append(str(mapping[lettre]))
     return "".join(pattern)
-
-from collections import defaultdict
 
 def charger_dictionnaire_complet(chemin_dict="cryptage/dict.txt"):
     """
@@ -53,7 +54,6 @@ def trouver_mots_correspondants(mot_chiffre):
 
     return mots_correspondants, len(mots_correspondants)
 
-from collections import defaultdict
 
 def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=0.95):
     """
@@ -104,7 +104,65 @@ def detecter_ponctuation(texte_chiffre: str, caractere_espace: str, score_seuil=
 
     return {'point': point, 'virgule': virgule}
 
-     
+def correction_apres_attaque(texte_chiffre, dictionnaire_traduction, dictionnaire_par_taille):
+    lettre_espace_chiffre = None
+    for k, v in dictionnaire_traduction.items():
+        if v == " ":
+            lettre_espace_chiffre = k
+            break
+    if not lettre_espace_chiffre:
+        raise ValueError("Lettre représentant l'espace introuvable.")
+
+    texte_dechiffre = decrypt.message_from_key(texte_chiffre, dictionnaire_traduction)
+    mots_chiffres = texte_chiffre.split(lettre_espace_chiffre)
+    mots_dechiffres = texte_dechiffre.split(" ")
+
+    for mot_chiffre, mot_dechiffre in zip(mots_chiffres, mots_dechiffres):
+        longueur = len(mot_dechiffre)
+        mots_valides = dictionnaire_par_taille.get(longueur, set())
+
+        if mot_dechiffre.lower() not in mots_valides:
+            suggestion = get_correction_proche(mot_dechiffre.lower(), mots_valides)
+            if suggestion:
+                print(f"[🔍 Proposition] '{mot_dechiffre}' → '{suggestion}'")
+
+                # Copie temporaire
+                tentative = copy.deepcopy(dictionnaire_traduction)
+
+                # Mise à jour temporaire
+                conflit = False
+                for c_chiffre, c_clair in zip(mot_chiffre, suggestion):
+                    ancien = tentative.get(c_chiffre)
+                    if ancien and ancien != c_clair:
+                        conflit = True
+                        break
+                    tentative[c_chiffre] = c_clair
+                if conflit:
+                    continue  # ne pas appliquer cette tentative
+
+                # Redéchiffrage global
+                texte_test = decrypt.message_from_key(texte_chiffre, tentative)
+                mots_test = texte_test.split(" ")
+
+                # Vérifie si tous les mots sont valides
+                tous_valides = all(
+                    mot.lower() in dictionnaire_par_taille.get(len(mot), set())
+                    for mot in mots_test
+                )
+                if tous_valides:
+                    dictionnaire_traduction = tentative
+                    print(f"Correction appliquée : {mot_dechiffre} → {suggestion}")
+                else:
+                    print(f"Correction rejetée : {mot_dechiffre} → {suggestion} (conflit)")
+    return dictionnaire_traduction
+
+def get_correction_proche(mot_invalide, liste_valides):
+    # Utilise difflib pour trouver les mots valides les plus proches
+    suggestions = get_close_matches(mot_invalide, liste_valides, n=1, cutoff=0.75)
+    return suggestions[0] if suggestions else None
+
+
+
 #pas encore fini 
 def mapping_with_list(keys_sure,traduction,mot_chiffre):
     L= []
