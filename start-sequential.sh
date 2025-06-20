@@ -29,7 +29,7 @@ sleep 5  # Attendre un peu que Flask démarre vraiment
 for i in {1..20}; do
     # Test avec curl et gestion d'erreur plus robuste
     if command -v curl >/dev/null 2>&1; then
-        if curl -f -s --connect-timeout 3 --max-time 5 http://localhost:5000/health > /dev/null 2>&1; then
+        if curl -f -s --connect-timeout 3 --max-time 5 http://127.0.0.1:5000/health > /dev/null 2>&1; then
             echo "✅ Flask est prêt! (curl test réussi)"
             break
         fi
@@ -39,7 +39,7 @@ for i in {1..20}; do
 import urllib.request
 import json
 try:
-    response = urllib.request.urlopen('http://localhost:5000/health', timeout=3)
+    response = urllib.request.urlopen('http://127.0.0.1:5000/health', timeout=3)
     data = json.loads(response.read())
     print('✅ Flask est prêt! (python test réussi)')
     exit(0)
@@ -55,7 +55,7 @@ except:
         echo "🔍 Debug: Vérification du processus Flask..."
         ps aux | grep python || echo "Aucun processus Python trouvé"
         echo "🔍 Debug: Test de connectivité réseau..."
-        nc -z localhost 5000 2>/dev/null && echo "Port 5000 ouvert" || echo "Port 5000 fermé"
+        nc -z 127.0.0.1 5000 2>/dev/null && echo "Port 5000 ouvert" || echo "Port 5000 fermé"
         exit 1
     fi
     echo "   Tentative $i/20..."

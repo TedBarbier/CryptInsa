@@ -12,7 +12,7 @@ app.use(morgan('combined'));
 
 // Proxy API calls to Flask backend
 app.use('/api', createProxyMiddleware({
-    target: 'http://localhost:5000',
+    target: 'http://127.0.0.1:5000',
     changeOrigin: true,
     pathRewrite: {
         '^/api': '', // Remove /api prefix when forwarding to Flask
@@ -49,7 +49,7 @@ app.use(express.static('public'));
 // Route de test pour vérifier la connexion avec Flask
 app.get('/test-backend', async (req, res) => {
     try {
-        const response = await fetch('http://localhost:5000/health');
+        const response = await fetch('http://127.0.0.1:5000/health');
         const data = await response.json();
         res.json({
             status: 'success',
