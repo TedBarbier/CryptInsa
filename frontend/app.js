@@ -1,6 +1,7 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
 const morgan = require('morgan');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -8,9 +9,23 @@ const port = process.env.PORT || 8000;
 //Set up morgan
 app.use(morgan('combined'));
 
+// Proxy API calls to Flask backend
+app.use('/api', createProxyMiddleware({
+    target: 'http://localhost:5000',
+    changeOrigin: true,
+    pathRewrite: {
+        '^/api': '', // Remove /api prefix when forwarding to Flask
+    },
+    onError: (err, req, res) => {
+        console.error('Proxy error:', err.message);
+        res.status(500).json({ error: 'Backend service unavailable' });
+    },
+    onProxyReq: (proxyReq, req, res) => {
+        console.log(`Proxying: ${req.method} ${req.url} -> http://localhost:5000${req.url.replace('/api', '')}`);
+    }
+}));
 
 //Set up handlebars
-
 app.engine('.hbs', engine({extname: '.hbs'}));
 app.set('view engine', '.hbs');
 app.set('views', './views');
