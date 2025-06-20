@@ -1,11 +1,3 @@
-# Multi-stage build pour optimiser la taille de l'image finale
-FROM node:18-alpine AS frontend-builder
-
-# Construire le frontend
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN npm ci --only=production
-
 FROM python:3.11-slim
 
 # Variables d'environnement pour la production
@@ -30,11 +22,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r backend/requirements.txt && \
     pip install --no-cache-dir supervisor
 
-# Copier les dépendances frontend depuis le stage builder
-COPY --from=frontend-builder /app/frontend/node_modules ./frontend/node_modules
-COPY frontend/ ./frontend/
+# Copier le frontend et installer les dépendances
+COPY frontend/package*.json ./frontend/
 WORKDIR /app/frontend
 RUN npm install --production
+COPY frontend/ ./
 WORKDIR /app
 
 # Copier le reste des fichiers du backend
