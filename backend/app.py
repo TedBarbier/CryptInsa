@@ -11,6 +11,16 @@ import cryptage.main as main
 
 app = Flask(__name__)
 CORS(app)  # autorise les requêtes depuis le frontend
+
+# Route de santé pour vérifier que le backend fonctionne
+@app.route('/', methods=['GET'])
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({
+        "status": "healthy",
+        "service": "flask-backend",
+        "message": "CryptInsa Backend API is running"
+    })
 analyse_started = False
 storedcipher = ""
 def analyze_frequencies(text):
@@ -97,4 +107,7 @@ def start_attack():
     return jsonify({"message": storedcipher})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import os
+    # En production, debug=False et host=0.0.0.0 pour être accessible depuis l'extérieur
+    debug_mode = os.environ.get('FLASK_ENV', 'production') == 'development'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)

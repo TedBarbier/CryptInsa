@@ -1,6 +1,7 @@
 async function analyze() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
     const message = document.getElementById("cipherText").value;
-    const res = await fetch("http://localhost:5000/analyze", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message })
@@ -14,8 +15,8 @@ async function analyze() { // Recuperer le texte chiffré et l'envoyer à l'API 
 window.analyze = analyze;
 
 async function cesar(message, shift) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-
-    const res = await fetch("http://localhost:5000/cesar", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/cesar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, shift })
@@ -27,7 +28,8 @@ async function cesar(message, shift) { // Recuperer le texte chiffré et l'envoy
 window.cesar = cesar;
 
 async function cesarDecrypt(message, shift) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/cesar/decrypt", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/cesar/decrypt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, shift })
@@ -39,7 +41,8 @@ async function cesarDecrypt(message, shift) { // Recuperer le texte chiffré et 
 window.cesarDecrypt = cesarDecrypt;
 
 async function vigenere(message, key) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/vigenere", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/vigenere`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, key })
@@ -51,7 +54,8 @@ async function vigenere(message, key) { // Recuperer le texte chiffré et l'envo
 window.vigenere = vigenere;
 
 async function vigenereDecrypt(message, key) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/vigenere/decrypt", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/vigenere/decrypt`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message, key })
@@ -64,7 +68,8 @@ window.vigenereDecrypt = vigenereDecrypt;
 
 
 async function updateAttack() { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/update_attack", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/update_attack`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "update" })
@@ -74,7 +79,8 @@ async function updateAttack() { // Recuperer le texte chiffré et l'envoyer à l
     return data;
 }
 async function startAttack(cipherText) { // Recuperer le texte chiffré et l'envoyer à l'API pour analyse et renvoi des fréquences json
-    const res = await fetch("http://localhost:5000/start_attack", {
+    const apiUrl = window.CONFIG ? window.CONFIG.API_URL : "http://localhost:5000";
+    const res = await fetch(`${apiUrl}/start_attack`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cipherText })
