@@ -104,12 +104,13 @@ def etape2(message,traduction,traduction_sur,message_split,ponctuation):
                     if traduction_sur_ref != traduction_sur:
                         # Sauvegarde même s’il n’y a pas de mot unique
                         save_to_json(mot_chiffre=mot, mot_traduit=None, dictionnaire=traduction_sur)
-    
-    # liste_mots=message.split(" ")
-    # for i in range(0,len(liste_mots)):
-    #     nouveau_mot=decrypt.check_mot(liste_mots[i],decrypt.dico_par_longueur)
-    #     liste_mots[i]=nouveau_mot
-
-    # message="".join(liste_mots)
+    message_clair=decrypt.message_from_key(message,traduction)
+    liste_mots=message_clair.split(" ")
+    for i in range(0,len(liste_mots)):
+        nouveau_mot=decrypt.check_mot(liste_mots[i],mapping.DICO_LONGUEUR)
+        if nouveau_mot is not None:
+            liste_mots[i]=nouveau_mot
+    separateur=" "
+    nouveau_message=separateur.join(liste_mots)
     save_to_json("final", "final", traduction)
     return traduction

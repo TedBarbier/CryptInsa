@@ -24,8 +24,8 @@
       "j": null,
       "e": null,
       "p": null,
-      ",": null,
       "c": ",",
+      ",": null,
       " ": null,
       "k": null
     }
@@ -55,8 +55,8 @@
       "j": null,
       "e": null,
       "p": null,
-      ",": null,
       "c": ",",
+      ",": null,
       " ": null,
       "k": null
     }
@@ -86,39 +86,8 @@
       "j": null,
       "e": null,
       "p": null,
+      "c": ",",
       ",": null,
-      "c": ",",
-      " ": null,
-      "k": null
-    }
-  },
-  {
-    "mot_chiffre": "p,vwhulhxvhphqwc",
-    "mot_traduit": "mysterieusement",
-    "dictionnaire": {
-      "h": "e",
-      "o": null,
-      "a": " ",
-      "q": "n",
-      "w": "t",
-      "u": "r",
-      "r": "o",
-      "x": "u",
-      "y": null,
-      "g": "d",
-      "f": null,
-      "i": null,
-      "t": null,
-      "d": "a",
-      "v": "s",
-      "l": "i",
-      "b": ".",
-      "s": "p",
-      "j": null,
-      "e": null,
-      "p": "m",
-      ",": "y",
-      "c": ",",
       " ": null,
       "k": null
     }
@@ -147,9 +116,40 @@
       "s": "p",
       "j": null,
       "e": null,
-      "p": "m",
-      ",": "y",
+      "p": null,
       "c": ",",
+      ",": null,
+      " ": null,
+      "k": null
+    }
+  },
+  {
+    "mot_chiffre": "dqrq,phvb",
+    "mot_traduit": "anonymes",
+    "dictionnaire": {
+      "h": "e",
+      "o": "l",
+      "a": " ",
+      "q": "n",
+      "w": "t",
+      "u": "r",
+      "r": "o",
+      "x": "u",
+      "y": null,
+      "g": "d",
+      "f": null,
+      "i": null,
+      "t": "q",
+      "d": "a",
+      "v": "s",
+      "l": "i",
+      "b": ".",
+      "s": "p",
+      "j": null,
+      "e": null,
+      "p": "m",
+      "c": ",",
+      ",": "y",
       " ": null,
       "k": null
     }
@@ -179,8 +179,8 @@
       "j": null,
       "e": null,
       "p": "m",
-      ",": "y",
       "c": ",",
+      ",": "y",
       " ": null,
       "k": null
     }
@@ -210,8 +210,8 @@
       "j": "g",
       "e": null,
       "p": "m",
-      ",": "y",
       "c": ",",
+      ",": "y",
       " ": null,
       "k": null
     }
@@ -241,8 +241,8 @@
       "j": "g",
       "e": "b",
       "p": "m",
-      ",": "y",
       "c": ",",
+      ",": "y",
       " ": null,
       "k": null
     }
@@ -272,8 +272,8 @@
       "j": "g",
       "e": "b",
       "p": "m",
-      ",": "y",
       "c": ",",
+      ",": "y",
       " ": null,
       "k": "h"
     }
@@ -303,8 +303,8 @@
       "j": "g",
       "e": "b",
       "p": "m",
-      ",": "y",
       "c": ",",
+      ",": "y",
       " ": "x",
       "k": "h"
     }
@@ -334,8 +334,8 @@
       "j": "g",
       "e": "b",
       "p": "m",
-      ",": "y",
       "c": ",",
+      ",": "y",
       " ": "x",
       "k": "h"
     }
