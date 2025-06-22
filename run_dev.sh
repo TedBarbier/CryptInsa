@@ -17,15 +17,26 @@ open_browser() {
 # Créer un venv si besoin
 if [ ! -d "venv" ]; then
   echo "Creation de l'environnement virtuel..."
-  python3 -m venv venv || { echo "Echec de creation du venv"; exit 1; }
+  if ! python3 -m venv venv 2>/dev/null; then
+    echo "Installation du module venv..."
+    sudo apt update && sudo apt install -y python3-venv
+    python3 -m venv venv || { echo "Echec de creation du venv"; USE_GLOBAL=true; }
+  fi
 fi
 
-# Activer le venv
-source venv/bin/activate || { echo "Impossible d'activer le venv"; exit 1; }
+# Activer le venv si disponible
+if [ "$USE_GLOBAL" != "true" ]; then
+  source venv/bin/activate || { echo "Impossible d'activer le venv"; exit 1; }
+fi
 
 # Installer les dépendances du backend
-echo "Installation des dependances Python..."
-pip install -r backend/requirements.txt
+if [ "$USE_GLOBAL" = "true" ]; then
+  echo "Installation des dependances Python (GLOBAL)..."
+  pip3 install -r backend/requirements.txt --user
+else
+  echo "Installation des dependances Python (VENV)..."
+  pip install -r backend/requirements.txt
+fi
 
 # Lancer le backend Flask
 echo "Demarrage du serveur Flask..."
