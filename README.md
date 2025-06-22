@@ -1,5 +1,13 @@
 <a name="readme-top"></a>
 
+<!-- PROJECT BADGES -->
+<div align="center">
+  
+[![Live Demo](https://img.shields.io/badge/Demo-Live-success?style=for-the-badge&logo=render&logoColor=white)](https://cryptinsa-app.onrender.com/)
+[![Deployment](https://img.shields.io/badge/Deployed%20on-Render-brightgreen?style=for-the-badge&logo=render)](https://cryptinsa-app.onrender.com/)
+
+</div>
+
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -7,7 +15,9 @@
   <p align="center">
     Application pédagogique expliquant le chiffrement par substitution et son attaque par analyse de fréquences.
     <br />
-    <a href="https://github.com/TedBarbier/ProjetApplicationMediationScientifiqueCryptographie/"><strong>Explore the docs »</strong></a>
+    <a href="https://cryptinsa-app.onrender.com/"><strong>🚀 Demo Live »</strong></a>
+    ·
+    <a href="https://github.com/TedBarbier/ProjetApplicationMediationScientifiqueCryptographie/"><strong>📖 Documentation »</strong></a>
     <br />
     <br />
     <a href="https://github.com/TedBarbier/ProjetApplicationMediationScientifiqueCryptographie/issues">Report Bug</a>
@@ -41,7 +51,7 @@
 
 Ce projet propose une application web interactive ayant pour objectif la vulgarisation des principes de la cryptanalyse. L'application permet :
 
-- De comprendre visuellement le fonctionnement du chiffrement par substitution, notamment les codes de César et de Vigenère
+- De comprendre visuellement le fonctionnement du chiffrement par substitution, notamment les codes de César
 - De générer un chiffrement par substitution personnalisé à partir d'un texte librement saisi par l'utilisateur
 - D'observer, étape par étape, comment une attaque automatique par analyse de fréquences peut retrouver le message original à partir de ce texte chiffré
 
@@ -53,6 +63,7 @@ Cette approche pédagogique est pensée pour la médiation scientifique, dans un
 
 * ![Python][python.com]
 * ![Flask][flask.com]
+* ![ExpressJs][expressjs.com]
 * ![JavaScript][js.com]
 * ![HTML5][html.com]
 * ![CSS3][css.com]
@@ -72,13 +83,17 @@ Le script :
 *    Crée un environnement virtuel
 *    Installe les dépendances depuis requirements.txt
 *    Lance le serveur Flask sur http://127.0.0.1:5000 (uniquement présent pour faire le liens avec le serveur web)
-*    lance le serveur web sur [http://localhost:8000](http://localhost:8000) par 
+*    lance le serveur web sur [http://localhost:8000](http://localhost:8000)
 
-Commandes pour démarrer le serveur web :
-* npm start        - Démarre le serveur en mode production
-* npm run dev      - Démarre le serveur en mode développement avec nodemon
-* node app.js      - Démarre directement le serveur
+### 🌐 Démo en ligne
+**Testez directement :** [https://cryptinsa-app.onrender.com/](https://cryptinsa-app.onrender.com/)
 
+> ⏳ **Note :** Le serveur peut prendre 30-60 secondes à démarrer lors de la première visite (Render free tier "cold start")
+
+### ⚠️ Important
+- **🌐 Demo Live** : [cryptinsa-app.onrender.com](https://cryptinsa-app.onrender.com/) (Render free tier - démarrage lent)
+- **🐳 Docker** : Pour l'hébergement web (production)
+- **💻 Local** : Pour tester en local, exécutez `./run_dev.sh`
 ## Roadmap
 - [x] Implémentation de l’API Flask
 - [x] Création d'une interface graphique simple pour tester
@@ -90,7 +105,7 @@ Commandes pour démarrer le serveur web :
 - [x] Explication substitution aléatoire (FRONTEND)
 - [x] Démonstration attaque par fréquence (BACKEND)
 - [x] Démonstration attaque par fréquence (FRONTEND)
-
+- [x] Hosting le web sur Render ( https://render.com/) par le  fichier Docker ( lien de web: https://cryptinsa-app.onrender.com/)
 <!-- CONTACT -->
 ## Contact
 [Ted BARBIER] - [LinkedIn](https://www.linkedin.com/in/ted-barbier) - [Email](mailto:[ted.barbier@insa-cvl.fr])
@@ -118,6 +133,7 @@ Ce projet a été réalisé dans un cadre pédagogique avec le soutien de notre 
 <!-- MARKDOWN LINKS & IMAGES -->
 [python.com]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 [flask.com]: https://img.shields.io/badge/flask-black?style=for-the-badge&logo=flask&logoColor=white
+[expressjs.com]: https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB
 [js.com]: https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black
 [html.com]: https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white
 [css.com]: https://img.shields.io/badge/css3-1572B6?style=for-the-badge&logo=css3&logoColor=white
